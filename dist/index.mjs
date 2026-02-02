@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { cac } from "cac";
 import * as p from "@clack/prompts";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
@@ -229,11 +229,135 @@ function registerStatusCommand(cli) {
 }
 
 //#endregion
+//#region src/cli/utils/errors.ts
+/**
+* Custom error classes for syncdocs CLI
+*/
+var SyncDocsError = class extends Error {
+	constructor(message) {
+		super(message);
+		this.name = "SyncDocsError";
+	}
+};
+var ConfigError = class extends SyncDocsError {
+	constructor(message) {
+		super(message);
+		this.name = "ConfigError";
+	}
+};
+
+//#endregion
 //#region src/cli/commands/validate.ts
 function registerValidateCommand(cli) {
 	cli.command("validate", "Validate syncdocs configuration").action(async () => {
-		console.log("validate command - TODO");
+		try {
+			const config = await loadAndValidateConfig();
+			console.log("✓ Config is valid");
+			console.log("✓ Output directory:", config.output?.dir);
+			console.log("✓ AI provider:", config.generation?.aiProvider);
+			const provider = config.generation?.aiProvider;
+			if (provider === "anthropic") {
+				const hasKey = !!process.env.ANTHROPIC_API_KEY;
+				console.log(hasKey ? "✓ ANTHROPIC_API_KEY found" : "⚠ ANTHROPIC_API_KEY not set");
+				if (!hasKey) console.log("\n  Set it with: export ANTHROPIC_API_KEY=your-key-here");
+			} else if (provider === "openai") {
+				const hasKey = !!process.env.OPENAI_API_KEY;
+				console.log(hasKey ? "✓ OPENAI_API_KEY found" : "⚠ OPENAI_API_KEY not set");
+				if (!hasKey) console.log("\n  Set it with: export OPENAI_API_KEY=your-key-here");
+			}
+			process.exit(0);
+		} catch (error) {
+			if (error instanceof ConfigError) {
+				console.error("✗ Config error:", error.message);
+				process.exit(2);
+			}
+			throw error;
+		}
 	});
+}
+async function loadAndValidateConfig() {
+	const configPath = join(process.cwd(), "_syncdocs", "config.yaml");
+	if (!existsSync(configPath)) throw new ConfigError("No config found. Run \"syncdocs init\" to set up syncdocs.");
+	const config = parseSimpleYAML(await readFile(configPath, "utf-8"));
+	if (!config.output?.dir) throw new ConfigError("Missing required field: output.dir");
+	if (!config.scope?.include || config.scope.include.length === 0) throw new ConfigError("Missing required field: scope.include");
+	if (!config.generation?.aiProvider) throw new ConfigError("Missing required field: generation.aiProvider");
+	const validProviders = [
+		"anthropic",
+		"openai",
+		"claude-code"
+	];
+	if (!validProviders.includes(config.generation.aiProvider)) throw new ConfigError(`Invalid aiProvider: ${config.generation.aiProvider}. Must be one of: ${validProviders.join(", ")}`);
+	if (!config.generation?.prompt) throw new ConfigError("Missing required field: generation.prompt");
+	return config;
+}
+function parseSimpleYAML(content) {
+	const config = {};
+	const lines = content.split("\n");
+	let currentSection = null;
+	let currentSubsection = null;
+	let inMultiline = false;
+	let multilineKey = "";
+	let multilineValue = [];
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+		if (line.trim().startsWith("#") || line.trim() === "") continue;
+		if (line.includes("|")) {
+			inMultiline = true;
+			multilineKey = line.split(":")[0].trim();
+			multilineValue = [];
+			continue;
+		}
+		if (inMultiline) {
+			if (line.startsWith("    ") || line.trim() === "") multilineValue.push(line.replace(/^    /, ""));
+			else {
+				setNestedValue(config, currentSection, currentSubsection, multilineKey, multilineValue.join("\n").trim());
+				inMultiline = false;
+			}
+			if (inMultiline) continue;
+		}
+		if (!line.startsWith(" ") && line.includes(":")) {
+			currentSection = line.split(":")[0].trim();
+			currentSubsection = null;
+			if (!config[currentSection]) config[currentSection] = {};
+			continue;
+		}
+		if (line.startsWith("  ") && !line.startsWith("    ")) {
+			const trimmed = line.trim();
+			if (trimmed.includes(":")) {
+				const [key, value] = trimmed.split(":").map((s) => s.trim());
+				if (value) setNestedValue(config, currentSection, null, key, parseValue(value));
+				else {
+					currentSubsection = key;
+					if (currentSection && !config[currentSection][key]) config[currentSection][key] = [];
+				}
+			}
+			continue;
+		}
+		if (line.startsWith("    -")) {
+			const value = line.trim().substring(1).trim();
+			if (currentSection && currentSubsection) {
+				const section = config[currentSection];
+				if (!Array.isArray(section[currentSubsection])) section[currentSubsection] = [];
+				section[currentSubsection].push(value);
+			}
+		}
+	}
+	return config;
+}
+function setNestedValue(config, section, subsection, key, value) {
+	if (!section) return;
+	if (!subsection) config[section][key] = value;
+	else {
+		if (!config[section][subsection]) config[section][subsection] = {};
+		config[section][subsection][key] = value;
+	}
+}
+function parseValue(value) {
+	if (value === "true") return true;
+	if (value === "false") return false;
+	if (/^\d+$/.test(value)) return parseInt(value, 10);
+	return value;
 }
 
 //#endregion
