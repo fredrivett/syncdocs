@@ -4,12 +4,12 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "syncdocs": "./dist/cli/index.js"
+    "syncdocs": "./dist/index.mjs"
   },
   "scripts": {
     "dev": "tsdown src/cli/index.ts --watch",
     "build": "tsdown src/cli/index.ts",
-    "syncdocs": "node dist/cli/index.js",
+    "syncdocs": "node dist/index.mjs",
     "test": "vitest"
   },
   "keywords": [],
