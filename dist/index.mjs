@@ -27,25 +27,22 @@ function registerInitCommand(cli) {
 		}
 		const outputDir = await p.text({
 			message: "Where should docs be generated?",
-			placeholder: "_syncdocs (press enter for default)",
-			defaultValue: "_syncdocs",
-			validate: (value) => {
-				if (!value) return "Output directory is required";
-			}
+			placeholder: "_syncdocs (press enter for default)"
 		});
 		if (p.isCancel(outputDir)) {
 			p.cancel("Setup cancelled");
 			process.exit(0);
 		}
+		const finalOutputDir = outputDir || "_syncdocs";
 		const includePattern = await p.text({
 			message: "Which files should be documented?",
-			placeholder: "src/**/*.{ts,tsx,js,jsx} (press enter for default)",
-			defaultValue: "src/**/*.{ts,tsx,js,jsx}"
+			placeholder: "src/**/*.{ts,tsx,js,jsx} (press enter for default)"
 		});
 		if (p.isCancel(includePattern)) {
 			p.cancel("Setup cancelled");
 			process.exit(0);
 		}
+		const finalIncludePattern = includePattern || "src/**/*.{ts,tsx,js,jsx}";
 		const excludePattern = await p.text({
 			message: "Which files should be excluded?",
 			placeholder: "**/*.test.ts,**/*.spec.ts",
@@ -128,9 +125,9 @@ function registerInitCommand(cli) {
 		const s = p.spinner();
 		s.start("Creating configuration...");
 		const config = {
-			output: { dir: outputDir },
+			output: { dir: finalOutputDir },
 			scope: {
-				include: [includePattern],
+				include: [finalIncludePattern],
 				exclude: excludePattern.split(",").map((p) => p.trim()).filter(Boolean)
 			},
 			generation: {
@@ -142,12 +139,12 @@ function registerInitCommand(cli) {
 				commitDepth: 10
 			}
 		};
-		await mkdir(join(process.cwd(), outputDir), { recursive: true });
+		await mkdir(join(process.cwd(), finalOutputDir), { recursive: true });
 		await writeFile(configPath, generateConfigYAML(config), "utf-8");
 		const gitignorePath = join(process.cwd(), ".gitignore");
 		if (!existsSync(gitignorePath)) await writeFile(gitignorePath, "node_modules\n", "utf-8");
 		s.stop("Configuration created!");
-		p.note(`Config saved to: ${outputDir}/config.yaml\n\nNext steps:\n  1. Set your API key: export ANTHROPIC_API_KEY=...\n  2. Generate your first doc: syncdocs generate\n  3. Or run: syncdocs check`, "Setup complete!");
+		p.note(`Config saved to: ${finalOutputDir}/config.yaml\n\nNext steps:\n  1. Set your API key: export ANTHROPIC_API_KEY=...\n  2. Generate your first doc: syncdocs generate\n  3. Or run: syncdocs check`, "Setup complete!");
 		p.outro("Happy documenting! 📝");
 	});
 }

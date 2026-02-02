@@ -48,10 +48,6 @@ export function registerInitCommand(cli: CAC) {
       const outputDir = await p.text({
         message: 'Where should docs be generated?',
         placeholder: '_syncdocs (press enter for default)',
-        defaultValue: '_syncdocs',
-        validate: (value) => {
-          if (!value) return 'Output directory is required'
-        },
       })
 
       if (p.isCancel(outputDir)) {
@@ -59,16 +55,19 @@ export function registerInitCommand(cli: CAC) {
         process.exit(0)
       }
 
+      const finalOutputDir = outputDir || '_syncdocs'
+
       const includePattern = await p.text({
         message: 'Which files should be documented?',
         placeholder: 'src/**/*.{ts,tsx,js,jsx} (press enter for default)',
-        defaultValue: 'src/**/*.{ts,tsx,js,jsx}',
       })
 
       if (p.isCancel(includePattern)) {
         p.cancel('Setup cancelled')
         process.exit(0)
       }
+
+      const finalIncludePattern = includePattern || 'src/**/*.{ts,tsx,js,jsx}'
 
       const excludePattern = await p.text({
         message: 'Which files should be excluded?',
@@ -157,10 +156,10 @@ export function registerInitCommand(cli: CAC) {
 
       const config: InitConfig = {
         output: {
-          dir: outputDir as string,
+          dir: finalOutputDir,
         },
         scope: {
-          include: [includePattern as string],
+          include: [finalIncludePattern],
           exclude: (excludePattern as string)
             .split(',')
             .map((p) => p.trim())
@@ -177,7 +176,7 @@ export function registerInitCommand(cli: CAC) {
       }
 
       // Create directory
-      const docDir = join(process.cwd(), outputDir as string)
+      const docDir = join(process.cwd(), finalOutputDir)
       await mkdir(docDir, { recursive: true })
 
       // Write config file
@@ -193,7 +192,7 @@ export function registerInitCommand(cli: CAC) {
       s.stop('Configuration created!')
 
       p.note(
-        `Config saved to: ${outputDir}/config.yaml\n\nNext steps:\n  1. Set your API key: export ANTHROPIC_API_KEY=...\n  2. Generate your first doc: syncdocs generate\n  3. Or run: syncdocs check`,
+        `Config saved to: ${finalOutputDir}/config.yaml\n\nNext steps:\n  1. Set your API key: export ANTHROPIC_API_KEY=...\n  2. Generate your first doc: syncdocs generate\n  3. Or run: syncdocs check`,
         'Setup complete!'
       )
 
