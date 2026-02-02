@@ -45,9 +45,10 @@ export function registerInitCommand(cli: CAC) {
       }
 
       // Gather configuration
-      let outputDir = await p.text({
+      const outputDir = await p.text({
         message: 'Where should docs be generated?',
         placeholder: '_syncdocs',
+        initialValue: '_syncdocs',
       })
 
       if (p.isCancel(outputDir)) {
@@ -55,26 +56,15 @@ export function registerInitCommand(cli: CAC) {
         process.exit(0)
       }
 
-      // Apply default and show what was selected
-      if (!outputDir || outputDir.trim() === '') {
-        outputDir = '_syncdocs'
-        p.log.info(`Using default: ${outputDir}`)
-      }
-
-      let includePattern = await p.text({
+      const includePattern = await p.text({
         message: 'Which files should be documented?',
         placeholder: 'src/**/*.{ts,tsx,js,jsx}',
+        initialValue: 'src/**/*.{ts,tsx,js,jsx}',
       })
 
       if (p.isCancel(includePattern)) {
         p.cancel('Setup cancelled')
         process.exit(0)
-      }
-
-      // Apply default and show what was selected
-      if (!includePattern || includePattern.trim() === '') {
-        includePattern = 'src/**/*.{ts,tsx,js,jsx}'
-        p.log.info(`Using default: ${includePattern}`)
       }
 
       const excludePattern = await p.text({
