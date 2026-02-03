@@ -95,20 +95,20 @@ export class AIClient {
 
     prompt += `\nSource code:\n\`\`\`typescript\n${symbol.fullText}\n\`\`\`\n\n`;
 
-    prompt += `Generate documentation that includes:\n`;
+    prompt += `Generate documentation with the following structure:\n\n`;
     prompt += `1. A clear h1 title using the symbol name\n`;
-    prompt += `2. A brief overview (2-3 sentences) of what this ${symbol.kind} does\n`;
-    prompt += `3. Parameters section (if applicable) with descriptions\n`;
-    prompt += `4. Return value section (if applicable)\n`;
-    prompt += `5. Usage examples in collapsible sections\n`;
-    prompt += `6. Implementation details in a collapsible section\n`;
-    prompt += `7. Edge cases and notes in a collapsible section (if applicable)\n\n`;
+    prompt += `2. A brief overview (2-3 sentences) of what this ${symbol.kind} does - VISIBLE BY DEFAULT\n`;
+    prompt += `3. ALL other content in collapsible sections\n\n`;
 
-    prompt += `IMPORTANT: Use collapsible sections for detailed content to keep docs scannable.\n`;
+    prompt += `IMPORTANT: Only the title and overview should be visible by default. Everything else must be in collapsible sections.\n\n`;
+
     prompt += `Use this syntax for collapsible sections:\n`;
     prompt += `<details>\n<summary>Section Title</summary>\n\nContent here\n\n</details>\n\n`;
 
-    prompt += `Recommended collapsible sections:\n`;
+    prompt += `Required collapsible sections (as applicable):\n`;
+    prompt += `- "Parameters" - Parameter descriptions (if applicable)\n`;
+    prompt += `- "Methods" - Method descriptions for classes (if applicable)\n`;
+    prompt += `- "Return Value" - What the function/method returns (if applicable)\n`;
     prompt += `- "Usage Examples" - Multiple code examples\n`;
     prompt += `- "Implementation Details" - How it works internally\n`;
     prompt += `- "Edge Cases" - Special cases and gotchas\n`;
