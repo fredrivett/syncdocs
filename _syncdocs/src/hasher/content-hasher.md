@@ -1,6 +1,6 @@
 ---
 title: ContentHasher
-generated: 2026-02-03T11:40:50.589Z
+generated: 2026-02-03T11:43:56.761Z
 dependencies:
   - path: /Users/fredrivett/code/FR/syncdocs/src/hasher/index.ts
     symbol: ContentHasher
@@ -8,65 +8,65 @@ dependencies:
 ---
 # ContentHasher
 
-A utility class for generating content-based hashes of code symbols while ignoring cosmetic changes like names, formatting, and whitespace. Designed to detect meaningful changes in symbol content (parameters and body) without triggering false positives from refactoring operations.
+The `ContentHasher` class provides content-based hashing functionality for code symbols, designed to detect meaningful changes while ignoring cosmetic modifications like renaming or formatting. It generates stable SHA256 hashes by focusing only on function parameters and body content.
 
 <details>
 <summary>Methods</summary>
 
-## hashSymbol(symbol: SymbolInfo): string
+## `hashSymbol(symbol: SymbolInfo): string`
 
-Generates a SHA256 hash of a symbol's meaningful content (parameters and body), excluding the symbol name to allow renames without triggering staleness detection.
+Generates a SHA256 hash of the symbol's meaningful content (parameters and body), excluding the symbol name to allow renames without triggering staleness detection.
 
 **Parameters:**
-- `symbol: SymbolInfo` - The symbol object containing params, body, and other metadata
+- `symbol`: `SymbolInfo` - The symbol object containing the code information to hash
 
-**Returns:** A hex-encoded SHA256 hash string
+**Returns:** `string` - A hexadecimal SHA256 hash of the normalized content
 
-## getHashableContent(symbol: SymbolInfo): string
+## `getHashableContent(symbol: SymbolInfo): string`
 
 Extracts and normalizes the content that should be included in the hash calculation. Combines the symbol's parameters and body while excluding name, export keywords, and visibility modifiers.
 
 **Parameters:**
-- `symbol: SymbolInfo` - The symbol object to extract content from
+- `symbol`: `SymbolInfo` - The symbol object to extract content from
 
-**Returns:** Normalized string containing parameters and body content
+**Returns:** `string` - The normalized, concatenated parameters and body content
 
-## hash(content: string): string
+## `hash(content: string): string`
 
 Computes a SHA256 hash of the provided string content.
 
 **Parameters:**
-- `content: string` - The string content to hash
+- `content`: `string` - The content to hash
 
-**Returns:** Hex-encoded SHA256 hash
+**Returns:** `string` - A hexadecimal SHA256 hash
 
-## normalizeWhitespace(content: string): string (private)
+## `hasChanged(oldSymbol: SymbolInfo, newSymbol: SymbolInfo): boolean`
 
-Normalizes whitespace in content to prevent formatting changes from affecting hash values. Handles line endings, tabs, multiple spaces, and trailing whitespace.
-
-**Parameters:**
-- `content: string` - Raw content string to normalize
-
-**Returns:** Normalized content with consistent whitespace
-
-## hasChanged(oldSymbol: SymbolInfo, newSymbol: SymbolInfo): boolean
-
-Compares two symbol versions to determine if the meaningful content has changed by comparing their hashes.
+Compares two symbols by their content hashes to determine if meaningful changes occurred.
 
 **Parameters:**
-- `oldSymbol: SymbolInfo` - Previous version of the symbol
-- `newSymbol: SymbolInfo` - Current version of the symbol
+- `oldSymbol`: `SymbolInfo` - The previous version of the symbol
+- `newSymbol`: `SymbolInfo` - The current version of the symbol
 
-**Returns:** `true` if content has changed, `false` otherwise
+**Returns:** `boolean` - `true` if the symbols have different content hashes, `false` otherwise
 
-## shortHash(hash: string): string
+## `shortHash(hash: string): string`
 
-Creates a shortened version of a hash for display purposes, taking only the first 8 characters.
+Creates a shortened version of a hash for display purposes by taking the first 8 characters.
 
 **Parameters:**
-- `hash: string` - Full hash string
+- `hash`: `string` - The full hash string to truncate
 
-**Returns:** Truncated hash (first 8 characters)
+**Returns:** `string` - The first 8 characters of the hash
+
+## `normalizeWhitespace(content: string): string` (private)
+
+Normalizes whitespace in content to prevent formatting changes from affecting hash values. Handles line endings, tabs, and multiple spaces consistently.
+
+**Parameters:**
+- `content`: `string` - The content to normalize
+
+**Returns:** `string` - The content with normalized whitespace
 
 </details>
 
@@ -74,38 +74,39 @@ Creates a shortened version of a hash for display purposes, taking only the firs
 <summary>Usage Examples</summary>
 
 ```typescript
-import { ContentHasher } from './content-hasher';
+import { ContentHasher } from './ContentHasher';
 
 const hasher = new ContentHasher();
 
-// Hash a symbol's content
-const symbol = {
-  name: 'myFunction',
-  params: '(x: number, y: string)',
-  body: '{ return x + y.length; }'
+// Hash a symbol
+const symbol: SymbolInfo = {
+  name: 'calculateTotal',
+  params: '(price: number, tax: number)',
+  body: '{ return price + (price * tax); }'
 };
 
 const hash = hasher.hashSymbol(symbol);
 console.log(hash); // "a1b2c3d4e5f6..."
 
-// Check if content changed between versions
-const oldSymbol = { params: '(x: number)', body: '{ return x; }' };
-const newSymbol = { params: '(x: number)', body: '{ return x * 2; }' };
+// Check for changes
+const oldSymbol: SymbolInfo = {
+  name: 'add',
+  params: '(a: number, b: number)',
+  body: '{ return a + b; }'
+};
 
-if (hasher.hasChanged(oldSymbol, newSymbol)) {
-  console.log('Symbol content has changed');
-}
+const newSymbol: SymbolInfo = {
+  name: 'sum', // renamed but same logic
+  params: '(a: number, b: number)',
+  body: '{ return a + b; }'
+};
 
-// Get display-friendly short hash
-const shortVersion = hasher.shortHash(hash);
-console.log(shortVersion); // "a1b2c3d4"
+const changed = hasher.hasChanged(oldSymbol, newSymbol);
+console.log(changed); // false - only name changed
 
-// Whitespace normalization doesn't affect hash
-const symbol1 = { params: '(x:number)', body: '{return x;}' };
-const symbol2 = { params: '( x : number )', body: '{\n  return x;\n}' };
-const hash1 = hasher.hashSymbol(symbol1);
-const hash2 = hasher.hashSymbol(symbol2);
-console.log(hash1 === hash2); // true
+// Get short hash for display
+const shortHash = hasher.shortHash(hash);
+console.log(shortHash); // "a1b2c3d4"
 ```
 
 </details>
@@ -113,47 +114,42 @@ console.log(hash1 === hash2); // true
 <details>
 <summary>Implementation Details</summary>
 
-The class uses SHA256 hashing to ensure collision resistance and consistent hash generation. The normalization process includes:
+The `ContentHasher` uses a multi-step process to ensure stable hashing:
 
-- **Line ending normalization**: Converts `\r\n` to `\n` for cross-platform consistency
-- **Tab conversion**: Replaces tabs with double spaces
-- **Space consolidation**: Collapses multiple consecutive spaces into single spaces
-- **Trimming**: Removes leading and trailing whitespace
+1. **Content Extraction**: Only `params` and `body` properties from `SymbolInfo` are included in the hash
+2. **Whitespace Normalization**: 
+   - Line endings are normalized to `\n`
+   - Tabs are converted to 2 spaces
+   - Multiple consecutive spaces are collapsed to single spaces
+   - Leading and trailing whitespace is trimmed
+3. **Hashing**: Uses Node.js's built-in `crypto.createHash('sha256')` for consistent hash generation
 
-Content selection is strategic - only `params` and `body` fields are included in the hash, allowing the following changes without triggering staleness:
-- Symbol renames
-- Export keyword changes
+This approach allows the system to ignore:
+- Symbol name changes (renames)
+- Export keyword modifications
 - Visibility modifier changes
-- Comment modifications
-- Import statement reordering
-
-The SHA256 algorithm provides a 256-bit hash, represented as a 64-character hexadecimal string.
+- Formatting and whitespace variations
+- Different line ending styles
 
 </details>
 
 <details>
 <summary>Edge Cases</summary>
 
-- **Empty content**: If both params and body are empty strings, the hash will be computed on an empty string
-- **Null/undefined fields**: The concatenation will include "undefined" or "null" as literal strings if symbol properties are missing
-- **Unicode content**: SHA256 handles UTF-8 encoding, so Unicode characters in symbol content are supported
-- **Very large symbols**: No size limits imposed by the hasher, but memory usage scales with symbol size
-- **Hash collisions**: While theoretically possible with SHA256, practically negligible for code symbol content
-
-**Potential gotchas:**
-- Semantic equivalence is not detected (e.g., `x + 1` vs `1 + x`)
-- Whitespace inside strings is normalized, which may not be desired for string literals
-- Parameter order changes will trigger staleness detection
+- **Empty Content**: If both `params` and `body` are empty strings, the hash will be computed on an empty string after normalization
+- **Unicode Content**: SHA256 handles Unicode content properly, but ensure consistent encoding across different environments
+- **Very Large Content**: No size limits are enforced, but extremely large symbol bodies may impact performance
+- **Null/Undefined Properties**: The method assumes `symbol.params` and `symbol.body` are defined strings; undefined values will be coerced to `"undefined"`
+- **Identical Normalized Content**: Different original formatting that normalizes to identical content will produce the same hash, which is the intended behavior
 
 </details>
 
 <details>
 <summary>Related</summary>
 
-- **SymbolInfo**: The interface/type expected as input to the hasher methods
-- **Staleness detection systems**: Primary use case for this hasher
-- **Content-based caching**: General pattern this class implements
-- **Crypto module**: Node.js built-in used for SHA256 hashing (`createHash`)
-- **Code analysis tools**: Often need similar content comparison capabilities
+- `SymbolInfo` - The interface/type used for symbol information
+- Node.js `crypto` module - Used for SHA256 hash generation
+- Hash-based change detection systems
+- Content-addressable storage patterns
 
 </details>

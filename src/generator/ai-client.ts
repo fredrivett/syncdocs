@@ -114,7 +114,17 @@ export class AIClient {
     prompt += `- "Edge Cases" - Special cases and gotchas\n`;
     prompt += `- "Related" - Related functions or concepts\n\n`;
 
-    prompt += `Format the documentation in clean markdown. Do NOT include frontmatter or metadata - just the documentation content.\n`;
+    prompt += `FORMATTING REQUIREMENTS:\n`;
+    prompt += `- Use inline code backticks for ALL code-related elements:\n`;
+    prompt += `  - Method/function signatures: \`methodName(param: Type): ReturnType\`\n`;
+    prompt += `  - Parameter names: \`paramName\`\n`;
+    prompt += `  - Type names: \`string\`, \`number\`, \`SymbolInfo\`, etc.\n`;
+    prompt += `  - Property names: \`config.apiKey\`\n`;
+    prompt += `  - Class names: \`ContentHasher\`\n`;
+    prompt += `  - Boolean values: \`true\`, \`false\`, \`null\`, \`undefined\`\n`;
+    prompt += `- Apply backticks in headings, descriptions, and all text content\n`;
+    prompt += `- Use triple backticks with language identifier for code blocks\n`;
+    prompt += `- Do NOT include frontmatter or metadata - just the documentation content\n`;
 
     return prompt;
   }
