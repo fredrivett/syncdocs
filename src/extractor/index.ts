@@ -2,5 +2,5 @@
  * Symbol extraction - exports the main extractor
  */
 
-export { TypeScriptExtractor } from './typescript-extractor.js'
-export type { SymbolInfo, ExtractionResult } from './types.js'
+export type { ExtractionResult, SymbolInfo } from "./types.js";
+export { TypeScriptExtractor } from "./typescript-extractor.js";

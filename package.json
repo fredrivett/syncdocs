@@ -1,33 +1,35 @@
 {
-  "name": "syncdocs",
-  "version": "0.0.1",
-  "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "syncdocs": "./dist/index.mjs"
-  },
-  "scripts": {
-    "dev": "tsdown src/cli/index.ts --watch",
-    "build": "tsdown src/cli/index.ts",
-    "syncdocs": "node dist/index.mjs",
-    "test": "vitest",
-    "test:extractor": "tsx scripts/test-extractor.ts"
-  },
-  "keywords": [],
-  "author": "@fredrivett",
-  "license": "ISC",
-  "description": "Docs that automatically sync with your code",
-  "devDependencies": {
-    "@biomejs/biome": "^2.3.13",
-    "@changesets/cli": "^2.29.8",
-    "tsdown": "^0.20.1",
-    "tsx": "^4.21.0",
-    "vitest": "^4.0.18"
-  },
-  "dependencies": {
-    "@clack/prompts": "^1.0.0",
-    "cac": "^6.7.14",
-    "dotenv": "^16.4.7",
-    "typescript": "^5.9.3"
-  }
+	"name": "syncdocs",
+	"version": "0.0.1",
+	"type": "module",
+	"main": "dist/index.js",
+	"bin": {
+		"syncdocs": "./dist/index.mjs"
+	},
+	"scripts": {
+		"dev": "tsdown src/cli/index.ts --watch",
+		"build": "tsdown src/cli/index.ts",
+		"syncdocs": "node dist/index.mjs",
+		"test": "vitest",
+		"test:extractor": "tsx scripts/test-extractor.ts",
+		"format": "biome check --write .",
+		"format:check": "biome check ."
+	},
+	"keywords": [],
+	"author": "@fredrivett",
+	"license": "ISC",
+	"description": "Docs that automatically sync with your code",
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.13",
+		"@changesets/cli": "^2.29.8",
+		"tsdown": "^0.20.1",
+		"tsx": "^4.21.0",
+		"vitest": "^4.0.18"
+	},
+	"dependencies": {
+		"@clack/prompts": "^1.0.0",
+		"cac": "^6.7.14",
+		"dotenv": "^16.4.7",
+		"typescript": "^5.9.3"
+	}
 }
