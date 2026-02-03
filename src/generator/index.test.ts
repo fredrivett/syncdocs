@@ -272,10 +272,11 @@ export class Calculator {
       expect(results.length).toBeGreaterThan(0);
       expect(results.every((r) => r.success)).toBe(true);
 
-      // Should have generated files for each symbol
-      expect(existsSync(join(OUTPUT_DIR, 'add.md'))).toBe(true);
-      expect(existsSync(join(OUTPUT_DIR, 'subtract.md'))).toBe(true);
-      expect(existsSync(join(OUTPUT_DIR, 'calculator.md'))).toBe(true);
+      // Should have generated files for each symbol in subdirectory matching source structure
+      const docDir = join(OUTPUT_DIR, '.test-generator', 'src');
+      expect(existsSync(join(docDir, 'add.md'))).toBe(true);
+      expect(existsSync(join(docDir, 'subtract.md'))).toBe(true);
+      expect(existsSync(join(docDir, 'calculator.md'))).toBe(true);
     });
 
     it('should handle file with no symbols', async () => {

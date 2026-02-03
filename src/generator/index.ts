@@ -111,9 +111,9 @@ export class Generator {
       }
     }
 
-    // Generate file path
+    // Generate file path preserving directory structure
     const fileName = this.generateFileName(symbol);
-    const filePath = join(this.config.outputDir, fileName);
+    const filePath = this.generateFilePath(symbol, fileName);
 
     // Extract title from content or use symbol name
     const title = this.extractTitle(content) || symbol.name;
@@ -165,6 +165,25 @@ export class Generator {
     frontmatter += '---';
 
     return frontmatter;
+  }
+
+  /**
+   * Generate file path for a symbol, preserving directory structure
+   */
+  private generateFilePath(symbol: SymbolInfo, fileName: string): string {
+    const cwd = process.cwd();
+
+    // Get relative path from project root to source file
+    let relativePath = symbol.filePath;
+    if (symbol.filePath.startsWith(cwd)) {
+      relativePath = symbol.filePath.substring(cwd.length + 1);
+    }
+
+    // Get directory path (without filename)
+    const dirPath = dirname(relativePath);
+
+    // Combine output dir + source dir structure + doc filename
+    return join(this.config.outputDir, dirPath, fileName);
   }
 
   /**
