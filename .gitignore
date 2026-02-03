@@ -1,2 +1,14 @@
 /node_modules
 .claude
+
+# Environment variables (never commit API keys!)
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Test artifacts
+.test-*
