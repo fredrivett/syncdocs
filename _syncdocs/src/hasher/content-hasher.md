@@ -1,6 +1,6 @@
 ---
 title: ContentHasher
-generated: 2026-02-03T11:35:00.655Z
+generated: 2026-02-03T11:38:00.149Z
 dependencies:
   - path: /Users/fredrivett/code/FR/syncdocs/src/hasher/index.ts
     symbol: ContentHasher
@@ -8,56 +8,80 @@ dependencies:
 ---
 # ContentHasher
 
-The `ContentHasher` class provides content-based hashing functionality for code symbols, enabling change detection while ignoring formatting differences and symbol renames. It generates SHA256 hashes of symbol parameters and body content, with whitespace normalization to prevent spurious change detection from code formatting.
+A utility class for generating cryptographic hashes of symbol content to detect meaningful changes in code symbols. The hasher focuses on functional content (parameters and body) while ignoring cosmetic changes like names, formatting, and export modifiers to prevent false positives in change detection.
 
 <details>
 <summary>Methods</summary>
 
 ## hashSymbol(symbol: SymbolInfo): string
 
-Generates a hash of the symbol's content, excluding the symbol name to allow renames without triggering staleness detection.
+Generates a SHA256 hash of the symbol's content, excluding the symbol name to allow renames without triggering staleness detection.
 
 **Parameters:**
-- `symbol: SymbolInfo` - The symbol to hash
+- `symbol: SymbolInfo` - The symbol object containing params, body, and other metadata
 
-**Returns:** A SHA256 hash string (64 hexadecimal characters)
+**Returns:** A hexadecimal string representing the SHA256 hash of the symbol's content.
 
 ## getHashableContent(symbol: SymbolInfo): string
 
-Extracts and normalizes the content that should be included in the hash calculation. Combines symbol parameters and body while excluding name, export keywords, and visibility modifiers.
+Extracts and normalizes the content that should be included in the hash calculation.
 
 **Parameters:**
-- `symbol: SymbolInfo` - The symbol to extract content from
+- `symbol: SymbolInfo` - The symbol object to extract content from
 
-**Returns:** Normalized string containing parameters and body content
+**Returns:** A normalized string containing the symbol's parameters and body with standardized whitespace.
+
+**Includes in hash:**
+- Function/method parameters
+- Function/method body
+
+**Excludes from hash:**
+- Symbol name
+- Export keywords
+- Visibility modifiers
 
 ## hash(content: string): string
 
-Generates a SHA256 hash of the provided content string.
+Computes a SHA256 hash of the provided content string.
 
 **Parameters:**
 - `content: string` - The content to hash
 
-**Returns:** SHA256 hash as a hexadecimal string
+**Returns:** A hexadecimal string representation of the SHA256 hash.
+
+## normalizeWhitespace(content: string): string (private)
+
+Normalizes whitespace in content to prevent formatting changes from affecting the hash.
+
+**Parameters:**
+- `content: string` - The content to normalize
+
+**Returns:** A string with normalized whitespace formatting.
+
+**Normalizations applied:**
+- Converts `\r\n` to `\n` (normalize line endings)
+- Converts tabs to double spaces
+- Collapses multiple consecutive spaces to single spaces
+- Removes leading and trailing whitespace
 
 ## hasChanged(oldSymbol: SymbolInfo, newSymbol: SymbolInfo): boolean
 
-Compares two symbols to determine if their content has changed by comparing their hashes.
+Compares two symbols to determine if their functional content has changed.
 
 **Parameters:**
 - `oldSymbol: SymbolInfo` - The previous version of the symbol
 - `newSymbol: SymbolInfo` - The current version of the symbol
 
-**Returns:** `true` if the content has changed, `false` otherwise
+**Returns:** `true` if the symbols have different content hashes, `false` if they are identical.
 
 ## shortHash(hash: string): string
 
 Creates a shortened version of a hash for display purposes.
 
 **Parameters:**
-- `hash: string` - The full hash string
+- `hash: string` - The full hash string to shorten
 
-**Returns:** The first 8 characters of the hash
+**Returns:** The first 8 characters of the provided hash.
 
 </details>
 
@@ -69,29 +93,34 @@ const hasher = new ContentHasher();
 
 // Hash a symbol
 const symbol: SymbolInfo = {
-  name: 'myFunction',
-  params: '(x: number, y: string)',
-  body: '{ return x + y.length; }'
+  name: 'calculateTotal',
+  params: '(items: Item[], tax: number)',
+  body: '{ return items.reduce((sum, item) => sum + item.price, 0) * (1 + tax); }'
 };
 
 const hash = hasher.hashSymbol(symbol);
 console.log(hash); // "a1b2c3d4e5f6..."
 
-// Check if symbols have changed
-const oldSymbol = { name: 'func', params: '(a: number)', body: '{ return a * 2; }' };
-const newSymbol = { name: 'renamedFunc', params: '(a: number)', body: '{ return a * 2; }' };
+// Check if symbol content changed
+const oldSymbol = { ...symbol };
+const newSymbol = { 
+  ...symbol, 
+  name: 'computeTotal' // Name change only
+};
 
-const changed = hasher.hasChanged(oldSymbol, newSymbol);
-console.log(changed); // false (only name changed, content is same)
+console.log(hasher.hasChanged(oldSymbol, newSymbol)); // false - name changes ignored
 
-// Get short hash for display
-const fullHash = hasher.hashSymbol(symbol);
-const short = hasher.shortHash(fullHash);
-console.log(short); // "a1b2c3d4"
+// Functional change detection
+const modifiedSymbol = {
+  ...symbol,
+  body: '{ return items.reduce((sum, item) => sum + item.price, 0) * (1 + tax + 0.01); }'
+};
 
-// Direct content hashing
-const content = hasher.getHashableContent(symbol);
-const directHash = hasher.hash(content);
+console.log(hasher.hasChanged(oldSymbol, modifiedSymbol)); // true - body changed
+
+// Get short hash for logging
+const shortHash = hasher.shortHash(hash);
+console.log(shortHash); // "a1b2c3d4"
 ```
 
 </details>
@@ -99,42 +128,40 @@ const directHash = hasher.hash(content);
 <details>
 <summary>Implementation Details</summary>
 
-The class implements a content-focused hashing strategy with the following key features:
+The `ContentHasher` uses SHA256 cryptographic hashing to generate consistent, collision-resistant hashes of symbol content. The implementation prioritizes:
 
-- **Whitespace Normalization**: The `normalizeWhitespace` method standardizes formatting by:
-  - Converting CRLF line endings to LF
-  - Converting tabs to 2 spaces
-  - Collapsing multiple consecutive spaces to single spaces
-  - Trimming leading and trailing whitespace
+1. **Change Detection Accuracy**: Only hashes functional content (params + body) to avoid false positives from cosmetic changes
+2. **Formatting Resilience**: Normalizes whitespace to prevent code formatting from affecting hashes
+3. **Rename Tolerance**: Excludes symbol names from hash calculations to allow refactoring without triggering staleness
 
-- **Content Selection**: Only symbol parameters and body are included in the hash, deliberately excluding:
-  - Symbol names (to allow renames)
-  - Export keywords
-  - Visibility modifiers (public, private, protected)
+The whitespace normalization process ensures that code reformatting, different indentation styles, or line ending differences don't create new hashes for functionally identical code.
 
-- **Hash Algorithm**: Uses Node.js's built-in `crypto.createHash` with SHA256 for cryptographically secure hashing.
-
-- **Deterministic Output**: The normalization process ensures consistent hashes regardless of code formatting variations.
+Hash generation follows this pipeline:
+1. Extract parameters and body from symbol
+2. Concatenate params and body strings
+3. Normalize whitespace in the combined content
+4. Generate SHA256 hash of normalized content
+5. Return hexadecimal representation
 
 </details>
 
 <details>
 <summary>Edge Cases</summary>
 
-- **Empty Content**: Symbols with empty parameters and body will produce a hash of an empty string after normalization
-- **Whitespace-Only Changes**: Formatting changes (indentation, spacing, line breaks) will not affect the hash due to normalization
-- **Unicode Content**: The hasher handles Unicode characters in symbol content correctly
-- **Large Content**: No size limits are imposed, but extremely large symbol bodies may impact performance
-- **Hash Collisions**: While theoretically possible with SHA256, collisions are cryptographically unlikely in practice
+- **Empty Content**: Symbols with empty params and body will hash to the same value
+- **Whitespace-Only Changes**: Formatting changes (spaces, tabs, line endings) are normalized and won't affect the hash
+- **Unicode Content**: The hasher properly handles Unicode characters in symbol content
+- **Large Content**: No size limits imposed, but very large symbol bodies may impact performance
+- **Null/Undefined Fields**: If `symbol.params` or `symbol.body` are undefined, they will be converted to "undefined" strings in the hash
 
 </details>
 
 <details>
 <summary>Related</summary>
 
-- `SymbolInfo` interface - The input type containing symbol metadata
-- `crypto.createHash` - Node.js crypto module used for hashing
-- Change detection systems that track code modifications
-- Code analysis tools that need to identify meaningful changes vs. formatting changes
+- `SymbolInfo` - The interface/type that defines the structure of symbols being hashed
+- Node.js `crypto.createHash()` - The underlying cryptographic function used for SHA256 hashing
+- Change detection systems that use content hashing for cache invalidation
+- Code analysis tools that need to track meaningful changes in source code
 
 </details>

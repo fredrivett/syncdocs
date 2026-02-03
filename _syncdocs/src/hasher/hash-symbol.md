@@ -1,6 +1,6 @@
 ---
 title: hashSymbol
-generated: 2026-02-03T11:27:07.860Z
+generated: 2026-02-03T11:38:12.998Z
 dependencies:
   - path: /Users/fredrivett/code/FR/syncdocs/src/hasher/index.ts
     symbol: hashSymbol
@@ -8,64 +8,47 @@ dependencies:
 ---
 # hashSymbol
 
-Generates a content hash for a given symbol. This function creates a unique string identifier based on the symbol's properties and content, useful for symbol comparison, caching, and change detection.
+Generates a hash string for a given symbol by utilizing the ContentHasher class. This function provides a convenient wrapper for creating consistent hash values from SymbolInfo objects.
 
-## Parameters
+<details>
+<summary>Parameters</summary>
 
-- `symbol` (SymbolInfo): The symbol information object to hash
+- `symbol: SymbolInfo` - The symbol information object to be hashed. This should contain the necessary metadata and properties that uniquely identify the symbol.
 
-## Return Value
+</details>
 
-Returns a `string` representing the content hash of the symbol.
+<details>
+<summary>Return Value</summary>
+
+Returns a `string` representing the computed hash of the provided symbol. The hash is generated using the internal ContentHasher implementation and provides a consistent identifier for the symbol.
+
+</details>
 
 <details>
 <summary>Usage Examples</summary>
 
-### Basic Usage
-
 ```typescript
 import { hashSymbol } from './path/to/module';
 
+// Hash a symbol object
 const symbolInfo: SymbolInfo = {
-  name: 'MyClass',
-  type: 'class',
-  filePath: '/src/components/MyClass.ts',
+  name: 'myFunction',
+  type: 'function',
   // ... other symbol properties
 };
 
 const hash = hashSymbol(symbolInfo);
-console.log(hash); // "abc123def456..."
-```
+console.log(hash); // Outputs: "a1b2c3d4e5f6..."
 
-### Symbol Comparison
+// Use in a symbol registry or cache
+const symbolCache = new Map<string, SymbolInfo>();
+const symbolHash = hashSymbol(symbolInfo);
+symbolCache.set(symbolHash, symbolInfo);
 
-```typescript
-const symbol1Hash = hashSymbol(symbolInfo1);
-const symbol2Hash = hashSymbol(symbolInfo2);
-
-if (symbol1Hash === symbol2Hash) {
-  console.log('Symbols have identical content');
-} else {
-  console.log('Symbols differ');
-}
-```
-
-### Caching with Symbol Hashes
-
-```typescript
-const symbolCache = new Map<string, ProcessedSymbol>();
-
-function processSymbol(symbol: SymbolInfo): ProcessedSymbol {
-  const hash = hashSymbol(symbol);
-  
-  if (symbolCache.has(hash)) {
-    return symbolCache.get(hash)!;
-  }
-  
-  const processed = performExpensiveProcessing(symbol);
-  symbolCache.set(hash, processed);
-  return processed;
-}
+// Compare symbols by hash
+const symbol1Hash = hashSymbol(symbol1);
+const symbol2Hash = hashSymbol(symbol2);
+const areEqual = symbol1Hash === symbol2Hash;
 ```
 
 </details>
@@ -73,44 +56,30 @@ function processSymbol(symbol: SymbolInfo): ProcessedSymbol {
 <details>
 <summary>Implementation Details</summary>
 
-The function serves as a simple wrapper around the `ContentHasher` class:
+The function creates a new instance of `ContentHasher` for each invocation and delegates the actual hashing logic to the `hashSymbol` method of that class. This design provides:
 
-1. Creates a new instance of `ContentHasher`
-2. Delegates the actual hashing to the `hashSymbol` method of the hasher
-3. Returns the resulting hash string
+- Encapsulation of hashing logic within the ContentHasher class
+- A clean, functional interface for symbol hashing
+- Consistency with the broader hashing infrastructure
 
-The actual hashing algorithm is implemented within the `ContentHasher` class, which likely:
-- Serializes the symbol's properties in a deterministic order
-- Applies a cryptographic hash function (such as SHA-256 or MD5)
-- Returns the hash as a hexadecimal string
+The ContentHasher instance is created fresh for each call, ensuring no state pollution between hash operations.
 
 </details>
 
 <details>
 <summary>Edge Cases</summary>
 
-### Null or Undefined Input
-
-The function may throw an error if passed `null` or `undefined`. Ensure the `symbol` parameter is a valid `SymbolInfo` object.
-
-### Hash Collisions
-
-While extremely rare with cryptographic hash functions, hash collisions are theoretically possible. For critical applications, consider additional validation beyond hash comparison.
-
-### Performance Considerations
-
-- Each call creates a new `ContentHasher` instance, which may have performance implications in high-frequency scenarios
-- Consider caching hash results for symbols that don't change frequently
-- The hashing operation's performance depends on the complexity and size of the `SymbolInfo` object
+- **Null/Undefined Symbol**: Behavior depends on the ContentHasher implementation. May throw an error or return a default hash value.
+- **Incomplete SymbolInfo**: If the SymbolInfo object is missing required properties, the hash may not be deterministic or unique.
+- **Memory Usage**: Each call creates a new ContentHasher instance, which may impact performance in high-frequency scenarios.
 
 </details>
 
 <details>
 <summary>Related</summary>
 
-- `ContentHasher` - The underlying class that performs the actual hashing
+- `ContentHasher` - The underlying class that performs the actual hashing operation
 - `SymbolInfo` - The type definition for symbol information objects
-- Hash-based caching strategies for symbol processing
-- Symbol comparison and change detection utilities
+- `ContentHasher.hashSymbol()` - The method that performs the core hashing logic
 
 </details>
