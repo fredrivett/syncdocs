@@ -17,12 +17,14 @@ import { registerCheckCommand } from './commands/check.js';
 import { registerGenerateCommand } from './commands/generate.js';
 // Register commands
 import { registerInitCommand } from './commands/init.js';
+import { registerRegenerateCommand } from './commands/regenerate.js';
 import { registerStatusCommand } from './commands/status.js';
 import { registerValidateCommand } from './commands/validate.js';
 
 registerInitCommand(cli);
 registerCheckCommand(cli);
 registerGenerateCommand(cli);
+registerRegenerateCommand(cli);
 registerStatusCommand(cli);
 registerValidateCommand(cli);
 
