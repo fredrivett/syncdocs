@@ -2,7 +2,7 @@
 
 // Load environment variables from .env file
 import { config } from 'dotenv'
-config()
+config({ silent: true })
 
 import { cac } from 'cac'
 import { version } from '../../package.json'
