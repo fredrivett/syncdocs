@@ -3,7 +3,7 @@
  */
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { TypeScriptExtractor } from '../extractor/index.js';
 import type { SymbolInfo } from '../extractor/types.js';
 import { ContentHasher } from '../hasher/index.js';

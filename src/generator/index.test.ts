@@ -6,7 +6,6 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SymbolInfo } from '../extractor/types.js';
-import { AIClient } from './ai-client.js';
 import { Generator } from './index.js';
 
 // Mock the AIClient
@@ -119,7 +118,7 @@ describe('Generator', () => {
       // Parse frontmatter to check hash format
       const hashMatch = content.match(/hash: ([a-f0-9]{64})/);
       expect(hashMatch).toBeTruthy();
-      expect(hashMatch![1]).toHaveLength(64);
+      expect(hashMatch?.[1]).toHaveLength(64);
     });
 
     it('should generate kebab-case file names', async () => {
@@ -340,7 +339,7 @@ export class Calculator {
       const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
       expect(frontmatterMatch).toBeTruthy();
 
-      const frontmatter = frontmatterMatch![1];
+      const frontmatter = frontmatterMatch?.[1];
 
       // Check dependency formatting (proper YAML indentation)
       expect(frontmatter).toMatch(/dependencies:\n {2}- path: /);

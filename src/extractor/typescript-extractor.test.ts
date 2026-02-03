@@ -25,7 +25,7 @@ describe('TypeScriptExtractor', () => {
       if (existsSync(TEST_FILE)) {
         unlinkSync(TEST_FILE);
       }
-    } catch (e) {
+    } catch (_e) {
       // Ignore cleanup errors
     }
   });

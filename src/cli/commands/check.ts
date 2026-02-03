@@ -152,7 +152,7 @@ async function regenerateStaleDocs(staleDocs: StaleDoc[], config: any) {
         } else {
           failed++;
         }
-      } catch (error) {
+      } catch (_error) {
         spinner.message(`Failed to regenerate ${dep.symbol}`);
         failed++;
       }

@@ -119,7 +119,7 @@ export function registerStatusCommand(cli: CAC) {
             if (!byFile.has(relativePath)) {
               byFile.set(relativePath, []);
             }
-            byFile.get(relativePath)!.push(symbol.name);
+            byFile.get(relativePath)?.push(symbol.name);
           }
 
           for (const [file, symbols] of byFile) {
@@ -149,7 +149,7 @@ export function registerStatusCommand(cli: CAC) {
     });
 }
 
-function findSourceFiles(rootDir: string, includes: string[], excludes: string[]): string[] {
+function findSourceFiles(rootDir: string, _includes: string[], _excludes: string[]): string[] {
   const files: string[] = [];
 
   // Simple recursive file finder

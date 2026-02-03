@@ -73,7 +73,7 @@ export class TypeScriptExtractor {
    * Extract function declaration
    */
   private extractFunction(node: ts.FunctionDeclaration, sourceFile: ts.SourceFile): SymbolInfo {
-    const name = node.name!.getText(sourceFile);
+    const name = node.name?.getText(sourceFile);
     const fullText = node.getText(sourceFile);
 
     // Extract parameters (everything between parentheses)
@@ -140,7 +140,7 @@ export class TypeScriptExtractor {
    * Extract class declaration
    */
   private extractClass(node: ts.ClassDeclaration, sourceFile: ts.SourceFile): SymbolInfo {
-    const name = node.name!.getText(sourceFile);
+    const name = node.name?.getText(sourceFile);
     const fullText = node.getText(sourceFile);
 
     // For classes, we treat the whole class as the "body"
