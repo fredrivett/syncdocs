@@ -56,6 +56,25 @@ export function registerRegenerateCommand(cli: CAC) {
 
         spinner.stop(`Found ${docs.length} documentation file${docs.length === 1 ? '' : 's'}`);
 
+        // Show list of docs to be regenerated
+        console.log('');
+        console.log('Documentation files to regenerate:');
+        for (const doc of docs) {
+          console.log(`  • ${doc.symbolName} (from ${doc.filePath})`);
+        }
+        console.log('');
+
+        // Confirm regeneration
+        const shouldContinue = await p.confirm({
+          message: `Regenerate ${docs.length} documentation file${docs.length === 1 ? '' : 's'}?`,
+          initialValue: true,
+        });
+
+        if (p.isCancel(shouldContinue) || !shouldContinue) {
+          p.cancel('Regeneration cancelled');
+          process.exit(0);
+        }
+
         // Create generator
         const generator = new Generator({
           apiKey: process.env.ANTHROPIC_API_KEY,
