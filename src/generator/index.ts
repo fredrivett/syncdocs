@@ -186,11 +186,11 @@ export class Generator {
    * Generate file name for a symbol
    */
   private generateFileName(symbol: SymbolInfo): string {
-    // Convert symbol name to kebab-case
+    // Convert symbol name to kebab-case (handles acronyms like YAML, API)
     const kebabName = symbol.name
-      .replace(/([A-Z])/g, '-$1')
-      .toLowerCase()
-      .replace(/^-/, '');
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .toLowerCase();
 
     return `${kebabName}.md`;
   }
@@ -249,7 +249,7 @@ export class Generator {
       symbolName?: string;
       depth?: number;
       force?: boolean;
-      onProgress?: (message: string) => void;
+      onProgress?: (message: string, type?: 'info' | 'progress') => void;
     },
   ): Promise<GenerationResult[]> {
     const depth = options.depth ?? 0;
@@ -257,20 +257,29 @@ export class Generator {
     const progress = options.onProgress ?? (() => {});
 
     // Extract target symbol(s)
-    let targetSymbols: SymbolInfo[];
+    let rawTargets: SymbolInfo[];
     if (options.symbolName) {
       const symbol = this.extractor.extractSymbol(filePath, options.symbolName);
       if (!symbol) {
         return [{ success: false, error: `Symbol "${options.symbolName}" not found in ${filePath}` }];
       }
-      targetSymbols = [symbol];
+      rawTargets = [symbol];
     } else {
       const result = this.extractor.extractSymbols(filePath);
       if (result.symbols.length === 0) {
         return [{ success: false, error: `No symbols found in ${filePath}` }];
       }
-      targetSymbols = result.symbols;
+      rawTargets = result.symbols;
     }
+
+    // Dedupe targets by filePath:name (extractor can find same-named nested symbols)
+    const seenTargets = new Set<string>();
+    const targetSymbols = rawTargets.filter((s) => {
+      const key = `${s.filePath}:${s.name}`;
+      if (seenTargets.has(key)) return false;
+      seenTargets.add(key);
+      return true;
+    });
 
     // Resolve call trees for all target symbols
     progress('Resolving call tree...');
@@ -291,14 +300,26 @@ export class Generator {
     });
 
     const totalCount = targetSymbols.length + uniqueCallees.length;
-    progress(`Found ${totalCount} symbols (${targetSymbols.length} target${targetSymbols.length === 1 ? '' : 's'}, ${uniqueCallees.length} callee${uniqueCallees.length === 1 ? '' : 's'})`);
+    const allNames = [...targetSymbols, ...uniqueCallees].map((s) => s.name).join(', ');
+    const breakdown = uniqueCallees.length > 0
+      ? ` (${targetSymbols.length} target${targetSymbols.length === 1 ? '' : 's'}, ${uniqueCallees.length} callee${uniqueCallees.length === 1 ? '' : 's'})`
+      : '';
+    progress(`Found ${totalCount} symbol${totalCount === 1 ? '' : 's'}${breakdown}: ${allNames}`, 'info');
 
     const results: GenerationResult[] = [];
+    const generated = new Set<string>();
     let current = 0;
 
     // Generate for target symbols (always generate)
     for (const symbol of targetSymbols) {
       current++;
+      const key = `${symbol.filePath}:${symbol.name}`;
+      if (generated.has(key)) {
+        progress(`[${current}/${totalCount}] Skipping ${symbol.name} (already generated)`);
+        continue;
+      }
+      generated.add(key);
+
       progress(`[${current}/${totalCount}] Generating ${symbol.name}`);
       const callees = this.resolveCallTree(symbol, depth);
       const result = await this.generate({
@@ -311,6 +332,13 @@ export class Generator {
     // Generate for callees (skip if up-to-date unless --force)
     for (const callee of uniqueCallees) {
       current++;
+      const key = `${callee.filePath}:${callee.name}`;
+      if (generated.has(key)) {
+        progress(`[${current}/${totalCount}] Skipping ${callee.name} (already generated)`);
+        continue;
+      }
+      generated.add(key);
+
       if (!force && this.isDocUpToDate(callee)) {
         progress(`[${current}/${totalCount}] Skipping ${callee.name} (up-to-date)`);
         results.push({

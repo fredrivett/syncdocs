@@ -120,16 +120,25 @@ async function generateFile(generator: Generator, filePath: string, displayPath:
     process.exit(1);
   }
 
-  const symbolCount = extractResult.symbols.length;
-  spinner.message(
-    `Found ${symbolCount} symbol${symbolCount === 1 ? '' : 's'}: ${extractResult.symbols.map((s) => s.name).join(', ')}`,
+  // Dedupe symbols by name (extractor can find same-named nested symbols)
+  const seen = new Set<string>();
+  const symbols = extractResult.symbols.filter((s) => {
+    if (seen.has(s.name)) return false;
+    seen.add(s.name);
+    return true;
+  });
+
+  const symbolCount = symbols.length;
+  spinner.stop(
+    `Found ${symbolCount} symbol${symbolCount === 1 ? '' : 's'}: ${symbols.map((s) => s.name).join(', ')}`,
   );
 
   // Generate docs for each symbol
+  spinner.start(`Generating documentation`);
   let completed = 0;
   const results: string[] = [];
 
-  for (const symbol of extractResult.symbols) {
+  for (const symbol of symbols) {
     completed++;
     spinner.message(`[${completed}/${symbolCount}] Generating documentation for ${symbol.name}`);
 
@@ -145,10 +154,7 @@ async function generateFile(generator: Generator, filePath: string, displayPath:
   spinner.stop(`Generated ${completed} document${completed === 1 ? '' : 's'}`);
 
   // Show results
-  console.log('');
-  for (const result of results) {
-    console.log(result);
-  }
+  p.log.message(results.join('\n'));
 }
 
 async function generateWithDepth(
@@ -166,7 +172,14 @@ async function generateWithDepth(
     symbolName,
     depth,
     force,
-    onProgress: (msg) => spinner.message(msg),
+    onProgress: (msg, type) => {
+      if (type === 'info') {
+        spinner.stop(msg);
+        spinner.start(msg);
+      } else {
+        spinner.message(msg);
+      }
+    },
   });
 
   const generated = results.filter((r) => r.success && !r.skipped);
@@ -176,16 +189,16 @@ async function generateWithDepth(
   spinner.stop(`Generated ${generated.length} document${generated.length === 1 ? '' : 's'}${skipped.length > 0 ? `, skipped ${skipped.length} up-to-date` : ''}`);
 
   // Show results
-  console.log('');
-  for (const result of results) {
+  const lines = results.map((result) => {
     if (result.skipped) {
-      console.log(`  ⊘ ${result.filePath} (up-to-date)`);
+      return `⊘ ${result.filePath} (up-to-date)`;
     } else if (result.success) {
-      console.log(`  ✓ ${result.filePath}`);
+      return `✓ ${result.filePath}`;
     } else {
-      console.log(`  ✗ ${result.error}`);
+      return `✗ ${result.error}`;
     }
-  }
+  });
+  p.log.message(lines.join('\n'));
 
   if (failed.length > 0) {
     process.exit(1);

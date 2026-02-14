@@ -58,12 +58,8 @@ export function registerRegenerateCommand(cli: CAC) {
         spinner.stop(`Found ${docs.length} documentation file${docs.length === 1 ? '' : 's'}`);
 
         // Show list of docs to be regenerated
-        console.log('');
-        console.log('Documentation files to regenerate:');
-        for (const doc of docs) {
-          console.log(`  • ${doc.symbolName} (from ${doc.filePath})`);
-        }
-        console.log('');
+        const docLines = docs.map((doc) => `• ${doc.symbolName} (from ${doc.filePath})`);
+        p.log.message('Documentation files to regenerate:\n' + docLines.join('\n'));
 
         // Confirm regeneration
         const shouldContinue = await p.confirm({
@@ -122,10 +118,7 @@ export function registerRegenerateCommand(cli: CAC) {
         spinner.stop(`Regenerated ${completed} document${completed === 1 ? '' : 's'}`);
 
         // Show results
-        console.log('');
-        for (const result of results) {
-          console.log(result);
-        }
+        p.log.message(results.join('\n'));
 
         p.outro('✨ Documentation regeneration complete!');
       } catch (error) {

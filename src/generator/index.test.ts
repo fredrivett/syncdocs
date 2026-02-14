@@ -125,7 +125,8 @@ describe('Generator', () => {
       const testCases = [
         { name: 'MyClass', expected: 'my-class.md' },
         { name: 'getUserData', expected: 'get-user-data.md' },
-        { name: 'APIClient', expected: 'a-p-i-client.md' },
+        { name: 'APIClient', expected: 'api-client.md' },
+        { name: 'generateConfigYAML', expected: 'generate-config-yaml.md' },
         { name: 'simple', expected: 'simple.md' },
       ];
 
@@ -459,6 +460,28 @@ function main() { return helper() }
       const names = result.map((s) => s.name);
       expect(names).toContain('helper');
       expect(names).toContain('deepHelper');
+    });
+
+    it('should not generate duplicate symbols found through multiple paths', async () => {
+      // Two targets that both call the same helper — helper should only be generated once
+      const code = `
+function helper() { return 1 }
+function main1() { return helper() }
+function main2() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'dedup.ts');
+      writeFileSync(sourcePath, code);
+
+      const progressMessages: string[] = [];
+      const results = await generator.generateWithDepth(sourcePath, {
+        depth: 1,
+        onProgress: (msg) => progressMessages.push(msg),
+      });
+
+      // helper should appear at most once in successful results (not counting skips)
+      const generatedPaths = results.filter((r) => r.success).map((r) => r.filePath);
+      const helperDocs = generatedPaths.filter((p) => p?.includes('helper'));
+      expect(helperDocs).toHaveLength(1);
     });
 
     it('should handle cycles without infinite recursion', () => {

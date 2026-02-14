@@ -77,39 +77,37 @@ export function registerStatusCommand(cli: CAC) {
 
         spinner.stop('Analysis complete');
 
-        // Calculate coverage
+        // Calculate coverage (doc paths are relative, source paths are absolute)
         const totalSymbols = allSymbols.length;
         const documented = allSymbols.filter((s) =>
-          documentedSymbols.has(`${s.file}:${s.symbol.name}`),
+          documentedSymbols.has(`${getRelativePath(s.file)}:${s.symbol.name}`),
         ).length;
         const undocumented = totalSymbols - documented;
         const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
 
         // Display results
-        console.log('');
-        console.log(`  Source Files: ${sourceFiles.length}`);
-        console.log(`  Total Symbols: ${totalSymbols}`);
-        console.log(`  Documented: ${documented}`);
-        console.log(`  Undocumented: ${undocumented}`);
-        console.log('');
-
-        // Coverage bar
         const barWidth = 30;
         const filled = Math.round((coverage / 100) * barWidth);
         const empty = barWidth - filled;
         const bar = '█'.repeat(filled) + '░'.repeat(empty);
+        const coverageColor =
+          coverage >= 75 ? '🟢' : coverage >= 50 ? '🟡' : coverage >= 25 ? '🟠' : '🔴';
 
-        const coverageColor = coverage >= 80 ? '✅' : coverage >= 50 ? '⚠️' : '❌';
-        console.log(`  ${coverageColor} Coverage: ${bar} ${coverage}%`);
-        console.log('');
+        p.log.message(
+          [
+            `Source Files: ${sourceFiles.length}`,
+            `Total Symbols: ${totalSymbols}`,
+            `Documented: ${documented}`,
+            `Undocumented: ${undocumented}`,
+            '',
+            `${coverageColor} Coverage: ${bar} ${coverage}%`,
+          ].join('\n'),
+        );
 
         // Show undocumented symbols if verbose or if there are undocumented symbols
         if (undocumented > 0 && (options.verbose || undocumented <= 20)) {
-          p.log.warn('Undocumented symbols:');
-          console.log('');
-
           const undocumentedList = allSymbols.filter(
-            (s) => !documentedSymbols.has(`${s.file}:${s.symbol.name}`),
+            (s) => !documentedSymbols.has(`${getRelativePath(s.file)}:${s.symbol.name}`),
           );
 
           // Group by file
@@ -122,19 +120,20 @@ export function registerStatusCommand(cli: CAC) {
             byFile.get(relativePath)?.push(symbol.name);
           }
 
+          const lines: string[] = [];
           for (const [file, symbols] of byFile) {
-            console.log(`  📄 ${file}`);
+            lines.push(`📄 ${file}`);
             for (const symbol of symbols) {
-              console.log(`     • ${symbol}`);
+              lines.push(`   • ${symbol}`);
             }
           }
+          lines.push('');
+          lines.push('💡 Generate docs with: syncdocs generate <file> or syncdocs generate <file>:<symbol>');
 
-          console.log('');
-          console.log(
-            `  💡 Generate docs with: syncdocs generate <file> or syncdocs generate <file>:<symbol>`,
-          );
+          p.log.warn('Undocumented symbols:');
+          p.log.message(lines.join('\n'));
         } else if (undocumented > 20) {
-          console.log(`  Use --verbose to see all ${undocumented} undocumented symbols`);
+          p.log.message(`Use --verbose to see all ${undocumented} undocumented symbols`);
         }
 
         p.outro(

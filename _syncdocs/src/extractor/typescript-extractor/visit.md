@@ -1,6 +1,6 @@
 ---
 title: visit
-generated: 2026-02-14T15:34:31.146Z
+generated: 2026-02-14T17:29:20.017Z
 dependencies:
   - path: src/extractor/typescript-extractor.ts
     symbol: visit
@@ -8,42 +8,38 @@ dependencies:
 ---
 # visit
 
-This const defines a TypeScript AST visitor function that traverses nodes to extract symbols (functions, classes, etc.) from source code. It implements a recursive tree-walking pattern to identify and process different types of declarations while handling errors gracefully.
+The `visit` const is a recursive tree traversal function designed to extract symbols from TypeScript AST nodes. It identifies function declarations, arrow functions, and class declarations, then processes them through specific extraction methods while gracefully handling errors and recursively visiting child nodes.
 
 <details>
 <summary>Visual Flow</summary>
 
 ```mermaid
 flowchart TD
-    A[visit called with node] --> B{Try block}
+    A[Start: visit node] --> B{Try block}
     B --> C{ts.isFunctionDeclaration?}
-    C -->|Yes & has name| D[Call this.extractFunction]
+    C -->|Yes + has name| D[extractFunction]
     C -->|No| E{ts.isVariableStatement?}
     
-    D --> F[Push to symbols array]
-    F --> E
+    D --> F[Push to symbols]
+    F --> G{ts.isClassDeclaration?}
     
-    E -->|Yes & has declarations| G{Check initializer}
-    E -->|No| H{ts.isClassDeclaration?}
+    E -->|Yes + has declarations| H{First declaration has initializer?}
+    E -->|No| G
+    H -->|Arrow/Function expression| I[extractArrowFunction]
+    H -->|No| G
+    I --> J[Push to symbols]
+    J --> G
     
-    G -->|Arrow/Function expression| I[Call this.extractArrowFunction]
-    G -->|Other| H
-    
-    I --> J[Push to symbols array]
-    J --> H
-    
-    H -->|Yes & has name| K[Call this.extractClass]
-    H -->|No| L[ts.forEachChild recursion]
-    
-    K --> M[Push to symbols array]
+    G -->|Yes + has name| K[extractClass]
+    G -->|No| L[ts.forEachChild recursive call]
+    K --> M[Push to symbols]
     M --> L
     
-    L --> N[Recursive visit on children]
-    N --> O[End]
+    L --> N[End]
     
-    B -.->|Exception| P[Catch block]
-    P --> Q[Push error to errors array]
-    Q --> O
+    B -.-> O[Catch Error]
+    O --> P[Push error to errors array]
+    P --> N
 ```
 
 </details>
@@ -51,29 +47,31 @@ flowchart TD
 <details>
 <summary>Parameters</summary>
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `node` | `ts.Node` | The TypeScript AST node to visit and process. Can be any type of AST node from the TypeScript compiler API. |
+- `node: ts.Node` - A TypeScript AST node to be analyzed for extractable symbols. Can be any node type in the TypeScript syntax tree, though only function declarations, variable statements containing functions, and class declarations will be processed for symbol extraction.
 
 </details>
 
 <details>
 <summary>Implementation Details</summary>
 
-The `visit` function implements a visitor pattern for TypeScript AST traversal:
+The function implements a visitor pattern for TypeScript AST traversal with the following key behaviors:
 
-1. **Error Handling**: Wraps all processing in a try-catch block to capture extraction errors
-2. **Function Detection**: Uses `ts.isFunctionDeclaration()` to identify named function declarations
-3. **Arrow Function Detection**: Checks variable statements for arrow functions and function expressions in initializers
-4. **Class Detection**: Uses `ts.isClassDeclaration()` to identify named class declarations
-5. **Recursive Traversal**: Calls `ts.forEachChild()` to recursively visit all child nodes
-6. **Symbol Collection**: Pushes extracted symbols to a `symbols` array (assumed to be in scope)
-7. **Error Collection**: Pushes any errors with position information to an `errors` array
+1. **Function Declaration Detection**: Uses `ts.isFunctionDeclaration()` to identify named function declarations and processes them via `this.extractFunction()`
 
-The function relies on external extraction methods:
-- `this.extractFunction()` for function declarations
-- `this.extractArrowFunction()` for arrow functions and function expressions
-- `this.extractClass()` for class declarations
+2. **Arrow Function Detection**: Checks for variable statements containing arrow functions or function expressions by:
+   - Verifying the node is a variable statement with declarations
+   - Examining the first declaration's initializer
+   - Using `ts.isArrowFunction()` or `ts.isFunctionExpression()` type guards
+
+3. **Class Declaration Detection**: Uses `ts.isClassDeclaration()` to identify named class declarations and processes them via `this.extractClass()`
+
+4. **Recursive Traversal**: Employs `ts.forEachChild()` to recursively visit all child nodes, ensuring complete AST coverage
+
+5. **Error Handling**: Wraps all operations in a try-catch block, collecting errors with node position information for debugging
+
+The function modifies two external collections:
+- `symbols` array - receives extracted symbol information
+- `errors` array - receives any processing errors with contextual information
 
 </details>
 
@@ -81,50 +79,38 @@ The function relies on external extraction methods:
 <summary>Usage Examples</summary>
 
 ```typescript
-// Basic usage in a TypeScript AST traversal context
-const sourceFile = ts.createSourceFile('example.ts', sourceCode, ts.ScriptTarget.Latest);
+// Usage within a TypeScript AST traversal context
 const symbols: SymbolInfo[] = [];
 const errors: string[] = [];
 
-// Define the visit function
-const visit = (node: ts.Node) => {
-  // ... implementation as shown
-};
-
-// Start traversal from root
+// Visit a source file's root node
+const sourceFile = ts.createSourceFile('example.ts', sourceCode, ts.ScriptTarget.Latest);
 visit(sourceFile);
-```
 
-```typescript
-// Usage within a class-based AST processor
-class SymbolExtractor {
-  private symbols: SymbolInfo[] = [];
-  private errors: string[] = [];
-
-  processFile(sourceFile: ts.SourceFile) {
-    const visit = (node: ts.Node) => {
-      // ... visit implementation
-    };
-    
-    visit(sourceFile);
-    return { symbols: this.symbols, errors: this.errors };
-  }
+// Process results
+console.log(`Found ${symbols.length} symbols`);
+if (errors.length > 0) {
+  console.error('Extraction errors:', errors);
 }
 ```
 
 ```typescript
-// Processing different node types
-// Will extract: function myFunc() {}
-const functionNode = /* function declaration node */;
-visit(functionNode);
-
-// Will extract: const myArrow = () => {}
-const variableNode = /* variable statement with arrow function */;
-visit(variableNode);
-
-// Will extract: class MyClass {}
-const classNode = /* class declaration node */;
-visit(classNode);
+// Example of nodes that would be processed
+const exampleCode = `
+  // Function declaration - will be extracted
+  function myFunction() { return 42; }
+  
+  // Arrow function - will be extracted
+  const myArrow = () => { return 'hello'; };
+  
+  // Class declaration - will be extracted
+  class MyClass { 
+    method() { return true; }
+  }
+  
+  // Regular variable - will be skipped
+  const myVar = 'value';
+`;
 ```
 
 </details>
@@ -132,25 +118,29 @@ visit(classNode);
 <details>
 <summary>Edge Cases</summary>
 
-- **Anonymous Functions**: Only processes named function declarations; anonymous functions are ignored
-- **Anonymous Classes**: Only processes named class declarations; anonymous classes are ignored
-- **Multiple Declarations**: Only processes the first declaration in a variable statement's declaration list
-- **Nested Functions**: Recursive traversal will visit nested functions, potentially extracting them multiple times if they're named
-- **Error Recovery**: Continues processing other nodes even if extraction fails for a specific node
-- **Position Information**: Error messages include node position (`node.pos`) for debugging malformed AST nodes
-- **Missing Initializers**: Variable statements without initializers are safely skipped
-- **Complex Expressions**: Only detects arrow functions and function expressions as direct initializers, not within complex expressions
+1. **Anonymous Functions**: Function declarations without names are ignored, even if they exist in the AST
+
+2. **Multiple Variable Declarations**: Only the first declaration in a variable statement is examined for function content
+
+3. **Nested Functions**: Inner function declarations will be visited separately due to recursive traversal, potentially creating multiple symbol entries
+
+4. **Anonymous Classes**: Class declarations without names are skipped during extraction
+
+5. **Error Recovery**: If extraction methods throw exceptions, the error is logged but traversal continues, preventing single node failures from stopping the entire process
+
+6. **Complex Initializers**: Variable declarations with complex expressions that aren't direct arrow functions or function expressions are ignored
 
 </details>
 
 <details>
 <summary>Related</summary>
 
-- `ts.forEachChild()` - TypeScript compiler API for AST traversal
-- `ts.isFunctionDeclaration()`, `ts.isVariableStatement()`, `ts.isClassDeclaration()` - TypeScript type guards
-- `ts.isArrowFunction()`, `ts.isFunctionExpression()` - TypeScript type guards for function types
-- `this.extractFunction()`, `this.extractArrowFunction()`, `this.extractClass()` - Symbol extraction methods
+- `this.extractFunction()` - Processes function declaration nodes into symbol information
+- `this.extractArrowFunction()` - Processes arrow function and function expression nodes
+- `this.extractClass()` - Processes class declaration nodes into symbol information
+- `ts.forEachChild()` - TypeScript compiler API function for AST traversal
+- `ts.isFunctionDeclaration()`, `ts.isVariableStatement()`, `ts.isClassDeclaration()` - TypeScript type guard functions
 - TypeScript AST visitor pattern implementations
-- Abstract Syntax Tree (AST) traversal algorithms
+- Symbol extraction and code analysis utilities
 
 </details>

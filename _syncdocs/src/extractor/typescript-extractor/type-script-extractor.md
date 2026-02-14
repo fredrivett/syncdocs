@@ -1,51 +1,58 @@
 ---
 title: TypeScriptExtractor
-generated: 2026-02-14T15:34:07.554Z
+generated: 2026-02-14T17:28:56.268Z
 dependencies:
   - path: src/extractor/typescript-extractor.ts
     symbol: TypeScriptExtractor
-    hash: add2fbd54c2ba40f7d5e87ec51febdddd6f9724f513a9b91d559a33521caffab
+    hash: 84549e9c2875c0e8037c37b92e870f5e3d63f8e355e120c7a5143f26ed8b904e
 ---
 # TypeScriptExtractor
 
-A utility class for parsing and extracting symbols (functions, classes, arrow functions) from TypeScript and JavaScript files using the TypeScript compiler API. It provides methods to extract all symbols from a file or find specific symbols by name, returning structured information about each symbol including its location, parameters, and source code.
+A class for extracting and analyzing TypeScript/JavaScript symbols (functions, classes, arrow functions) from source files using the TypeScript compiler API. It parses source code into AST nodes and extracts detailed symbol information including parameters, body content, and call site analysis.
 
 <details>
 <summary>Visual Flow</summary>
 
 ```mermaid
 flowchart TD
-    A[extractSymbols] --> B[Read file with readFileSync]
-    B --> C[Create SourceFile with ts.createSourceFile]
-    C --> D[Initialize visit function]
-    D --> E[Visit each node recursively]
+    subgraph TypeScriptExtractor["TypeScriptExtractor Class"]
+        A[extractSymbols] --> B[Read file & create SourceFile]
+        B --> C[Visit AST nodes recursively]
+        C --> D{Node type?}
+        D -->|Function Declaration| E[extractFunction]
+        D -->|Variable with Arrow/Function| F[extractArrowFunction]
+        D -->|Class Declaration| G[extractClass]
+        D -->|Other| H[Continue traversal]
+        E --> I[Collect SymbolInfo]
+        F --> I
+        G --> I
+        H --> C
+        C -.->|Error| J[Add to errors array]
+        
+        K[extractSymbol] --> A
+        K --> L[Find symbol by name]
+        
+        M[extractCallSites] --> N[Create SourceFile]
+        N --> O[findSymbolBody]
+        O --> P{Body found?}
+        P -->|Yes| Q[Walk AST for CallExpressions]
+        P -->|No| R[Return empty array]
+        Q --> S[extractCallName]
+        S --> T[Collect CallSite objects]
+        
+        U[findSymbolBody] --> V[Visit nodes to find matching symbol]
+        V --> W{Symbol type?}
+        W -->|Function| X[Return function body]
+        W -->|Variable/Arrow| Y[Return function body]
+        W -->|Class| Z[Return class node]
+        
+        AA[extractCallName] --> BB{Expression type?}
+        BB -->|Identifier| CC[Return identifier text]
+        BB -->|PropertyAccess| DD[Return property name]
+        BB -->|Other| EE[Return null]
+    end
     
-    E --> F{Node Type?}
-    F -->|Function Declaration| G[extractFunction]
-    F -->|Variable with Arrow/Function| H[extractArrowFunction]  
-    F -->|Class Declaration| I[extractClass]
-    F -->|Other| J[Continue recursion]
-    
-    G --> K[Extract name, params, body]
-    H --> L[Extract name, params, body]
-    I --> M[Extract name, full text as body]
-    
-    K --> N[Create SymbolInfo]
-    L --> N
-    M --> N
-    
-    N --> O[Add to symbols array]
-    O --> J
-    J --> P[ts.forEachChild - recurse]
-    P --> E
-    
-    E --> Q[Return ExtractionResult]
-    
-    R[extractSymbol] --> A
-    R --> S[Find symbol by name in results]
-    
-    B -.-> T[ExtractionError on file read failure]
-    E -.-> U[Add error to errors array]
+    A -.->|File read error| FF[Throw ExtractionError]
 ```
 
 </details>
@@ -53,86 +60,130 @@ flowchart TD
 <details>
 <summary>Methods</summary>
 
-### `extractSymbols(filePath: string): ExtractionResult`
-Parses a TypeScript/JavaScript file and extracts all function declarations, arrow functions, function expressions, and class declarations. Returns an `ExtractionResult` containing an array of `SymbolInfo` objects and any extraction errors encountered.
+## `extractSymbols(filePath: string): ExtractionResult`
+Extracts all symbols (functions, classes, arrow functions) from a TypeScript/JavaScript file. Returns an `ExtractionResult` containing an array of `SymbolInfo` objects and any extraction errors encountered.
 
-### `extractSymbol(filePath: string, symbolName: string): SymbolInfo | null`
-Extracts a specific symbol by name from the given file. Returns the `SymbolInfo` object if found, or `null` if the symbol doesn't exist.
+## `extractSymbol(filePath: string, symbolName: string): SymbolInfo | null`
+Extracts a single symbol by name from the specified file. Returns the `SymbolInfo` object if found, or `null` if the symbol doesn't exist.
 
-### `extractFunction(node: ts.FunctionDeclaration, sourceFile: ts.SourceFile): SymbolInfo` (private)
-Processes TypeScript function declaration nodes to extract symbol information including parameters, function body, and source location.
+## `extractCallSites(filePath: string, symbolName: string): CallSite[]`
+Analyzes a symbol's body to find all function/method calls made within it. Returns an array of `CallSite` objects containing the call name and full expression.
 
-### `extractArrowFunction(decl: ts.VariableDeclaration, sourceFile: ts.SourceFile): SymbolInfo` (private)
-Handles variable declarations that contain arrow functions or function expressions, extracting their parameters and bodies with special handling for expression vs block arrow functions.
+## Private Methods
 
-### `extractClass(node: ts.ClassDeclaration, sourceFile: ts.SourceFile): SymbolInfo` (private)
-Processes class declarations, treating the entire class definition as the body content.
+### `findSymbolBody(sourceFile: SourceFile, symbolName: string): Node | null`
+Locates the AST node representing the body of a named symbol (function body, arrow function body, or class node).
+
+### `extractCallName(expr: Expression, sourceFile: SourceFile): string | null`
+Extracts the callable function name from a call expression, handling identifiers (`foo()`) and property access (`obj.method()`).
+
+### `extractFunction(node: FunctionDeclaration, sourceFile: SourceFile): SymbolInfo`
+Processes function declarations and extracts comprehensive symbol information including parameters, body, and location data.
+
+### `extractArrowFunction(decl: VariableDeclaration, sourceFile: SourceFile): SymbolInfo`
+Handles arrow functions and function expressions assigned to variables, normalizing their body format.
+
+### `extractClass(node: ClassDeclaration, sourceFile: SourceFile): SymbolInfo`
+Processes class declarations and extracts class-level symbol information.
 
 </details>
 
 <details>
 <summary>Return Value</summary>
 
-### `extractSymbols()`
-Returns an `ExtractionResult` object with:
-- `symbols`: Array of `SymbolInfo` objects containing extracted symbol data
-- `errors`: Array of error messages for symbols that couldn't be processed
+## `extractSymbols()` Returns: `ExtractionResult`
+```typescript
+{
+  symbols: SymbolInfo[];  // Array of extracted symbol information
+  errors: string[];       // Any extraction errors encountered
+}
+```
 
-### `extractSymbol()`
-Returns a single `SymbolInfo` object or `null` if the symbol isn't found.
+## `extractSymbol()` Returns: `SymbolInfo | null`
+Returns a single `SymbolInfo` object or `null` if the symbol is not found.
 
-### `SymbolInfo` Structure
-Each extracted symbol contains:
-- `name`: Symbol name
-- `kind`: Type of symbol (`'function'`, `'const'`, `'class'`)
-- `filePath`: Source file path
-- `params`: Parameter list as string
-- `body`: Function/class body content
-- `fullText`: Complete source code
-- `startLine`/`endLine`: 1-based line numbers
+## `extractCallSites()` Returns: `CallSite[]`
+```typescript
+{
+  name: string;        // Function name being called
+  expression: string;  // Full call expression
+}[]
+```
+
+## `SymbolInfo` Structure
+```typescript
+{
+  name: string;      // Symbol name
+  kind: 'function' | 'const' | 'class';
+  filePath: string;  // Source file path
+  params: string;    // Parameter list as string
+  body: string;      // Symbol body content
+  fullText: string;  // Complete symbol text
+  startLine: number; // Starting line number (1-based)
+  endLine: number;   // Ending line number (1-based)
+}
+```
 
 </details>
 
 <details>
 <summary>Usage Examples</summary>
 
+## Extract All Symbols
 ```typescript
-// Extract all symbols from a file
 const extractor = new TypeScriptExtractor();
 const result = extractor.extractSymbols('./src/utils.ts');
 
 console.log(`Found ${result.symbols.length} symbols`);
 result.symbols.forEach(symbol => {
-  console.log(`${symbol.kind}: ${symbol.name} at lines ${symbol.startLine}-${symbol.endLine}`);
+  console.log(`${symbol.kind}: ${symbol.name} (lines ${symbol.startLine}-${symbol.endLine})`);
 });
 
-// Find a specific function
-const myFunction = extractor.extractSymbol('./src/helpers.ts', 'calculateTotal');
-if (myFunction) {
-  console.log(`Function params: ${myFunction.params}`);
-  console.log(`Function body: ${myFunction.body}`);
-}
-
-// Handle extraction errors
 if (result.errors.length > 0) {
-  console.warn('Extraction errors:', result.errors);
+  console.log('Extraction errors:', result.errors);
 }
 ```
 
+## Extract Specific Symbol
 ```typescript
-// Processing different symbol types
-const result = extractor.extractSymbols('./example.ts');
+const extractor = new TypeScriptExtractor();
+const symbol = extractor.extractSymbol('./src/api.ts', 'fetchUserData');
+
+if (symbol) {
+  console.log(`Function: ${symbol.name}`);
+  console.log(`Parameters: ${symbol.params}`);
+  console.log(`Body preview: ${symbol.body.substring(0, 100)}...`);
+} else {
+  console.log('Symbol not found');
+}
+```
+
+## Analyze Call Sites
+```typescript
+const extractor = new TypeScriptExtractor();
+const callSites = extractor.extractCallSites('./src/service.ts', 'processData');
+
+console.log('Functions called by processData:');
+callSites.forEach(call => {
+  console.log(`- ${call.name} (${call.expression})`);
+});
+```
+
+## Handle Different Symbol Types
+```typescript
+const extractor = new TypeScriptExtractor();
+const result = extractor.extractSymbols('./src/components.tsx');
 
 result.symbols.forEach(symbol => {
   switch (symbol.kind) {
     case 'function':
-      console.log(`Function ${symbol.name}(${symbol.params})`);
+      console.log(`Function declaration: ${symbol.name}`);
       break;
     case 'const':
-      console.log(`Arrow function or const ${symbol.name}`);
+      console.log(`Arrow function/const: ${symbol.name}`);
       break;
     case 'class':
-      console.log(`Class ${symbol.name}`);
+      console.log(`Class: ${symbol.name}`);
       break;
   }
 });
@@ -143,39 +194,81 @@ result.symbols.forEach(symbol => {
 <details>
 <summary>Implementation Details</summary>
 
-The class uses the TypeScript Compiler API (`ts`) to parse source files into Abstract Syntax Trees (ASTs). Key implementation aspects:
+## AST Processing
+The extractor uses the TypeScript compiler API (`ts.createSourceFile`) to parse source code into Abstract Syntax Trees. It recursively visits each AST node using `ts.forEachChild()` to identify and process different symbol types.
 
-- **File Processing**: Uses `readFileSync()` to read source files and `ts.createSourceFile()` with `ScriptTarget.Latest` for parsing
-- **AST Traversal**: Implements a recursive visitor pattern using `ts.forEachChild()` to traverse all nodes
-- **Symbol Detection**: Uses TypeScript's type guards (`ts.isFunctionDeclaration()`, `ts.isClassDeclaration()`, etc.) to identify extractable symbols
-- **Arrow Function Handling**: Special logic to detect variable declarations containing arrow functions or function expressions
-- **Error Resilience**: Wraps individual symbol extraction in try-catch blocks to continue processing other symbols when one fails
-- **Line Number Calculation**: Uses `getLineAndCharacterOfPosition()` to convert character positions to 1-based line numbers
-- **Text Extraction**: Uses `getText(sourceFile)` to extract clean source code without leading/trailing whitespace
+## Symbol Type Detection
+- **Function Declarations**: Detected using `ts.isFunctionDeclaration()`
+- **Arrow Functions**: Identified as variable statements with arrow function or function expression initializers
+- **Classes**: Found using `ts.isClassDeclaration()`
+
+## Error Handling
+- Individual node extraction errors are caught and added to the `errors` array
+- File-level errors (read failures, parse errors) throw `ExtractionError` exceptions
+- The extractor continues processing other nodes even if some fail
+
+## Text Extraction
+Symbol information is extracted using TypeScript's `getText()` method on AST nodes, which preserves original formatting and spacing. Line numbers are calculated using `getLineAndCharacterOfPosition()` and converted to 1-based indexing.
+
+## Call Site Analysis
+The `extractCallSites()` method performs a secondary AST walk focused on `CallExpression` nodes within a symbol's body. It extracts both simple function calls (`foo()`) and method calls (`obj.method()`) while deduplicating results.
+
+## Parameter Processing
+Function parameters are extracted from the AST parameter nodes and joined as comma-separated strings, preserving type annotations and default values as they appear in source code.
 
 </details>
 
 <details>
 <summary>Edge Cases</summary>
 
-- **Anonymous Functions**: Only extracts named functions and functions assigned to variables; anonymous functions are ignored
-- **Arrow Function Bodies**: Expression-style arrow functions get wrapped in `{ return ... }` blocks for consistency
-- **File Read Errors**: Throws `ExtractionError` for file system issues, but continues processing individual symbol errors
-- **Nested Functions**: Inner functions are extracted as separate symbols with their own entries
-- **Method Extraction**: Class methods are not individually extracted; only the class declaration itself
-- **Export Statements**: Exported functions/classes are extracted the same as non-exported ones
-- **TypeScript vs JavaScript**: Works with both `.ts` and `.js` files due to TypeScript's JavaScript parsing capabilities
-- **Malformed Syntax**: Individual syntax errors are captured in the `errors` array without stopping overall extraction
+## Anonymous Functions
+Arrow functions and function expressions must be assigned to variables to be extractable. Anonymous functions passed as callbacks are not captured as top-level symbols.
+
+## Complex Call Expressions
+The `extractCallName()` method only handles simple identifiers and property access. Complex expressions like `obj[method]()` or `func()()` return `null` for the call name.
+
+## Arrow Function Bodies
+Expression-form arrow functions (`const fn = () => value`) are normalized to block form (`{ return value }`) in the body extraction to maintain consistency.
+
+## Nested Symbols
+Only top-level symbols are extracted. Nested functions, classes within functions, or methods within classes are not captured as separate `SymbolInfo` objects.
+
+## TypeScript vs JavaScript
+The extractor works with both TypeScript and JavaScript files, using `ScriptTarget.Latest` to handle modern syntax features.
+
+## File Encoding
+Files are read using UTF-8 encoding. Other encodings may cause extraction failures or incorrect symbol information.
+
+## Line Number Accuracy
+Line numbers account for TypeScript compiler's token positioning, which may include leading whitespace. The `startLine` represents the beginning of the symbol declaration.
+
+## Call Site Deduplication
+The `extractCallSites()` method uses a `Set` to deduplicate function names, so multiple calls to the same function are reported only once.
 
 </details>
 
 <details>
 <summary>Related</summary>
 
-- `SymbolInfo` - The data structure returned for each extracted symbol
-- `ExtractionResult` - Container for extraction results and errors
-- `ExtractionError` - Custom error type thrown for file-level failures
-- TypeScript Compiler API (`ts`) - The underlying parsing engine
-- AST (Abstract Syntax Tree) - The tree structure used for code analysis
+## Dependencies
+- **TypeScript Compiler API**: `ts.createSourceFile`, `ts.forEachChild`, type guards
+- **Node.js fs**: `readFileSync` for file operations
+- **ExtractionError**: Custom error class for extraction failures
+
+## Related Types
+- `ExtractionResult`: Container for symbols and errors
+- `SymbolInfo`: Detailed symbol metadata
+- `CallSite`: Function call information
+
+## Common Use Cases
+- Code analysis and documentation generation
+- Dependency tracking and call graph analysis
+- Refactoring tools and IDE features
+- Static analysis and code quality tools
+
+## Alternative Approaches
+- **ts-morph**: Higher-level TypeScript manipulation library
+- **@typescript-eslint/parser**: ESLint's TypeScript parser
+- **typescript-parser**: Dedicated TypeScript parsing library
 
 </details>
