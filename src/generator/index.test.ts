@@ -386,4 +386,104 @@ export class Calculator {
       expect(existsSync(result.filePath!)).toBe(true);
     });
   });
+
+  describe('resolveCallTree', () => {
+    it('should return empty array for depth 0', () => {
+      const code = `
+function helper() { return 1 }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 3,
+        endLine: 3,
+      };
+
+      const result = generator.resolveCallTree(symbol, 0);
+      expect(result).toHaveLength(0);
+    });
+
+    it('should find direct callees at depth 1', () => {
+      const code = `
+function helper() { return 1 }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 3,
+        endLine: 3,
+      };
+
+      const result = generator.resolveCallTree(symbol, 1);
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe('helper');
+    });
+
+    it('should traverse multiple levels with depth > 1', () => {
+      const code = `
+function deepHelper() { return 1 }
+function helper() { return deepHelper() }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 4,
+        endLine: 4,
+      };
+
+      const result = generator.resolveCallTree(symbol, 2);
+      const names = result.map((s) => s.name);
+      expect(names).toContain('helper');
+      expect(names).toContain('deepHelper');
+    });
+
+    it('should handle cycles without infinite recursion', () => {
+      const code = `
+function a() { return b() }
+function b() { return a() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'a',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return b() }',
+        fullText: 'function a() { return b() }',
+        startLine: 2,
+        endLine: 2,
+      };
+
+      // Should not throw or hang
+      const result = generator.resolveCallTree(symbol, 10);
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe('b');
+    });
+  });
 });

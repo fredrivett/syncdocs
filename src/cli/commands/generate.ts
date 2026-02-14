@@ -7,14 +7,19 @@ import { Generator } from '../../generator/index.js';
 
 interface GenerateOptions {
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
+  depth?: number;
+  force?: boolean;
 }
 
 export function registerGenerateCommand(cli: CAC) {
   cli
     .command('generate <target>', 'Generate documentation for a file or symbol')
     .option('--style <type>', 'Documentation style (technical, beginner-friendly, comprehensive)')
+    .option('--depth <n>', 'Recursion depth for call-tree traversal (default: 0)')
+    .option('--force', 'Regenerate docs even if they already exist and are up-to-date')
     .example('syncdocs generate src/utils.ts')
     .example('syncdocs generate src/utils.ts:myFunction')
+    .example('syncdocs generate src/utils.ts --depth 1')
     .action(async (target: string, options: GenerateOptions) => {
       p.intro('📚 Generate Documentation');
 
@@ -50,12 +55,14 @@ export function registerGenerateCommand(cli: CAC) {
           model: config.model,
         });
 
-        // Generate documentation
-        if (symbolName) {
-          // Generate for specific symbol
+        const depth = options.depth ? Number(options.depth) : 0;
+
+        // Use depth-aware generation when --depth is provided
+        if (depth > 0) {
+          await generateWithDepth(generator, resolvedPath, filePath, symbolName, depth, options.force ?? false);
+        } else if (symbolName) {
           await generateSymbol(generator, resolvedPath, symbolName, filePath);
         } else {
-          // Generate for all symbols in file
           await generateFile(generator, resolvedPath, filePath);
         }
 
@@ -141,6 +148,46 @@ async function generateFile(generator: Generator, filePath: string, displayPath:
   console.log('');
   for (const result of results) {
     console.log(result);
+  }
+}
+
+async function generateWithDepth(
+  generator: Generator,
+  filePath: string,
+  displayPath: string,
+  symbolName: string | undefined,
+  depth: number,
+  force: boolean,
+) {
+  const spinner = p.spinner();
+  spinner.start(`Extracting symbols from ${displayPath} (depth: ${depth})`);
+
+  const results = await generator.generateWithDepth(filePath, {
+    symbolName,
+    depth,
+    force,
+  });
+
+  const generated = results.filter((r) => r.success && !r.skipped);
+  const skipped = results.filter((r) => r.skipped);
+  const failed = results.filter((r) => !r.success);
+
+  spinner.stop(`Generated ${generated.length} document${generated.length === 1 ? '' : 's'}${skipped.length > 0 ? `, skipped ${skipped.length} up-to-date` : ''}`);
+
+  // Show results
+  console.log('');
+  for (const result of results) {
+    if (result.skipped) {
+      console.log(`  ⊘ ${result.filePath} (up-to-date)`);
+    } else if (result.success) {
+      console.log(`  ✓ ${result.filePath}`);
+    } else {
+      console.log(`  ✗ ${result.error}`);
+    }
+  }
+
+  if (failed.length > 0) {
+    process.exit(1);
   }
 }
 

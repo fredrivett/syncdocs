@@ -2,7 +2,7 @@
  * Documentation generator - creates docs using AI
  */
 
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { toRelativePath } from '../cli/utils/paths.js';
 import { TypeScriptExtractor } from '../extractor/index.js';
@@ -202,6 +202,140 @@ export class Generator {
   private extractTitle(content: string): string | null {
     const match = content.match(/^#\s+(.+)$/m);
     return match ? match[1] : null;
+  }
+
+  /**
+   * Resolve the call tree for a symbol up to a given depth
+   * Returns all discovered callee symbols (not including the root symbol itself)
+   */
+  resolveCallTree(symbol: SymbolInfo, depth: number, visited?: Set<string>): SymbolInfo[] {
+    if (depth <= 0) return [];
+
+    const key = `${symbol.filePath}:${symbol.name}`;
+    visited = visited || new Set<string>();
+    if (visited.has(key)) return [];
+    visited.add(key);
+
+    const callSites = this.extractor.extractCallSites(symbol.filePath, symbol.name);
+
+    // Get all symbols in the same file to match against
+    const fileSymbols = this.extractor.extractSymbols(symbol.filePath).symbols;
+
+    const found: SymbolInfo[] = [];
+
+    for (const call of callSites) {
+      const match = fileSymbols.find((s) => s.name === call.name);
+      if (match && match.name !== symbol.name) {
+        const matchKey = `${match.filePath}:${match.name}`;
+        if (!visited.has(matchKey)) {
+          found.push(match);
+          // Recurse with depth - 1
+          const deeper = this.resolveCallTree(match, depth - 1, visited);
+          found.push(...deeper);
+        }
+      }
+    }
+
+    return found;
+  }
+
+  /**
+   * Generate documentation with call-tree traversal
+   * Generates docs for the target symbol(s) and their callees up to the given depth
+   */
+  async generateWithDepth(
+    filePath: string,
+    options: { symbolName?: string; depth?: number; force?: boolean },
+  ): Promise<GenerationResult[]> {
+    const depth = options.depth ?? 0;
+    const force = options.force ?? false;
+
+    // Extract target symbol(s)
+    let targetSymbols: SymbolInfo[];
+    if (options.symbolName) {
+      const symbol = this.extractor.extractSymbol(filePath, options.symbolName);
+      if (!symbol) {
+        return [{ success: false, error: `Symbol "${options.symbolName}" not found in ${filePath}` }];
+      }
+      targetSymbols = [symbol];
+    } else {
+      const result = this.extractor.extractSymbols(filePath);
+      if (result.symbols.length === 0) {
+        return [{ success: false, error: `No symbols found in ${filePath}` }];
+      }
+      targetSymbols = result.symbols;
+    }
+
+    // Resolve call trees for all target symbols
+    const visited = new Set<string>();
+    const allCallees: SymbolInfo[] = [];
+
+    for (const symbol of targetSymbols) {
+      const callees = this.resolveCallTree(symbol, depth, visited);
+      allCallees.push(...callees);
+    }
+
+    // Dedupe callees (exclude any that are also target symbols)
+    const targetNames = new Set(targetSymbols.map((s) => `${s.filePath}:${s.name}`));
+    const uniqueCallees = allCallees.filter((callee, index) => {
+      const key = `${callee.filePath}:${callee.name}`;
+      if (targetNames.has(key)) return false;
+      return allCallees.findIndex((c) => `${c.filePath}:${c.name}` === key) === index;
+    });
+
+    const results: GenerationResult[] = [];
+
+    // Generate for target symbols (always generate)
+    for (const symbol of targetSymbols) {
+      const callees = this.resolveCallTree(symbol, depth);
+      const result = await this.generate({
+        symbol,
+        context: callees.length > 0 ? { relatedSymbols: callees } : undefined,
+      });
+      results.push(result);
+    }
+
+    // Generate for callees (skip if up-to-date unless --force)
+    for (const callee of uniqueCallees) {
+      if (!force && this.isDocUpToDate(callee)) {
+        results.push({
+          success: true,
+          filePath: this.getDocPath(callee),
+          skipped: true,
+        });
+        continue;
+      }
+
+      const result = await this.generate({ symbol: callee });
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  /**
+   * Check if an existing doc for a symbol is up-to-date (hash matches)
+   */
+  private isDocUpToDate(symbol: SymbolInfo): boolean {
+    const docPath = this.getDocPath(symbol);
+    if (!existsSync(docPath)) return false;
+
+    const content = readFileSync(docPath, 'utf-8');
+    const currentHash = this.hasher.hashSymbol(symbol);
+
+    // Check if the frontmatter contains a matching hash for this symbol
+    const hashPattern = new RegExp(`symbol: ${symbol.name}\\n\\s+hash: ([a-f0-9]{64})`);
+    const match = content.match(hashPattern);
+
+    return match?.[1] === currentHash;
+  }
+
+  /**
+   * Get the expected doc file path for a symbol
+   */
+  private getDocPath(symbol: SymbolInfo): string {
+    const fileName = this.generateFileName(symbol);
+    return this.generateFilePath(symbol, fileName);
   }
 
   /**
