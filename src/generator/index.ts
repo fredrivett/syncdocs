@@ -3,7 +3,7 @@
  */
 
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { toRelativePath } from '../cli/utils/paths.js';
 import { TypeScriptExtractor } from '../extractor/index.js';
 import type { SymbolInfo } from '../extractor/types.js';
@@ -174,11 +174,12 @@ export class Generator {
   private generateFilePath(symbol: SymbolInfo, fileName: string): string {
     const relativePath = toRelativePath(symbol.filePath);
 
-    // Get directory path (without filename)
+    // Get directory path (without filename) and source filename without extension
     const dirPath = dirname(relativePath);
+    const sourceBaseName = basename(relativePath).replace(/\.[^.]+$/, '');
 
-    // Combine output dir + source dir structure + doc filename
-    return join(this.config.outputDir, dirPath, fileName);
+    // Combine output dir + source dir structure + source file name + doc filename
+    return join(this.config.outputDir, dirPath, sourceBaseName, fileName);
   }
 
   /**

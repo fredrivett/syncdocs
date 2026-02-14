@@ -273,7 +273,8 @@ export class Calculator {
       expect(results.every((r) => r.success)).toBe(true);
 
       // Should have generated files for each symbol in subdirectory matching source structure
-      const docDir = join(OUTPUT_DIR, '.test-generator', 'src');
+      // Files are nested under source filename: docs/{relative-dir}/{source-file-name}/{symbol}.md
+      const docDir = join(OUTPUT_DIR, '.test-generator', 'src', 'math');
       expect(existsSync(join(docDir, 'add.md'))).toBe(true);
       expect(existsSync(join(docDir, 'subtract.md'))).toBe(true);
       expect(existsSync(join(docDir, 'calculator.md'))).toBe(true);
