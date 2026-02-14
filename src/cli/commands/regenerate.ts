@@ -1,9 +1,11 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
 import { TypeScriptExtractor } from '../../extractor/index.js';
 import { Generator } from '../../generator/index.js';
+import { showCoverageAndSuggestion } from '../utils/next-suggestion.js';
+import { resolveSourcePath } from '../utils/paths.js';
 
 interface RegenerateOptions {
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
@@ -57,12 +59,8 @@ export function registerRegenerateCommand(cli: CAC) {
         spinner.stop(`Found ${docs.length} documentation file${docs.length === 1 ? '' : 's'}`);
 
         // Show list of docs to be regenerated
-        console.log('');
-        console.log('Documentation files to regenerate:');
-        for (const doc of docs) {
-          console.log(`  • ${doc.symbolName} (from ${doc.filePath})`);
-        }
-        console.log('');
+        const docLines = docs.map((doc) => `• ${doc.symbolName} (from ${doc.filePath})`);
+        p.log.message('Documentation files to regenerate:\n' + docLines.join('\n'));
 
         // Confirm regeneration
         const shouldContinue = await p.confirm({
@@ -92,16 +90,19 @@ export function registerRegenerateCommand(cli: CAC) {
 
         for (const doc of docs) {
           completed++;
-          spinner.message(`[${completed}/${docs.length}] Regenerating ${doc.symbolName} from ${doc.filePath}`);
+          const resolvedPath = resolveSourcePath(doc.filePath);
+          spinner.message(
+            `[${completed}/${docs.length}] Regenerating ${doc.symbolName} from ${resolvedPath}`,
+          );
 
           // Check if source file still exists
-          if (!existsSync(doc.filePath)) {
-            results.push(`  ⚠ ${doc.symbolName}: Source file not found (${doc.filePath})`);
+          if (!existsSync(resolvedPath)) {
+            results.push(`  ⚠ ${doc.symbolName}: Source file not found (${resolvedPath})`);
             continue;
           }
 
           // Extract symbol
-          const symbol = extractor.extractSymbol(doc.filePath, doc.symbolName);
+          const symbol = extractor.extractSymbol(resolvedPath, doc.symbolName);
           if (!symbol) {
             results.push(`  ⚠ ${doc.symbolName}: Symbol not found in ${doc.filePath}`);
             continue;
@@ -120,10 +121,9 @@ export function registerRegenerateCommand(cli: CAC) {
         spinner.stop(`Regenerated ${completed} document${completed === 1 ? '' : 's'}`);
 
         // Show results
-        console.log('');
-        for (const result of results) {
-          console.log(result);
-        }
+        p.log.message(results.join('\n'));
+
+        showCoverageAndSuggestion(config.outputDir);
 
         p.outro('✨ Documentation regeneration complete!');
       } catch (error) {

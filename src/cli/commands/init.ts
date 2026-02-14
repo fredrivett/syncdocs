@@ -24,6 +24,7 @@ interface InitConfig {
 
 export function registerInitCommand(cli: CAC) {
   cli.command('init', 'Initialize syncdocs in your project').action(async () => {
+    // biome-ignore lint/suspicious/noConsole: intentional clear before init wizard
     console.clear();
 
     p.intro('✨ Welcome to syncdocs');

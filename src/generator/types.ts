@@ -39,4 +39,5 @@ export interface GenerationResult {
   success: boolean;
   filePath?: string;
   error?: string;
+  skipped?: boolean;
 }

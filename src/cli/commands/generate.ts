@@ -4,17 +4,23 @@ import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
 import { TypeScriptExtractor } from '../../extractor/index.js';
 import { Generator } from '../../generator/index.js';
+import { showCoverageAndSuggestion } from '../utils/next-suggestion.js';
 
 interface GenerateOptions {
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
+  depth?: number;
+  force?: boolean;
 }
 
 export function registerGenerateCommand(cli: CAC) {
   cli
     .command('generate <target>', 'Generate documentation for a file or symbol')
     .option('--style <type>', 'Documentation style (technical, beginner-friendly, comprehensive)')
+    .option('--depth <n>', 'Recursion depth for call-tree traversal (default: 0)')
+    .option('--force', 'Regenerate docs even if they already exist and are up-to-date')
     .example('syncdocs generate src/utils.ts')
     .example('syncdocs generate src/utils.ts:myFunction')
+    .example('syncdocs generate src/utils.ts --depth 1')
     .action(async (target: string, options: GenerateOptions) => {
       p.intro('📚 Generate Documentation');
 
@@ -50,14 +56,20 @@ export function registerGenerateCommand(cli: CAC) {
           model: config.model,
         });
 
-        // Generate documentation
-        if (symbolName) {
-          // Generate for specific symbol
-          await generateSymbol(generator, resolvedPath, symbolName, filePath);
+        const depth = options.depth ? Number(options.depth) : 0;
+
+        const force = options.force ?? false;
+
+        // Use depth-aware generation when --depth is provided
+        if (depth > 0) {
+          await generateWithDepth(generator, resolvedPath, filePath, symbolName, depth, force);
+        } else if (symbolName) {
+          await generateSymbol(generator, resolvedPath, symbolName, filePath, force);
         } else {
-          // Generate for all symbols in file
-          await generateFile(generator, resolvedPath, filePath);
+          await generateFile(generator, resolvedPath, filePath, force);
         }
+
+        showCoverageAndSuggestion(config.outputDir);
 
         p.outro('✨ Documentation generated successfully!');
       } catch (error) {
@@ -74,6 +86,7 @@ async function generateSymbol(
   filePath: string,
   symbolName: string,
   displayPath: string,
+  force: boolean,
 ) {
   const spinner = p.spinner();
   spinner.start(`Extracting ${symbolName} from ${displayPath}`);
@@ -87,6 +100,15 @@ async function generateSymbol(
     process.exit(1);
   }
 
+  // Check if already up-to-date
+  if (!force && generator.isDocUpToDate(symbol)) {
+    spinner.stop(`⊘ ${symbolName} is already up-to-date`);
+    p.log.message(
+      'Use \x1b[1;36m--force\x1b[0m to regenerate, or \x1b[1;36msyncdocs regenerate\x1b[0m for all docs.',
+    );
+    return;
+  }
+
   spinner.message(`Generating documentation for ${symbolName}`);
 
   // Generate documentation
@@ -97,10 +119,15 @@ async function generateSymbol(
     process.exit(1);
   }
 
-  spinner.stop(`Generated: ${result.filePath}`);
+  spinner.stop(`📝 Generated: ${result.filePath}`);
 }
 
-async function generateFile(generator: Generator, filePath: string, displayPath: string) {
+async function generateFile(
+  generator: Generator,
+  filePath: string,
+  displayPath: string,
+  force: boolean,
+) {
   const spinner = p.spinner();
   spinner.start(`Extracting symbols from ${displayPath}`);
 
@@ -113,34 +140,109 @@ async function generateFile(generator: Generator, filePath: string, displayPath:
     process.exit(1);
   }
 
-  const symbolCount = extractResult.symbols.length;
-  spinner.message(
-    `Found ${symbolCount} symbol${symbolCount === 1 ? '' : 's'}: ${extractResult.symbols.map((s) => s.name).join(', ')}`,
+  // Dedupe symbols by name (extractor can find same-named nested symbols)
+  const seen = new Set<string>();
+  const symbols = extractResult.symbols.filter((s) => {
+    if (seen.has(s.name)) return false;
+    seen.add(s.name);
+    return true;
+  });
+
+  const symbolCount = symbols.length;
+  spinner.stop(
+    `🔍 Found ${symbolCount} symbol${symbolCount === 1 ? '' : 's'}: ${symbols.map((s) => s.name).join(', ')}`,
   );
 
   // Generate docs for each symbol
+  spinner.start(`Generating documentation`);
   let completed = 0;
+  let generated = 0;
+  let skipped = 0;
   const results: string[] = [];
 
-  for (const symbol of extractResult.symbols) {
+  for (const symbol of symbols) {
     completed++;
+
+    // Check if already up-to-date
+    if (!force && generator.isDocUpToDate(symbol)) {
+      skipped++;
+      results.push(`  ⊘ ${symbol.name} (up-to-date)`);
+      spinner.message(`[${completed}/${symbolCount}] Skipping ${symbol.name} (up-to-date)`);
+      continue;
+    }
+
     spinner.message(`[${completed}/${symbolCount}] Generating documentation for ${symbol.name}`);
 
     const result = await generator.generate({ symbol });
 
     if (result.success) {
+      generated++;
       results.push(`  ✓ ${symbol.name} → ${result.filePath}`);
     } else {
       results.push(`  ✗ ${symbol.name}: ${result.error}`);
     }
   }
 
-  spinner.stop(`Generated ${completed} document${completed === 1 ? '' : 's'}`);
+  const skippedNote = skipped > 0 ? `, skipped ${skipped} up-to-date` : '';
+  spinner.stop(`📝 Generated ${generated} document${generated === 1 ? '' : 's'}${skippedNote}`);
 
   // Show results
-  console.log('');
-  for (const result of results) {
-    console.log(result);
+  p.log.message(results.join('\n'));
+
+  if (skipped > 0) {
+    p.log.message(
+      'Use \x1b[1;36m--force\x1b[0m to regenerate, or \x1b[1;36msyncdocs regenerate\x1b[0m for all docs.',
+    );
+  }
+}
+
+async function generateWithDepth(
+  generator: Generator,
+  filePath: string,
+  displayPath: string,
+  symbolName: string | undefined,
+  depth: number,
+  force: boolean,
+) {
+  const spinner = p.spinner();
+  spinner.start(`Extracting symbols from ${displayPath} (depth: ${depth})`);
+
+  const results = await generator.generateWithDepth(filePath, {
+    symbolName,
+    depth,
+    force,
+    onProgress: (msg, type) => {
+      if (type === 'info') {
+        spinner.stop(msg);
+        spinner.start(msg);
+      } else {
+        spinner.message(msg);
+      }
+    },
+  });
+
+  const generated = results.filter((r) => r.success && !r.skipped);
+  const skipped = results.filter((r) => r.skipped);
+  const failed = results.filter((r) => !r.success);
+
+  spinner.stop(
+    `📝 Generated ${generated.length} document${generated.length === 1 ? '' : 's'}${skipped.length > 0 ? `, skipped ${skipped.length} up-to-date` : ''}`,
+  );
+
+  // Show results
+  const lines = results.map((result) => {
+    if (result.skipped) {
+      return `⊘ ${result.filePath} (up-to-date)`;
+    } else if (result.success) {
+      return `✓ ${result.filePath}`;
+    } else {
+      return `✗ ${result.error}`;
+    }
+  });
+  p.log.message(lines.join('\n'));
+
+  if (failed.length > 0) {
+    process.exit(1);
   }
 }
 

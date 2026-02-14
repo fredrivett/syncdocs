@@ -90,8 +90,8 @@ describe('Generator', () => {
       expect(content).toContain('generated:');
       expect(content).toContain('dependencies:');
 
-      // Should have dependency with hash
-      expect(content).toContain(`path: ${symbol.filePath}`);
+      // Should have dependency with relative path and hash
+      expect(content).toContain('path: .test-generator/src/utils.ts');
       expect(content).toContain('symbol: myFunc');
       expect(content).toContain('hash:');
 
@@ -125,7 +125,8 @@ describe('Generator', () => {
       const testCases = [
         { name: 'MyClass', expected: 'my-class.md' },
         { name: 'getUserData', expected: 'get-user-data.md' },
-        { name: 'APIClient', expected: 'a-p-i-client.md' },
+        { name: 'APIClient', expected: 'api-client.md' },
+        { name: 'generateConfigYAML', expected: 'generate-config-yaml.md' },
         { name: 'simple', expected: 'simple.md' },
       ];
 
@@ -181,8 +182,8 @@ describe('Generator', () => {
       // Should have both dependencies
       expect(content).toContain('symbol: processData');
       expect(content).toContain('symbol: transform');
-      expect(content).toContain(mainSymbol.filePath);
-      expect(content).toContain(relatedSymbol.filePath);
+      expect(content).toContain('path: .test-generator/src/processor.ts');
+      expect(content).toContain('path: .test-generator/src/utils.ts');
     });
 
     it('should handle generation errors gracefully', async () => {
@@ -273,7 +274,8 @@ export class Calculator {
       expect(results.every((r) => r.success)).toBe(true);
 
       // Should have generated files for each symbol in subdirectory matching source structure
-      const docDir = join(OUTPUT_DIR, '.test-generator', 'src');
+      // Files are nested under source filename: docs/{relative-dir}/{source-file-name}/{symbol}.md
+      const docDir = join(OUTPUT_DIR, '.test-generator', 'src', 'math');
       expect(existsSync(join(docDir, 'add.md'))).toBe(true);
       expect(existsSync(join(docDir, 'subtract.md'))).toBe(true);
       expect(existsSync(join(docDir, 'calculator.md'))).toBe(true);
@@ -383,6 +385,128 @@ export class Calculator {
 
       expect(result.filePath).toContain(customOutputDir);
       expect(existsSync(result.filePath!)).toBe(true);
+    });
+  });
+
+  describe('resolveCallTree', () => {
+    it('should return empty array for depth 0', () => {
+      const code = `
+function helper() { return 1 }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 3,
+        endLine: 3,
+      };
+
+      const result = generator.resolveCallTree(symbol, 0);
+      expect(result).toHaveLength(0);
+    });
+
+    it('should find direct callees at depth 1', () => {
+      const code = `
+function helper() { return 1 }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 3,
+        endLine: 3,
+      };
+
+      const result = generator.resolveCallTree(symbol, 1);
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe('helper');
+    });
+
+    it('should traverse multiple levels with depth > 1', () => {
+      const code = `
+function deepHelper() { return 1 }
+function helper() { return deepHelper() }
+function main() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'main',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return helper() }',
+        fullText: 'function main() { return helper() }',
+        startLine: 4,
+        endLine: 4,
+      };
+
+      const result = generator.resolveCallTree(symbol, 2);
+      const names = result.map((s) => s.name);
+      expect(names).toContain('helper');
+      expect(names).toContain('deepHelper');
+    });
+
+    it('should not generate duplicate symbols found through multiple paths', async () => {
+      // Two targets that both call the same helper — helper should only be generated once
+      const code = `
+function helper() { return 1 }
+function main1() { return helper() }
+function main2() { return helper() }
+`;
+      const sourcePath = join(SRC_DIR, 'dedup.ts');
+      writeFileSync(sourcePath, code);
+
+      const progressMessages: string[] = [];
+      const results = await generator.generateWithDepth(sourcePath, {
+        depth: 1,
+        onProgress: (msg) => progressMessages.push(msg),
+      });
+
+      // helper should appear at most once in successful results (not counting skips)
+      const generatedPaths = results.filter((r) => r.success).map((r) => r.filePath);
+      const helperDocs = generatedPaths.filter((p) => p?.includes('helper'));
+      expect(helperDocs).toHaveLength(1);
+    });
+
+    it('should handle cycles without infinite recursion', () => {
+      const code = `
+function a() { return b() }
+function b() { return a() }
+`;
+      const sourcePath = join(SRC_DIR, 'calltree.ts');
+      writeFileSync(sourcePath, code);
+
+      const symbol = {
+        name: 'a',
+        kind: 'function' as const,
+        filePath: sourcePath,
+        params: '',
+        body: '{ return b() }',
+        fullText: 'function a() { return b() }',
+        startLine: 2,
+        endLine: 2,
+      };
+
+      // Should not throw or hang
+      const result = generator.resolveCallTree(symbol, 10);
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe('b');
     });
   });
 });

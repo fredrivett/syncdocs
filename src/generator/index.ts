@@ -2,8 +2,9 @@
  * Documentation generator - creates docs using AI
  */
 
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
+import { toRelativePath } from '../cli/utils/paths.js';
 import { TypeScriptExtractor } from '../extractor/index.js';
 import type { SymbolInfo } from '../extractor/types.js';
 import { ContentHasher } from '../hasher/index.js';
@@ -91,10 +92,10 @@ export class Generator {
       customPrompt,
     });
 
-    // Create dependency entry with hash
+    // Create dependency entry with hash (using relative paths for portability)
     const dependencies: DocDependency[] = [
       {
-        path: symbol.filePath,
+        path: toRelativePath(symbol.filePath),
         symbol: symbol.name,
         hash: this.hasher.hashSymbol(symbol),
       },
@@ -104,7 +105,7 @@ export class Generator {
     if (context?.relatedSymbols) {
       for (const relatedSymbol of context.relatedSymbols) {
         dependencies.push({
-          path: relatedSymbol.filePath,
+          path: toRelativePath(relatedSymbol.filePath),
           symbol: relatedSymbol.name,
           hash: this.hasher.hashSymbol(relatedSymbol),
         });
@@ -171,30 +172,25 @@ export class Generator {
    * Generate file path for a symbol, preserving directory structure
    */
   private generateFilePath(symbol: SymbolInfo, fileName: string): string {
-    const cwd = process.cwd();
+    const relativePath = toRelativePath(symbol.filePath);
 
-    // Get relative path from project root to source file
-    let relativePath = symbol.filePath;
-    if (symbol.filePath.startsWith(cwd)) {
-      relativePath = symbol.filePath.substring(cwd.length + 1);
-    }
-
-    // Get directory path (without filename)
+    // Get directory path (without filename) and source filename without extension
     const dirPath = dirname(relativePath);
+    const sourceBaseName = basename(relativePath).replace(/\.[^.]+$/, '');
 
-    // Combine output dir + source dir structure + doc filename
-    return join(this.config.outputDir, dirPath, fileName);
+    // Combine output dir + source dir structure + source file name + doc filename
+    return join(this.config.outputDir, dirPath, sourceBaseName, fileName);
   }
 
   /**
    * Generate file name for a symbol
    */
   private generateFileName(symbol: SymbolInfo): string {
-    // Convert symbol name to kebab-case
+    // Convert symbol name to kebab-case (handles acronyms like YAML, API)
     const kebabName = symbol.name
-      .replace(/([A-Z])/g, '-$1')
-      .toLowerCase()
-      .replace(/^-/, '');
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .toLowerCase();
 
     return `${kebabName}.md`;
   }
@@ -206,6 +202,190 @@ export class Generator {
   private extractTitle(content: string): string | null {
     const match = content.match(/^#\s+(.+)$/m);
     return match ? match[1] : null;
+  }
+
+  /**
+   * Resolve the call tree for a symbol up to a given depth
+   * Returns all discovered callee symbols (not including the root symbol itself)
+   */
+  resolveCallTree(symbol: SymbolInfo, depth: number, visited?: Set<string>): SymbolInfo[] {
+    if (depth <= 0) return [];
+
+    const key = `${symbol.filePath}:${symbol.name}`;
+    visited = visited || new Set<string>();
+    if (visited.has(key)) return [];
+    visited.add(key);
+
+    const callSites = this.extractor.extractCallSites(symbol.filePath, symbol.name);
+
+    // Get all symbols in the same file to match against
+    const fileSymbols = this.extractor.extractSymbols(symbol.filePath).symbols;
+
+    const found: SymbolInfo[] = [];
+
+    for (const call of callSites) {
+      const match = fileSymbols.find((s) => s.name === call.name);
+      if (match && match.name !== symbol.name) {
+        const matchKey = `${match.filePath}:${match.name}`;
+        if (!visited.has(matchKey)) {
+          found.push(match);
+          // Recurse with depth - 1
+          const deeper = this.resolveCallTree(match, depth - 1, visited);
+          found.push(...deeper);
+        }
+      }
+    }
+
+    return found;
+  }
+
+  /**
+   * Generate documentation with call-tree traversal
+   * Generates docs for the target symbol(s) and their callees up to the given depth
+   */
+  async generateWithDepth(
+    filePath: string,
+    options: {
+      symbolName?: string;
+      depth?: number;
+      force?: boolean;
+      onProgress?: (message: string, type?: 'info' | 'progress') => void;
+    },
+  ): Promise<GenerationResult[]> {
+    const depth = options.depth ?? 0;
+    const force = options.force ?? false;
+    const progress = options.onProgress ?? (() => {});
+
+    // Extract target symbol(s)
+    let rawTargets: SymbolInfo[];
+    if (options.symbolName) {
+      const symbol = this.extractor.extractSymbol(filePath, options.symbolName);
+      if (!symbol) {
+        return [
+          { success: false, error: `Symbol "${options.symbolName}" not found in ${filePath}` },
+        ];
+      }
+      rawTargets = [symbol];
+    } else {
+      const result = this.extractor.extractSymbols(filePath);
+      if (result.symbols.length === 0) {
+        return [{ success: false, error: `No symbols found in ${filePath}` }];
+      }
+      rawTargets = result.symbols;
+    }
+
+    // Dedupe targets by filePath:name (extractor can find same-named nested symbols)
+    const seenTargets = new Set<string>();
+    const targetSymbols = rawTargets.filter((s) => {
+      const key = `${s.filePath}:${s.name}`;
+      if (seenTargets.has(key)) return false;
+      seenTargets.add(key);
+      return true;
+    });
+
+    // Resolve call trees for all target symbols
+    progress('Resolving call tree...');
+    const visited = new Set<string>();
+    const allCallees: SymbolInfo[] = [];
+
+    for (const symbol of targetSymbols) {
+      const callees = this.resolveCallTree(symbol, depth, visited);
+      allCallees.push(...callees);
+    }
+
+    // Dedupe callees (exclude any that are also target symbols)
+    const targetNames = new Set(targetSymbols.map((s) => `${s.filePath}:${s.name}`));
+    const uniqueCallees = allCallees.filter((callee, index) => {
+      const key = `${callee.filePath}:${callee.name}`;
+      if (targetNames.has(key)) return false;
+      return allCallees.findIndex((c) => `${c.filePath}:${c.name}` === key) === index;
+    });
+
+    const totalCount = targetSymbols.length + uniqueCallees.length;
+    const allNames = [...targetSymbols, ...uniqueCallees].map((s) => s.name).join(', ');
+    const breakdown =
+      uniqueCallees.length > 0
+        ? ` (${targetSymbols.length} target${targetSymbols.length === 1 ? '' : 's'}, ${uniqueCallees.length} callee${uniqueCallees.length === 1 ? '' : 's'})`
+        : '';
+    progress(
+      `Found ${totalCount} symbol${totalCount === 1 ? '' : 's'}${breakdown}: ${allNames}`,
+      'info',
+    );
+
+    const results: GenerationResult[] = [];
+    const generated = new Set<string>();
+    let current = 0;
+
+    // Generate for target symbols (always generate)
+    for (const symbol of targetSymbols) {
+      current++;
+      const key = `${symbol.filePath}:${symbol.name}`;
+      if (generated.has(key)) {
+        progress(`[${current}/${totalCount}] Skipping ${symbol.name} (already generated)`);
+        continue;
+      }
+      generated.add(key);
+
+      progress(`[${current}/${totalCount}] Generating ${symbol.name}`);
+      const callees = this.resolveCallTree(symbol, depth);
+      const result = await this.generate({
+        symbol,
+        context: callees.length > 0 ? { relatedSymbols: callees } : undefined,
+      });
+      results.push(result);
+    }
+
+    // Generate for callees (skip if up-to-date unless --force)
+    for (const callee of uniqueCallees) {
+      current++;
+      const key = `${callee.filePath}:${callee.name}`;
+      if (generated.has(key)) {
+        progress(`[${current}/${totalCount}] Skipping ${callee.name} (already generated)`);
+        continue;
+      }
+      generated.add(key);
+
+      if (!force && this.isDocUpToDate(callee)) {
+        progress(`[${current}/${totalCount}] Skipping ${callee.name} (up-to-date)`);
+        results.push({
+          success: true,
+          filePath: this.getDocPath(callee),
+          skipped: true,
+        });
+        continue;
+      }
+
+      progress(`[${current}/${totalCount}] Generating ${callee.name}`);
+      const result = await this.generate({ symbol: callee });
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  /**
+   * Check if an existing doc for a symbol is up-to-date (hash matches)
+   */
+  isDocUpToDate(symbol: SymbolInfo): boolean {
+    const docPath = this.getDocPath(symbol);
+    if (!existsSync(docPath)) return false;
+
+    const content = readFileSync(docPath, 'utf-8');
+    const currentHash = this.hasher.hashSymbol(symbol);
+
+    // Check if the frontmatter contains a matching hash for this symbol
+    const hashPattern = new RegExp(`symbol: ${symbol.name}\\n\\s+hash: ([a-f0-9]{64})`);
+    const match = content.match(hashPattern);
+
+    return match?.[1] === currentHash;
+  }
+
+  /**
+   * Get the expected doc file path for a symbol
+   */
+  getDocPath(symbol: SymbolInfo): string {
+    const fileName = this.generateFileName(symbol);
+    return this.generateFilePath(symbol, fileName);
   }
 
   /**

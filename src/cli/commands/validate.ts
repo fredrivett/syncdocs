@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
 import { ConfigError } from '../utils/errors.js';
 
@@ -25,33 +26,41 @@ interface Config {
 
 export function registerValidateCommand(cli: CAC) {
   cli.command('validate', 'Validate syncdocs configuration').action(async () => {
+    p.intro('🔧 Validate Configuration');
+
     try {
       const config = await loadAndValidateConfig();
 
-      console.log('✓ Config is valid');
-      console.log('✓ Output directory:', config.output?.dir);
-      console.log('✓ AI provider:', config.generation?.aiProvider);
+      const lines = [
+        '✓ Config is valid',
+        `✓ Output directory: ${config.output?.dir}`,
+        `✓ AI provider: ${config.generation?.aiProvider}`,
+      ];
 
       // Check if API key is set
       const provider = config.generation?.aiProvider;
       if (provider === 'anthropic') {
         const hasKey = !!process.env.ANTHROPIC_API_KEY;
-        console.log(hasKey ? '✓ ANTHROPIC_API_KEY found' : '⚠ ANTHROPIC_API_KEY not set');
+        lines.push(hasKey ? '✓ ANTHROPIC_API_KEY found' : '⚠ ANTHROPIC_API_KEY not set');
         if (!hasKey) {
-          console.log('\n  Set it with: export ANTHROPIC_API_KEY=your-key-here');
+          lines.push('');
+          lines.push('Set it with: export ANTHROPIC_API_KEY=your-key-here');
         }
       } else if (provider === 'openai') {
         const hasKey = !!process.env.OPENAI_API_KEY;
-        console.log(hasKey ? '✓ OPENAI_API_KEY found' : '⚠ OPENAI_API_KEY not set');
+        lines.push(hasKey ? '✓ OPENAI_API_KEY found' : '⚠ OPENAI_API_KEY not set');
         if (!hasKey) {
-          console.log('\n  Set it with: export OPENAI_API_KEY=your-key-here');
+          lines.push('');
+          lines.push('Set it with: export OPENAI_API_KEY=your-key-here');
         }
       }
 
+      p.log.message(lines.join('\n'));
+      p.outro('✨ Configuration is valid!');
       process.exit(0);
     } catch (error) {
       if (error instanceof ConfigError) {
-        console.error('✗ Config error:', error.message);
+        p.cancel(`Config error: ${error.message}`);
         process.exit(2);
       }
       throw error;

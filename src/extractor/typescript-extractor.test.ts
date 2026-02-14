@@ -416,6 +416,117 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
     });
   });
 
+  describe('extractCallSites', () => {
+    it('should find direct function calls', () => {
+      const code = `
+function helper() { return 1 }
+function main() {
+  const x = helper()
+  return x
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'main');
+
+      expect(calls).toHaveLength(1);
+      expect(calls[0].name).toBe('helper');
+      expect(calls[0].expression).toBe('helper');
+    });
+
+    it('should find method calls', () => {
+      const code = `
+function process(items: any[]) {
+  items.map(x => x)
+  items.filter(Boolean)
+  console.log('done')
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'process');
+      const names = calls.map((c) => c.name);
+
+      expect(names).toContain('map');
+      expect(names).toContain('filter');
+      expect(names).toContain('log');
+    });
+
+    it('should not duplicate calls to the same function', () => {
+      const code = `
+function helper() { return 1 }
+function main() {
+  helper()
+  helper()
+  helper()
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'main');
+
+      expect(calls).toHaveLength(1);
+      expect(calls[0].name).toBe('helper');
+    });
+
+    it('should return empty for functions with no calls', () => {
+      const code = `
+function simple() {
+  return 42
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'simple');
+
+      expect(calls).toHaveLength(0);
+    });
+
+    it('should return empty for non-existent symbol', () => {
+      const code = `function exists() { return 1 }`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'doesNotExist');
+
+      expect(calls).toHaveLength(0);
+    });
+
+    it('should find calls in arrow functions', () => {
+      const code = `
+function doWork() { return 'work' }
+const main = () => {
+  return doWork()
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'main');
+
+      expect(calls).toHaveLength(1);
+      expect(calls[0].name).toBe('doWork');
+    });
+
+    it('should find calls in class methods', () => {
+      const code = `
+function validate() { return true }
+class Processor {
+  run() {
+    const valid = validate()
+    this.cleanup()
+  }
+  cleanup() {}
+}
+`;
+      writeFileSync(TEST_FILE, code);
+
+      const calls = extractor.extractCallSites(TEST_FILE, 'Processor');
+      const names = calls.map((c) => c.name);
+
+      expect(names).toContain('validate');
+      expect(names).toContain('cleanup');
+    });
+  });
+
   describe('TypeScript-specific Features', () => {
     it('should handle generic functions', () => {
       const code = `

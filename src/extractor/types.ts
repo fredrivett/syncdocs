@@ -13,6 +13,11 @@ export interface SymbolInfo {
   endLine: number;
 }
 
+export interface CallSite {
+  name: string;
+  expression: string;
+}
+
 export interface ExtractionResult {
   symbols: SymbolInfo[];
   errors: string[];

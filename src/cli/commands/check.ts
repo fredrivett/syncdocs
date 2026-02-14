@@ -44,41 +44,37 @@ export function registerCheckCommand(cli: CAC) {
 
         // Display errors if any
         if (result.errors.length > 0) {
-          console.log('');
           p.log.error('Errors encountered:');
-          for (const error of result.errors) {
-            console.log(`  ${error}`);
-          }
+          p.log.message(result.errors.join('\n'));
         }
 
         // Display results
-        console.log('');
         if (result.staleDocs.length === 0) {
           p.log.success(`All ${result.totalDocs} documents are up to date! ✨`);
         } else {
           p.log.warn(
             `Found ${result.staleDocs.length} stale document${result.staleDocs.length === 1 ? '' : 's'}:`,
           );
-          console.log('');
 
+          const lines: string[] = [];
           for (const staleDoc of result.staleDocs) {
-            console.log(`  📄 ${getRelativePath(staleDoc.docPath)}`);
+            lines.push(`📄 ${getRelativePath(staleDoc.docPath)}`);
             for (const dep of staleDoc.staleDependencies) {
               const reason = formatStaleReason(dep.reason);
-              console.log(`     ${reason} ${dep.path}:${dep.symbol}`);
+              lines.push(`   ${reason} ${dep.path}:${dep.symbol}`);
               if (dep.reason === 'changed') {
-                console.log(`       old: ${dep.oldHash.substring(0, 8)}`);
-                console.log(`       new: ${dep.newHash.substring(0, 8)}`);
+                lines.push(`     old: ${dep.oldHash.substring(0, 8)}`);
+                lines.push(`     new: ${dep.newHash.substring(0, 8)}`);
               }
             }
-            console.log('');
           }
+          p.log.message(lines.join('\n'));
 
           // Offer to fix if --fix flag is set
           if (options.fix) {
             await regenerateStaleDocs(result.staleDocs, config);
           } else {
-            console.log('  💡 Run with --fix to regenerate stale docs: syncdocs check --fix');
+            p.log.message('💡 Run with --fix to regenerate stale docs: syncdocs check --fix');
           }
         }
 
@@ -102,7 +98,6 @@ export function registerCheckCommand(cli: CAC) {
 }
 
 async function regenerateStaleDocs(staleDocs: StaleDoc[], config: any) {
-  console.log('');
   const spinner = p.spinner();
   spinner.start('Regenerating stale documentation');
 

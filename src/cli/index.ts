@@ -29,4 +29,10 @@ registerStatusCommand(cli);
 registerValidateCommand(cli);
 
 // Parse CLI arguments
-cli.parse();
+const parsed = cli.parse();
+
+// Show help if no command was matched (e.g. "syncdocs" or "syncdocs help")
+// but not when --help or --version was explicitly passed (cac handles those)
+if (!cli.matchedCommand && !parsed.options.help && !parsed.options.version) {
+  cli.outputHelp();
+}

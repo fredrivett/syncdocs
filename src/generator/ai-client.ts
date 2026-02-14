@@ -41,7 +41,7 @@ export class AIClient {
       },
       body: JSON.stringify({
         model: this.model,
-        max_tokens: 4096,
+        max_tokens: 8192,
         messages: [
           {
             role: 'user',
@@ -105,7 +105,11 @@ export class AIClient {
     prompt += `Use this syntax for collapsible sections:\n`;
     prompt += `<details>\n<summary>Section Title</summary>\n\nContent here\n\n</details>\n\n`;
 
-    prompt += `Required collapsible sections (as applicable):\n`;
+    prompt += `Required collapsible sections (as applicable), in this order:\n`;
+    prompt += `- "Visual Flow" - A mermaid flowchart diagram showing the internal flow of this ${symbol.kind}. THIS MUST BE THE FIRST COLLAPSIBLE SECTION, immediately after the overview.\n`;
+    prompt += `  For functions: Show the execution flow including key decision points, async operations, error handling paths, and calls to external functions/methods.\n`;
+    prompt += `  For classes: Show how methods relate to each other (which methods call which) and key external dependencies. Wrap all method flows in a single subgraph labeled with the class name so they are visually grouped together.\n`;
+    prompt += `  Use \`\`\`mermaid code fence with flowchart TD (top-down) orientation. Keep node labels short and readable. Use dashed lines (-.->)  for error/exception paths.\n`;
     prompt += `- "Parameters" - Parameter descriptions (if applicable)\n`;
     prompt += `- "Methods" - Method descriptions for classes (if applicable)\n`;
     prompt += `- "Return Value" - What the function/method returns (if applicable)\n`;
