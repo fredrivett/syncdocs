@@ -166,6 +166,7 @@ async function generateWithDepth(
     symbolName,
     depth,
     force,
+    onProgress: (msg) => spinner.message(msg),
   });
 
   const generated = results.filter((r) => r.success && !r.skipped);

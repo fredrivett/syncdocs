@@ -245,10 +245,16 @@ export class Generator {
    */
   async generateWithDepth(
     filePath: string,
-    options: { symbolName?: string; depth?: number; force?: boolean },
+    options: {
+      symbolName?: string;
+      depth?: number;
+      force?: boolean;
+      onProgress?: (message: string) => void;
+    },
   ): Promise<GenerationResult[]> {
     const depth = options.depth ?? 0;
     const force = options.force ?? false;
+    const progress = options.onProgress ?? (() => {});
 
     // Extract target symbol(s)
     let targetSymbols: SymbolInfo[];
@@ -267,6 +273,7 @@ export class Generator {
     }
 
     // Resolve call trees for all target symbols
+    progress('Resolving call tree...');
     const visited = new Set<string>();
     const allCallees: SymbolInfo[] = [];
 
@@ -283,10 +290,16 @@ export class Generator {
       return allCallees.findIndex((c) => `${c.filePath}:${c.name}` === key) === index;
     });
 
+    const totalCount = targetSymbols.length + uniqueCallees.length;
+    progress(`Found ${totalCount} symbols (${targetSymbols.length} target${targetSymbols.length === 1 ? '' : 's'}, ${uniqueCallees.length} callee${uniqueCallees.length === 1 ? '' : 's'})`);
+
     const results: GenerationResult[] = [];
+    let current = 0;
 
     // Generate for target symbols (always generate)
     for (const symbol of targetSymbols) {
+      current++;
+      progress(`[${current}/${totalCount}] Generating ${symbol.name}`);
       const callees = this.resolveCallTree(symbol, depth);
       const result = await this.generate({
         symbol,
@@ -297,7 +310,9 @@ export class Generator {
 
     // Generate for callees (skip if up-to-date unless --force)
     for (const callee of uniqueCallees) {
+      current++;
       if (!force && this.isDocUpToDate(callee)) {
+        progress(`[${current}/${totalCount}] Skipping ${callee.name} (up-to-date)`);
         results.push({
           success: true,
           filePath: this.getDocPath(callee),
@@ -306,6 +321,7 @@ export class Generator {
         continue;
       }
 
+      progress(`[${current}/${totalCount}] Generating ${callee.name}`);
       const result = await this.generate({ symbol: callee });
       results.push(result);
     }
