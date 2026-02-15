@@ -323,6 +323,48 @@ export class Calculator {
       expect(content).toContain('hash:');
     });
 
+    it('should include syncdocsVersion in frontmatter when configured', async () => {
+      const versionedGenerator = new Generator({
+        apiKey: 'test-api-key',
+        outputDir: OUTPUT_DIR,
+        syncdocsVersion: '1.2.3',
+      });
+
+      const symbol: SymbolInfo = {
+        name: 'testFunc',
+        kind: 'function',
+        filePath: join(SRC_DIR, 'test.ts'),
+        params: '',
+        body: '{}',
+        fullText: 'function testFunc() {}',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const result = await versionedGenerator.generate({ symbol });
+      const content = readFileSync(result.filePath!, 'utf-8');
+
+      expect(content).toContain('syncdocsVersion: 1.2.3');
+    });
+
+    it('should omit syncdocsVersion from frontmatter when not configured', async () => {
+      const symbol: SymbolInfo = {
+        name: 'testFunc',
+        kind: 'function',
+        filePath: join(SRC_DIR, 'test.ts'),
+        params: '',
+        body: '{}',
+        fullText: 'function testFunc() {}',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const result = await generator.generate({ symbol });
+      const content = readFileSync(result.filePath!, 'utf-8');
+
+      expect(content).not.toContain('syncdocsVersion');
+    });
+
     it('should format dependencies correctly', async () => {
       const symbol: SymbolInfo = {
         name: 'func',

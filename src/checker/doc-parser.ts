@@ -38,6 +38,7 @@ export class DocParser {
     const lines = frontmatter.split('\n');
 
     let title = '';
+    let syncdocsVersion: string | undefined;
     let generated = '';
     const dependencies: DocDependency[] = [];
     let inDependencies = false;
@@ -48,6 +49,8 @@ export class DocParser {
 
       if (trimmed.startsWith('title:')) {
         title = trimmed.substring(6).trim();
+      } else if (trimmed.startsWith('syncdocsVersion:')) {
+        syncdocsVersion = trimmed.substring(16).trim();
       } else if (trimmed.startsWith('generated:')) {
         generated = trimmed.substring(10).trim();
       } else if (trimmed.startsWith('dependencies:')) {
@@ -80,6 +83,6 @@ export class DocParser {
       dependencies.push(currentDep as DocDependency);
     }
 
-    return { title, generated, dependencies };
+    return { title, syncdocsVersion, generated, dependencies };
   }
 }

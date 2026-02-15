@@ -11,6 +11,7 @@ export interface DocDependency {
 
 export interface DocMetadata {
   title: string;
+  syncdocsVersion?: string;
   generated: string;
   dependencies: DocDependency[];
 }

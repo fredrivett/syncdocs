@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
+import { version } from '../../../package.json';
 import { TypeScriptExtractor } from '../../extractor/index.js';
 import { Generator } from '../../generator/index.js';
 import { showCoverageAndSuggestion } from '../utils/next-suggestion.js';
@@ -79,6 +80,7 @@ export function registerRegenerateCommand(cli: CAC) {
           outputDir: config.outputDir,
           style: options.style || config.style,
           model: config.model,
+          syncdocsVersion: version,
         });
 
         // Regenerate each doc
