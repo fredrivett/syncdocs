@@ -27,6 +27,7 @@ export class TypeScriptExtractor {
           }
 
           // Arrow functions: const foo = () => {}
+          // Call expressions: const foo = task({...})
           if (ts.isVariableStatement(node) && node.declarationList.declarations.length > 0) {
             const decl = node.declarationList.declarations[0];
             if (
@@ -34,6 +35,13 @@ export class TypeScriptExtractor {
               (ts.isArrowFunction(decl.initializer) || ts.isFunctionExpression(decl.initializer))
             ) {
               symbols.push(this.extractArrowFunction(decl, sourceFile));
+            } else if (
+              decl.initializer &&
+              ts.isCallExpression(decl.initializer) &&
+              ts.isIdentifier(decl.name) &&
+              this.isTopLevelVariable(node, sourceFile)
+            ) {
+              symbols.push(this.extractCallExpression(decl, sourceFile));
             }
           }
 
@@ -258,6 +266,41 @@ export class TypeScriptExtractor {
       kind: 'const',
       filePath: sourceFile.fileName,
       params,
+      body,
+      fullText,
+      startLine: startLine + 1,
+      endLine: endLine + 1,
+    };
+  }
+
+  /**
+   * Check if a variable statement is at the top level of the file (not nested inside functions/classes)
+   */
+  private isTopLevelVariable(node: ts.Node, sourceFile: ts.SourceFile): boolean {
+    return node.parent === sourceFile;
+  }
+
+  /**
+   * Extract call expression assignment: const foo = someFunc({...})
+   * Captures the full text so AI can analyze task definitions, etc.
+   */
+  private extractCallExpression(
+    decl: ts.VariableDeclaration,
+    sourceFile: ts.SourceFile,
+  ): SymbolInfo {
+    const name = decl.name.getText(sourceFile);
+    const call = decl.initializer as ts.CallExpression;
+
+    const fullText = decl.getText(sourceFile);
+    const body = call.getText(sourceFile);
+    const { line: startLine } = sourceFile.getLineAndCharacterOfPosition(decl.pos);
+    const { line: endLine } = sourceFile.getLineAndCharacterOfPosition(decl.end);
+
+    return {
+      name,
+      kind: 'const',
+      filePath: sourceFile.fileName,
+      params: '',
       body,
       fullText,
       startLine: startLine + 1,

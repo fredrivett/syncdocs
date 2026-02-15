@@ -3,6 +3,7 @@
  */
 
 import type { SymbolInfo } from '../extractor/types.js';
+import type { DiscoveredSymbolContext } from './types.js';
 
 export interface AIClientConfig {
   apiKey: string;
@@ -13,6 +14,7 @@ export interface GenerateDocRequest {
   symbol: SymbolInfo;
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
   projectContext?: string;
+  discoveredSymbols?: DiscoveredSymbolContext[];
   customPrompt?: string;
 }
 
@@ -27,11 +29,10 @@ export class AIClient {
   }
 
   /**
-   * Generate documentation for a symbol using Claude
+   * Send a raw prompt to the API and return the text response.
+   * Used by both generateDoc and discovery.
    */
-  async generateDoc(request: GenerateDocRequest): Promise<string> {
-    const prompt = this.buildPrompt(request);
-
+  async sendPrompt(prompt: string, maxTokens?: number): Promise<string> {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -41,7 +42,7 @@ export class AIClient {
       },
       body: JSON.stringify({
         model: this.model,
-        max_tokens: 8192,
+        max_tokens: maxTokens ?? 8192,
         messages: [
           {
             role: 'user',
@@ -61,10 +62,19 @@ export class AIClient {
   }
 
   /**
+   * Generate documentation for a symbol using Claude
+   */
+  async generateDoc(request: GenerateDocRequest): Promise<string> {
+    const prompt = this.buildPrompt(request);
+    return this.sendPrompt(prompt);
+  }
+
+  /**
    * Build the prompt for documentation generation
    */
   private buildPrompt(request: GenerateDocRequest): string {
-    const { symbol, style = 'technical', projectContext, customPrompt } = request;
+    const { symbol, style = 'technical', projectContext, discoveredSymbols, customPrompt } =
+      request;
 
     if (customPrompt) {
       return customPrompt;
@@ -120,6 +130,21 @@ export class AIClient {
     prompt += `    subgraph "lib/vision.ts"\n      A[analyzeImage] --> B[getVisionClient]\n    end\n`;
     prompt += `    subgraph "lib/search/color-utils.ts"\n      C[getNearestColorName]\n    end\n`;
     prompt += `    B --> C\n`;
+
+    // Add runtime dispatch guidance when discovered symbols are present
+    if (discoveredSymbols && discoveredSymbols.length > 0) {
+      prompt += `  RUNTIME DISPATCHES: The following symbols are connected via runtime dispatch (not direct function calls). In the mermaid diagram, show them with:\n`;
+      prompt += `    - DOTTED lines (-.-> ) from the dispatch call to the target — NOT solid lines\n`;
+      prompt += `    - Soft orange fill for dispatch target nodes: style DispatchNode fill:#FFE0B2,stroke:#FFB74D,color:#333\n`;
+      prompt += `    - A "Runtime Dispatches" subgraph to group them\n`;
+      prompt += `    - Edge label showing the dispatch method, e.g. -.->|"tasks.trigger"|\n`;
+      prompt += `    - Do NOT show the internal flow of the dispatched task — just the dispatch boundary\n`;
+      prompt += `  Runtime dispatch targets:\n`;
+      for (const ds of discoveredSymbols) {
+        prompt += `    - \`${ds.symbol.name}\` (${ds.dispatchType}): ${ds.reason}\n`;
+      }
+    }
+
     prompt += `- "Parameters" - Parameter descriptions (if applicable)\n`;
     prompt += `- "Methods" - Method descriptions for classes (if applicable)\n`;
     prompt += `- "Return Value" - What the function/method returns (if applicable)\n`;

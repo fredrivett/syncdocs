@@ -2,8 +2,9 @@
  * Documentation generator - creates docs using AI
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join } from 'node:path';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join, resolve } from 'node:path';
+import { DocParser } from '../checker/doc-parser.js';
 import { toRelativePath } from '../cli/utils/paths.js';
 import { TypeScriptExtractor } from '../extractor/index.js';
 import { resolveImportPath } from '../extractor/resolve-import.js';
@@ -11,6 +12,7 @@ import type { SymbolInfo } from '../extractor/types.js';
 import { ContentHasher } from '../hasher/index.js';
 import { AIClient } from './ai-client.js';
 import type {
+  DiscoveredSymbolContext,
   DocDependency,
   GeneratedDoc,
   GenerateRequest,
@@ -21,6 +23,7 @@ import type {
 export class Generator {
   private extractor: TypeScriptExtractor;
   private hasher: ContentHasher;
+  private parser: DocParser;
   private aiClient: AIClient;
   private config: GeneratorConfig;
 
@@ -28,6 +31,7 @@ export class Generator {
     this.config = config;
     this.extractor = new TypeScriptExtractor();
     this.hasher = new ContentHasher();
+    this.parser = new DocParser();
     this.aiClient = new AIClient({
       apiKey: config.apiKey,
       model: config.model,
@@ -90,6 +94,7 @@ export class Generator {
       symbol,
       style: this.config.style,
       projectContext: context?.projectContext,
+      discoveredSymbols: context?.discoveredSymbols,
       customPrompt,
     });
 
@@ -109,6 +114,17 @@ export class Generator {
           path: toRelativePath(relatedSymbol.filePath),
           symbol: relatedSymbol.name,
           hash: this.hasher.hashSymbol(relatedSymbol),
+        });
+      }
+    }
+
+    // Add discovered symbols as dependencies if provided
+    if (context?.discoveredSymbols) {
+      for (const ds of context.discoveredSymbols) {
+        dependencies.push({
+          path: toRelativePath(ds.symbol.filePath),
+          symbol: ds.symbol.name,
+          hash: this.hasher.hashSymbol(ds.symbol),
         });
       }
     }
@@ -269,11 +285,13 @@ export class Generator {
       symbolName?: string;
       depth?: number;
       force?: boolean;
-      onProgress?: (message: string, type?: 'info' | 'progress') => void;
+      discover?: boolean;
+      onProgress?: (message: string, type?: 'info' | 'detail' | 'progress') => void;
     },
   ): Promise<GenerationResult[]> {
     const depth = options.depth ?? 0;
     const force = options.force ?? false;
+    const discover = options.discover ?? false;
     const progress = options.onProgress ?? (() => {});
 
     // Extract target symbol(s)
@@ -321,6 +339,40 @@ export class Generator {
       return allCallees.findIndex((c) => `${c.filePath}:${c.name}` === key) === index;
     });
 
+    // AI-powered runtime connection discovery
+    // Map from source symbol key to its discovered connections
+    const discoveredByTarget = new Map<string, DiscoveredSymbolContext[]>();
+    if (discover) {
+      const { ConnectionResolver } = await import('../resolver/index.js');
+      const resolver = new ConnectionResolver(this.aiClient, this.extractor);
+      const projectRoot = this.findProjectRoot(filePath);
+
+      const verified = await resolver.resolveConnections({
+        symbols: targetSymbols,
+        projectRoot,
+        onProgress: progress,
+      });
+
+      for (const v of verified) {
+        const key = `${v.targetSymbol.filePath}:${v.targetSymbol.name}`;
+        if (
+          !targetNames.has(key) &&
+          !uniqueCallees.some((c) => `${c.filePath}:${c.name}` === key)
+        ) {
+          uniqueCallees.push(v.targetSymbol);
+        }
+
+        const sourceKey = `${v.sourceSymbol.filePath}:${v.sourceSymbol.name}`;
+        const contexts = discoveredByTarget.get(sourceKey) ?? [];
+        contexts.push({
+          symbol: v.targetSymbol,
+          dispatchType: v.connection.type,
+          reason: v.connection.reason,
+        });
+        discoveredByTarget.set(sourceKey, contexts);
+      }
+    }
+
     const totalCount = targetSymbols.length + uniqueCallees.length;
     const allNames = [...targetSymbols, ...uniqueCallees].map((s) => s.name).join(', ');
     const breakdown =
@@ -336,7 +388,7 @@ export class Generator {
     const generated = new Set<string>();
     let current = 0;
 
-    // Generate for target symbols (always generate)
+    // Generate for target symbols (skip if up-to-date unless --force)
     for (const symbol of targetSymbols) {
       current++;
       const key = `${symbol.filePath}:${symbol.name}`;
@@ -346,11 +398,26 @@ export class Generator {
       }
       generated.add(key);
 
+      if (!force && this.isDocUpToDate(symbol)) {
+        progress(`[${current}/${totalCount}] Skipping ${symbol.name} (up-to-date)`);
+        results.push({
+          success: true,
+          filePath: this.getDocPath(symbol),
+          skipped: true,
+        });
+        continue;
+      }
+
       progress(`[${current}/${totalCount}] Generating ${symbol.name}`);
       const callees = this.resolveCallTree(symbol, depth);
+      const symbolDiscovered = discoveredByTarget.get(key);
+      const context: GenerateRequest['context'] = {};
+      if (callees.length > 0) context.relatedSymbols = callees;
+      if (symbolDiscovered && symbolDiscovered.length > 0)
+        context.discoveredSymbols = symbolDiscovered;
       const result = await this.generate({
         symbol,
-        context: callees.length > 0 ? { relatedSymbols: callees } : undefined,
+        context: Object.keys(context).length > 0 ? context : undefined,
       });
       results.push(result);
     }
@@ -384,20 +451,30 @@ export class Generator {
   }
 
   /**
-   * Check if an existing doc for a symbol is up-to-date (hash matches)
+   * Check if an existing doc for a symbol is up-to-date (all dependency hashes match)
    */
   isDocUpToDate(symbol: SymbolInfo): boolean {
     const docPath = this.getDocPath(symbol);
     if (!existsSync(docPath)) return false;
 
-    const content = readFileSync(docPath, 'utf-8');
-    const currentHash = this.hasher.hashSymbol(symbol);
+    try {
+      const metadata = this.parser.parseDocFile(docPath);
+      if (metadata.dependencies.length === 0) return false;
 
-    // Check if the frontmatter contains a matching hash for this symbol
-    const hashPattern = new RegExp(`symbol: ${symbol.name}\\n\\s+hash: ([a-f0-9]{64})`);
-    const match = content.match(hashPattern);
+      for (const dep of metadata.dependencies) {
+        const resolvedPath = resolve(process.cwd(), dep.path);
+        if (!existsSync(resolvedPath)) return false;
 
-    return match?.[1] === currentHash;
+        const depSymbol = this.extractor.extractSymbol(resolvedPath, dep.symbol);
+        if (!depSymbol) return false;
+
+        if (this.hasher.hashSymbol(depSymbol) !== dep.hash) return false;
+      }
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -406,6 +483,21 @@ export class Generator {
   getDocPath(symbol: SymbolInfo): string {
     const fileName = this.generateFileName(symbol);
     return this.generateFilePath(symbol, fileName);
+  }
+
+  /**
+   * Walk up from a file path to find the project root (directory with package.json)
+   */
+  private findProjectRoot(filePath: string): string {
+    let dir = dirname(filePath);
+    while (dir !== dirname(dir)) {
+      if (existsSync(join(dir, 'package.json'))) {
+        return dir;
+      }
+      dir = dirname(dir);
+    }
+    // Fallback: use the file's directory
+    return dirname(filePath);
   }
 
   /**

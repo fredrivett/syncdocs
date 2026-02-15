@@ -11,6 +11,7 @@ interface GenerateOptions {
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
   depth?: number;
   force?: boolean;
+  discover?: boolean;
 }
 
 export function registerGenerateCommand(cli: CAC) {
@@ -19,9 +20,11 @@ export function registerGenerateCommand(cli: CAC) {
     .option('--style <type>', 'Documentation style (technical, beginner-friendly, comprehensive)')
     .option('--depth <n>', 'Recursion depth for call-tree traversal (default: 0)')
     .option('--force', 'Regenerate docs even if they already exist and are up-to-date')
+    .option('--discover', 'Use AI to discover runtime connections (e.g. task dispatches)')
     .example('syncdocs generate src/utils.ts')
     .example('syncdocs generate src/utils.ts:myFunction')
     .example('syncdocs generate src/utils.ts --depth 1')
+    .example('syncdocs generate src/utils.ts --depth 1 --discover')
     .action(async (target: string, options: GenerateOptions) => {
       p.intro('📚 Generate Documentation');
 
@@ -61,10 +64,19 @@ export function registerGenerateCommand(cli: CAC) {
         const depth = options.depth ? Number(options.depth) : 0;
 
         const force = options.force ?? false;
+        const discover = options.discover ?? false;
 
-        // Use depth-aware generation when --depth is provided
-        if (depth > 0) {
-          await generateWithDepth(generator, resolvedPath, filePath, symbolName, depth, force);
+        // Use depth-aware generation when --depth or --discover is provided
+        if (depth > 0 || discover) {
+          await generateWithDepth(
+            generator,
+            resolvedPath,
+            filePath,
+            symbolName,
+            depth,
+            force,
+            discover,
+          );
         } else if (symbolName) {
           await generateSymbol(generator, resolvedPath, symbolName, filePath, force);
         } else {
@@ -205,6 +217,7 @@ async function generateWithDepth(
   symbolName: string | undefined,
   depth: number,
   force: boolean,
+  discover: boolean,
 ) {
   const spinner = p.spinner();
   spinner.start(`Extracting symbols from ${displayPath} (depth: ${depth})`);
@@ -213,14 +226,23 @@ async function generateWithDepth(
     symbolName,
     depth,
     force,
-    onProgress: (msg, type) => {
-      if (type === 'info') {
-        spinner.stop(msg);
-        spinner.start(msg);
-      } else {
-        spinner.message(msg);
-      }
-    },
+    discover,
+    onProgress: (() => {
+      let spinnerRunning = true;
+      return (msg: string, type?: string) => {
+        if (type === 'info') {
+          if (spinnerRunning) spinner.stop(msg);
+          else p.log.step(msg);
+          spinnerRunning = false;
+        } else if (type === 'detail') {
+          if (spinnerRunning) { spinner.stop(''); spinnerRunning = false; }
+          p.log.message(`  ${msg}`);
+        } else {
+          if (!spinnerRunning) { spinner.start(); spinnerRunning = true; }
+          spinner.message(msg);
+        }
+      };
+    })(),
   });
 
   const generated = results.filter((r) => r.success && !r.skipped);

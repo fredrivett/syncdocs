@@ -734,4 +734,196 @@ function b() { return a() }
       expect(result[0].name).toBe('b');
     });
   });
+
+  describe('isDocUpToDate', () => {
+    it('should return false when doc does not exist', () => {
+      const symbol: SymbolInfo = {
+        name: 'missing',
+        kind: 'function',
+        filePath: join(SRC_DIR, 'test.ts'),
+        params: '',
+        body: '{}',
+        fullText: 'function missing() {}',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      expect(generator.isDocUpToDate(symbol)).toBe(false);
+    });
+
+    it('should return true when primary symbol hash matches', async () => {
+      const sourcePath = join(SRC_DIR, 'uptodate.ts');
+      writeFileSync(sourcePath, 'function upToDate() { return 1 }');
+
+      const symbol: SymbolInfo = {
+        name: 'upToDate',
+        kind: 'function',
+        filePath: sourcePath,
+        params: '',
+        body: '{ return 1 }',
+        fullText: 'function upToDate() { return 1 }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      // Generate the doc first
+      await generator.generate({ symbol });
+
+      // Should be up-to-date (nothing changed)
+      expect(generator.isDocUpToDate(symbol)).toBe(true);
+    });
+
+    it('should return false when primary symbol hash changes', async () => {
+      const sourcePath = join(SRC_DIR, 'changing.ts');
+      writeFileSync(sourcePath, 'function changing() { return 1 }');
+
+      const symbol: SymbolInfo = {
+        name: 'changing',
+        kind: 'function',
+        filePath: sourcePath,
+        params: '',
+        body: '{ return 1 }',
+        fullText: 'function changing() { return 1 }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      // Generate the doc
+      await generator.generate({ symbol });
+
+      // Modify the source file on disk (isDocUpToDate re-extracts from disk)
+      writeFileSync(sourcePath, 'function changing() { return 2 }');
+
+      expect(generator.isDocUpToDate(symbol)).toBe(false);
+    });
+
+    it('should return false when a dependency hash changes', async () => {
+      const mainPath = join(SRC_DIR, 'main-dep.ts');
+      const helperPath = join(SRC_DIR, 'helper-dep.ts');
+      writeFileSync(mainPath, 'function mainDep() { return helperDep() }');
+      writeFileSync(helperPath, 'function helperDep() { return 1 }');
+
+      const mainSymbol: SymbolInfo = {
+        name: 'mainDep',
+        kind: 'function',
+        filePath: mainPath,
+        params: '',
+        body: '{ return helperDep() }',
+        fullText: 'function mainDep() { return helperDep() }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const helperSymbol: SymbolInfo = {
+        name: 'helperDep',
+        kind: 'function',
+        filePath: helperPath,
+        params: '',
+        body: '{ return 1 }',
+        fullText: 'function helperDep() { return 1 }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      // Generate doc with helper as dependency
+      await generator.generate({
+        symbol: mainSymbol,
+        context: { relatedSymbols: [helperSymbol] },
+      });
+
+      // Doc should be up-to-date initially
+      expect(generator.isDocUpToDate(mainSymbol)).toBe(true);
+
+      // Now change the helper source file
+      writeFileSync(helperPath, 'function helperDep() { return 999 }');
+
+      // Main doc should now be stale (dependency changed)
+      expect(generator.isDocUpToDate(mainSymbol)).toBe(false);
+    });
+
+    it('should return false when a dependency file is deleted', async () => {
+      const mainPath = join(SRC_DIR, 'main-del.ts');
+      const helperPath = join(SRC_DIR, 'helper-del.ts');
+      writeFileSync(mainPath, 'function mainDel() { return helperDel() }');
+      writeFileSync(helperPath, 'function helperDel() { return 1 }');
+
+      const mainSymbol: SymbolInfo = {
+        name: 'mainDel',
+        kind: 'function',
+        filePath: mainPath,
+        params: '',
+        body: '{ return helperDel() }',
+        fullText: 'function mainDel() { return helperDel() }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const helperSymbol: SymbolInfo = {
+        name: 'helperDel',
+        kind: 'function',
+        filePath: helperPath,
+        params: '',
+        body: '{ return 1 }',
+        fullText: 'function helperDel() { return 1 }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      await generator.generate({
+        symbol: mainSymbol,
+        context: { relatedSymbols: [helperSymbol] },
+      });
+
+      // Delete the helper file
+      rmSync(helperPath);
+
+      // Main doc should be stale (dependency file missing)
+      expect(generator.isDocUpToDate(mainSymbol)).toBe(false);
+    });
+  });
+
+  describe('discoveredSymbols dependencies', () => {
+    it('should include discovered symbols as dependencies in frontmatter', async () => {
+      const mainSymbol: SymbolInfo = {
+        name: 'dispatcher',
+        kind: 'function',
+        filePath: join(SRC_DIR, 'dispatch.ts'),
+        params: '',
+        body: '{ tasks.trigger("analyze") }',
+        fullText: 'function dispatcher() { tasks.trigger("analyze") }',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const discoveredSymbol: SymbolInfo = {
+        name: 'analyzeTask',
+        kind: 'const',
+        filePath: join(SRC_DIR, 'trigger/analyze.ts'),
+        params: '',
+        body: 'task({ id: "analyze" })',
+        fullText: 'const analyzeTask = task({ id: "analyze" })',
+        startLine: 1,
+        endLine: 1,
+      };
+
+      const result = await generator.generate({
+        symbol: mainSymbol,
+        context: {
+          discoveredSymbols: [
+            {
+              symbol: discoveredSymbol,
+              dispatchType: 'trigger-task',
+              reason: 'dispatches via tasks.trigger',
+            },
+          ],
+        },
+      });
+
+      const content = readFileSync(result.filePath!, 'utf-8');
+
+      // Should have both the main symbol and discovered symbol as dependencies
+      expect(content).toContain('symbol: dispatcher');
+      expect(content).toContain('symbol: analyzeTask');
+    });
+  });
 });
