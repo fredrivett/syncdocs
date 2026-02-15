@@ -537,8 +537,18 @@ import { foo, bar } from './utils'
       const imports = extractor.extractImports(TEST_FILE);
 
       expect(imports).toHaveLength(2);
-      expect(imports[0]).toMatchObject({ name: 'foo', originalName: 'foo', source: './utils', isDefault: false });
-      expect(imports[1]).toMatchObject({ name: 'bar', originalName: 'bar', source: './utils', isDefault: false });
+      expect(imports[0]).toMatchObject({
+        name: 'foo',
+        originalName: 'foo',
+        source: './utils',
+        isDefault: false,
+      });
+      expect(imports[1]).toMatchObject({
+        name: 'bar',
+        originalName: 'bar',
+        source: './utils',
+        isDefault: false,
+      });
     });
 
     it('should extract default imports', () => {
@@ -550,7 +560,12 @@ import MyModule from './my-module'
       const imports = extractor.extractImports(TEST_FILE);
 
       expect(imports).toHaveLength(1);
-      expect(imports[0]).toMatchObject({ name: 'MyModule', originalName: 'MyModule', source: './my-module', isDefault: true });
+      expect(imports[0]).toMatchObject({
+        name: 'MyModule',
+        originalName: 'MyModule',
+        source: './my-module',
+        isDefault: true,
+      });
     });
 
     it('should extract both default and named imports from same declaration', () => {

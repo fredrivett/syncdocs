@@ -32,9 +32,7 @@ export function loadTsconfigPaths(fromFile: string): TsconfigPaths | null {
       try {
         const content = readFileSync(tsconfigPath, 'utf-8');
         // Strip comments (// and /* */) before parsing — tsconfig allows them
-        const stripped = content
-          .replace(/\/\/.*$/gm, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '');
+        const stripped = content.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
         const config = JSON.parse(stripped);
         const paths = config?.compilerOptions?.paths;
 

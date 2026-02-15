@@ -2,12 +2,12 @@
  * Connection resolver — orchestrates AI discovery and verification
  */
 
-import type { AIClient } from '../generator/ai-client.js';
-import type { TypeScriptExtractor } from '../extractor/typescript-extractor.js';
 import type { SymbolInfo } from '../extractor/types.js';
+import type { TypeScriptExtractor } from '../extractor/typescript-extractor.js';
+import type { AIClient } from '../generator/ai-client.js';
 import { discoverConnections } from './discover.js';
-import { findTypeScriptFiles, verifyConnection, type VerifyResult } from './verify.js';
 import type { VerifiedConnection } from './types.js';
+import { findTypeScriptFiles, type VerifyResult, verifyConnection } from './verify.js';
 
 export type { DiscoveredConnection, VerifiedConnection } from './types.js';
 
@@ -50,10 +50,7 @@ export class ConnectionResolver {
         continue;
       }
 
-      progress(
-        `AI found ${connections.length} potential connection(s) in ${symbol.name}`,
-        'info',
-      );
+      progress(`AI found ${connections.length} potential connection(s) in ${symbol.name}`, 'info');
       for (const c of connections) {
         progress(`"${c.targetHint}" (${c.type}) — ${c.reason}`, 'detail');
       }
@@ -70,7 +67,9 @@ export class ConnectionResolver {
             verified++;
           }
         } else {
-          discardReasons.push(`  "${connection.targetHint}" (${connection.type}): ${result.reason}`);
+          discardReasons.push(
+            `  "${connection.targetHint}" (${connection.type}): ${result.reason}`,
+          );
         }
       }
 

@@ -73,8 +73,13 @@ export class AIClient {
    * Build the prompt for documentation generation
    */
   private buildPrompt(request: GenerateDocRequest): string {
-    const { symbol, style = 'technical', projectContext, discoveredSymbols, customPrompt } =
-      request;
+    const {
+      symbol,
+      style = 'technical',
+      projectContext,
+      discoveredSymbols,
+      customPrompt,
+    } = request;
 
     if (customPrompt) {
       return customPrompt;

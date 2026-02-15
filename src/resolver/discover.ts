@@ -2,8 +2,8 @@
  * AI-powered discovery of runtime dispatch connections
  */
 
-import type { AIClient } from '../generator/ai-client.js';
 import type { SymbolInfo } from '../extractor/types.js';
+import type { AIClient } from '../generator/ai-client.js';
 import type { DiscoveredConnection } from './types.js';
 
 /**

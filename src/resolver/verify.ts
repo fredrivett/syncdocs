@@ -4,8 +4,8 @@
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import type { TypeScriptExtractor } from '../extractor/typescript-extractor.js';
 import type { SymbolInfo } from '../extractor/types.js';
+import type { TypeScriptExtractor } from '../extractor/typescript-extractor.js';
 import type { DiscoveredConnection, VerifiedConnection } from './types.js';
 
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', '.next', 'build', 'coverage', '.turbo']);
@@ -35,9 +35,7 @@ export function findTypeScriptFiles(rootDir: string): string[] {
         } else if (entry.endsWith('.ts') || entry.endsWith('.tsx')) {
           results.push(fullPath);
         }
-      } catch {
-        continue;
-      }
+      } catch {}
     }
   }
 
@@ -65,9 +63,7 @@ export function findTaskDefinition(taskId: string, tsFiles: string[]): string | 
       if (pattern.test(content)) {
         return filePath;
       }
-    } catch {
-      continue;
-    }
+    } catch {}
   }
 
   return null;
@@ -92,7 +88,12 @@ export function resolveTaskSymbol(
  * Dispatches to type-specific verifiers. Returns null if unverified.
  */
 export type VerifyResult =
-  | { verified: true; connection: DiscoveredConnection; targetSymbol: SymbolInfo; targetFilePath: string }
+  | {
+      verified: true;
+      connection: DiscoveredConnection;
+      targetSymbol: SymbolInfo;
+      targetFilePath: string;
+    }
   | { verified: false; connection: DiscoveredConnection; reason: string };
 
 const TASK_DISPATCH_TYPES = new Set([
@@ -113,12 +114,20 @@ export function verifyConnection(
   if (TASK_DISPATCH_TYPES.has(normalizedType)) {
     const targetFile = findTaskDefinition(connection.targetHint, tsFiles);
     if (!targetFile) {
-      return { verified: false, connection, reason: `no file defines id "${connection.targetHint}"` };
+      return {
+        verified: false,
+        connection,
+        reason: `no file defines id "${connection.targetHint}"`,
+      };
     }
 
     const targetSymbol = resolveTaskSymbol(targetFile, connection.targetHint, extractor);
     if (!targetSymbol) {
-      return { verified: false, connection, reason: `found id "${connection.targetHint}" in ${targetFile} but could not extract symbol` };
+      return {
+        verified: false,
+        connection,
+        reason: `found id "${connection.targetHint}" in ${targetFile} but could not extract symbol`,
+      };
     }
 
     return {

@@ -235,10 +235,16 @@ async function generateWithDepth(
           else p.log.step(msg);
           spinnerRunning = false;
         } else if (type === 'detail') {
-          if (spinnerRunning) { spinner.stop(''); spinnerRunning = false; }
+          if (spinnerRunning) {
+            spinner.stop('');
+            spinnerRunning = false;
+          }
           p.log.message(`  ${msg}`);
         } else {
-          if (!spinnerRunning) { spinner.start(); spinnerRunning = true; }
+          if (!spinnerRunning) {
+            spinner.start();
+            spinnerRunning = true;
+          }
           spinner.message(msg);
         }
       };
