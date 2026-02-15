@@ -13,10 +13,17 @@ export interface GeneratorConfig {
   syncdocsVersion?: string;
 }
 
+export interface DiscoveredSymbolContext {
+  symbol: SymbolInfo;
+  dispatchType: string;
+  reason: string;
+}
+
 export interface GenerateRequest {
   symbol: SymbolInfo;
   context?: {
     relatedSymbols?: SymbolInfo[];
+    discoveredSymbols?: DiscoveredSymbolContext[];
     projectContext?: string;
   };
   customPrompt?: string;
