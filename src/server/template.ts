@@ -75,39 +75,166 @@ export function getTemplate(): string {
     #symbol-tree {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 0;
+      padding: 8px 12px;
     }
 
-    .dir-group {
-      margin-bottom: 4px;
+    /* Tree controls */
+    .tree-controls {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
     }
 
-    .dir-label {
-      padding: 4px 16px;
+    .tree-controls button {
+      flex: 1;
+      padding: 4px 8px;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
     }
 
-    .symbol-link {
-      display: block;
-      padding: 4px 16px 4px 24px;
+    .tree-controls button:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    /* Tree nodes */
+    .tree-dir {
+      user-select: none;
+    }
+
+    .tree-dir-label {
+      display: flex;
+      align-items: center;
+      height: 26px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .tree-dir-label:hover {
+      background: var(--bg-hover);
+    }
+
+    .tree-dir-label .chevron {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: transform 0.15s ease;
+    }
+
+    .tree-dir.collapsed > .tree-dir-label .chevron {
+      transform: rotate(-90deg);
+    }
+
+    .tree-dir-label .dir-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-left: 2px;
+    }
+
+    .tree-children {
+      /* No padding — indentation handled by guide elements */
+    }
+
+    .tree-dir.collapsed > .tree-children {
+      display: none;
+    }
+
+    /* Guide elements — CSS-drawn tree lines, no gaps */
+    .guide {
+      width: 16px;
+      flex-shrink: 0;
+      position: relative;
+      align-self: stretch;
+    }
+
+    /* Vertical line (ancestor has more siblings below) */
+    .guide-line::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      border-left: 1px solid var(--border);
+    }
+
+    /* Tee connector ├ (not last child) */
+    .guide-tee::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      border-left: 1px solid var(--border);
+    }
+
+    .guide-tee::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      right: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Corner connector └ (last child) */
+    .guide-corner::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      height: 50%;
+      border-left: 1px solid var(--border);
+    }
+
+    .guide-corner::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      right: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Tree items (symbol links) */
+    .tree-item {
+      display: flex;
+      align-items: center;
+      height: 26px;
       font-size: 13px;
       color: var(--text);
       text-decoration: none;
       cursor: pointer;
-      border-left: 2px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .symbol-link:hover {
+    .tree-item .item-name {
+      margin-left: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    a.tree-item:hover {
       background: var(--bg-hover);
     }
 
-    .symbol-link.active {
+    a.tree-item.active {
       background: var(--bg-active);
-      border-left-color: var(--accent);
       font-weight: 500;
     }
 
@@ -308,6 +435,10 @@ export function getTemplate(): string {
       <div id="sidebar-header">
         <h1>syncdocs</h1>
         <input type="text" id="search" placeholder="Search symbols...">
+        <div class="tree-controls">
+          <button id="collapse-all" title="Collapse all">Collapse all</button>
+          <button id="expand-all" title="Expand all">Expand all</button>
+        </div>
       </div>
       <nav id="symbol-tree"></nav>
     </aside>
@@ -352,11 +483,10 @@ export function getTemplate(): string {
       renderSidebar(symbolIndex);
     }
 
-    // --- Sidebar ---
-    function renderSidebar(index, filter = '') {
-      const tree = document.getElementById('symbol-tree');
-      tree.innerHTML = '';
+    // --- Tree building ---
+    function buildTree(index, filter = '') {
       const lowerFilter = filter.toLowerCase();
+      const root = { children: {}, symbols: [] };
 
       for (const [dir, symbols] of Object.entries(index)) {
         const filtered = symbols.filter(s =>
@@ -364,32 +494,140 @@ export function getTemplate(): string {
         );
         if (filtered.length === 0) continue;
 
-        const group = document.createElement('div');
-        group.className = 'dir-group';
-
-        const label = document.createElement('div');
-        label.className = 'dir-label';
-        label.textContent = dir;
-        group.appendChild(label);
-
-        for (const sym of filtered) {
-          const link = document.createElement('a');
-          link.className = 'symbol-link';
-          link.textContent = sym.name;
-          link.dataset.docPath = sym.docPath;
-          link.href = '#/doc/' + encodeURIComponent(sym.docPath);
-          group.appendChild(link);
+        const parts = dir === '.' ? ['.'] : dir.split('/');
+        let node = root;
+        for (const part of parts) {
+          if (!node.children[part]) {
+            node.children[part] = { children: {}, symbols: [] };
+          }
+          node = node.children[part];
         }
+        node.symbols.push(...filtered);
+      }
 
-        tree.appendChild(group);
+      return root;
+    }
+
+    // Add guide elements to a row
+    function addGuides(row, guides, isLast) {
+      for (const hasLine of guides) {
+        const g = document.createElement('span');
+        g.className = hasLine ? 'guide guide-line' : 'guide';
+        row.appendChild(g);
+      }
+      // Connector for current item
+      const conn = document.createElement('span');
+      conn.className = isLast ? 'guide guide-corner' : 'guide guide-tee';
+      row.appendChild(conn);
+    }
+
+    function renderTreeNode(name, node, depth, guides, isLast) {
+      const hasChildren = Object.keys(node.children).length > 0 || node.symbols.length > 0;
+      if (!hasChildren) return null;
+
+      const div = document.createElement('div');
+      div.className = 'tree-dir';
+
+      const label = document.createElement('div');
+      label.className = 'tree-dir-label';
+
+      // Add guide elements for depth > 0
+      if (depth > 0) {
+        addGuides(label, guides, isLast);
+      }
+
+      const chevron = document.createElement('span');
+      chevron.className = 'chevron';
+      chevron.innerHTML = '&#9660;';
+      label.appendChild(chevron);
+
+      const dirName = document.createElement('span');
+      dirName.className = 'dir-name';
+      dirName.textContent = name;
+      label.appendChild(dirName);
+
+      label.addEventListener('click', () => {
+        div.classList.toggle('collapsed');
+      });
+
+      div.appendChild(label);
+
+      const childContainer = document.createElement('div');
+      childContainer.className = 'tree-children';
+
+      // Build child guides: extend with current node's continuation info
+      const childGuides = depth > 0 ? [...guides, !isLast] : [];
+
+      // Collect all children (dirs first, then symbols)
+      const sortedDirs = Object.keys(node.children).sort();
+      const allItems = [];
+      for (const d of sortedDirs) {
+        allItems.push({ type: 'dir', name: d });
+      }
+      for (const sym of node.symbols) {
+        allItems.push({ type: 'sym', sym });
+      }
+
+      for (let i = 0; i < allItems.length; i++) {
+        const item = allItems[i];
+        const itemIsLast = i === allItems.length - 1;
+
+        if (item.type === 'dir') {
+          const childEl = renderTreeNode(item.name, node.children[item.name], depth + 1, childGuides, itemIsLast);
+          if (childEl) childContainer.appendChild(childEl);
+        } else {
+          const link = document.createElement('a');
+          link.className = 'tree-item';
+          link.dataset.docPath = item.sym.docPath;
+          link.href = '#/doc/' + encodeURIComponent(item.sym.docPath);
+
+          addGuides(link, childGuides, itemIsLast);
+
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'item-name';
+          nameSpan.textContent = item.sym.name;
+          link.appendChild(nameSpan);
+
+          childContainer.appendChild(link);
+        }
+      }
+
+      div.appendChild(childContainer);
+      return div;
+    }
+
+    // --- Sidebar ---
+    function renderSidebar(index, filter = '') {
+      const treeEl = document.getElementById('symbol-tree');
+      treeEl.innerHTML = '';
+
+      const tree = buildTree(index, filter);
+
+      for (const [name, node] of Object.entries(tree.children).sort(([a],[b]) => a.localeCompare(b))) {
+        const el = renderTreeNode(name, node, 0, [], false);
+        if (el) treeEl.appendChild(el);
+      }
+
+      // Expand all when filtering
+      if (filter) {
+        treeEl.querySelectorAll('.tree-dir').forEach(d => d.classList.remove('collapsed'));
       }
 
       updateActiveLink();
     }
 
+    // --- Collapse / Expand all ---
+    document.getElementById('collapse-all').addEventListener('click', () => {
+      document.querySelectorAll('#symbol-tree .tree-dir').forEach(d => d.classList.add('collapsed'));
+    });
+
+    document.getElementById('expand-all').addEventListener('click', () => {
+      document.querySelectorAll('#symbol-tree .tree-dir').forEach(d => d.classList.remove('collapsed'));
+    });
+
     function updateActiveLink() {
       const hash = decodeURIComponent(window.location.hash.slice(6) || '');
-      document.querySelectorAll('.symbol-link').forEach(el => {
+      document.querySelectorAll('.tree-item').forEach(el => {
         el.classList.toggle('active', el.dataset.docPath === hash);
       });
     }
