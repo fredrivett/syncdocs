@@ -87,6 +87,47 @@ Content
     expect(metadata.dependencies[1].asOf).toBe('commit456');
   });
 
+  it('should parse syncdocsVersion from frontmatter', () => {
+    const content = `---
+title: Test Doc
+syncdocsVersion: 0.1.0
+generated: 2026-02-03T10:00:00Z
+dependencies:
+  - path: src/test.ts
+    symbol: testFunc
+    hash: abc123
+---
+
+# Test Doc
+
+Some content here.
+`;
+
+    writeFileSync(join(TEST_DIR, 'versioned.md'), content);
+    const metadata = parser.parseDocFile(join(TEST_DIR, 'versioned.md'));
+
+    expect(metadata.syncdocsVersion).toBe('0.1.0');
+  });
+
+  it('should handle missing syncdocsVersion gracefully', () => {
+    const content = `---
+title: Test Doc
+generated: 2026-02-03T10:00:00Z
+dependencies:
+  - path: src/test.ts
+    symbol: testFunc
+    hash: abc123
+---
+
+Content
+`;
+
+    writeFileSync(join(TEST_DIR, 'no-version.md'), content);
+    const metadata = parser.parseDocFile(join(TEST_DIR, 'no-version.md'));
+
+    expect(metadata.syncdocsVersion).toBeUndefined();
+  });
+
   it('should handle dependency without asOf field', () => {
     const content = `---
 title: Test

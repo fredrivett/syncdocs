@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
+import { version } from '../../../package.json';
 import { StaleChecker } from '../../checker/index.js';
 import type { StaleDoc } from '../../checker/types.js';
 import { TypeScriptExtractor } from '../../extractor/index.js';
@@ -113,6 +114,7 @@ async function regenerateStaleDocs(staleDocs: StaleDoc[], config: any) {
     outputDir: config.outputDir,
     style: config.style,
     model: config.model,
+    syncdocsVersion: version,
   });
 
   const extractor = new TypeScriptExtractor();

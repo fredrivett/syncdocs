@@ -151,6 +151,9 @@ export class Generator {
 
     let frontmatter = '---\n';
     frontmatter += `title: ${doc.title}\n`;
+    if (this.config.syncdocsVersion) {
+      frontmatter += `syncdocsVersion: ${this.config.syncdocsVersion}\n`;
+    }
     frontmatter += `generated: ${now}\n`;
     frontmatter += `dependencies:\n`;
 

@@ -10,6 +10,7 @@ export interface GeneratorConfig {
   outputDir: string;
   projectName?: string;
   style?: 'technical' | 'beginner-friendly' | 'comprehensive';
+  syncdocsVersion?: string;
 }
 
 export interface GenerateRequest {
