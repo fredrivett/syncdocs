@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdir, stat } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import { DocParser } from '../../checker/doc-parser.js';
@@ -124,6 +125,113 @@ export function scanProject(outputDir: string): ProjectScan {
     undocumented,
     coverage,
   };
+}
+
+const tick = () => new Promise<void>((resolve) => setImmediate(resolve));
+
+/**
+ * Async version of scanProject that yields throughout
+ * so spinner animations stay smooth.
+ */
+export async function scanProjectAsync(
+  outputDir: string,
+  onProgress?: (message: string) => void,
+): Promise<ProjectScan> {
+  const docsDir = resolve(process.cwd(), outputDir);
+
+  // Phase 1: find source files (async fs, yields naturally at each I/O)
+  const sourceFiles = await findSourceFilesAsync(process.cwd());
+
+  const allSymbols: { file: string; symbol: { name: string } }[] = [];
+
+  if (sourceFiles.length > 0) {
+    onProgress?.(`Analyzing ${sourceFiles.length} source files`);
+    await tick();
+
+    // Phase 2: extract symbols, yielding every batch of files
+    const extractor = new TypeScriptExtractor();
+    for (let i = 0; i < sourceFiles.length; i++) {
+      try {
+        const result = extractor.extractSymbols(sourceFiles[i]);
+        for (const symbol of result.symbols) {
+          allSymbols.push({ file: sourceFiles[i], symbol });
+        }
+      } catch {
+        // Skip files that can't be parsed
+      }
+      if (i % 10 === 9) await tick();
+    }
+  }
+
+  // Phase 3: check documentation
+  onProgress?.('Checking documentation');
+  await tick();
+
+  const documentedSymbols = new Set<string>();
+  if (existsSync(docsDir)) {
+    const docFiles = findMarkdownFiles(docsDir);
+    const parser = new DocParser();
+
+    for (const docFile of docFiles) {
+      try {
+        const metadata = parser.parseDocFile(docFile);
+        for (const dep of metadata.dependencies) {
+          documentedSymbols.add(`${dep.path}:${dep.symbol}`);
+        }
+      } catch {
+        // Skip invalid doc files
+      }
+    }
+  }
+
+  const totalSymbols = allSymbols.length;
+  const documented = allSymbols.filter((s) =>
+    documentedSymbols.has(`${getRelativePath(s.file)}:${s.symbol.name}`),
+  ).length;
+  const undocumented = totalSymbols - documented;
+  const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
+
+  return {
+    sourceFiles,
+    allSymbols,
+    documentedSymbols,
+    totalSymbols,
+    documented,
+    undocumented,
+    coverage,
+  };
+}
+
+async function findSourceFilesAsync(rootDir: string): Promise<string[]> {
+  const files: string[] = [];
+  const skipDirs = new Set(['node_modules', '.git', 'dist', 'build', '_syncdocs']);
+  const sourceExts = new Set(['.ts', '.tsx', '.js', '.jsx']);
+  const testPatterns = ['.test.ts', '.test.tsx', '.test.js', '.test.jsx', '.spec.ts', '.spec.tsx'];
+
+  const walk = async (dir: string) => {
+    const items = await readdir(dir);
+
+    for (const item of items) {
+      const fullPath = join(dir, item);
+      const s = await stat(fullPath);
+
+      if (s.isDirectory()) {
+        if (skipDirs.has(item)) continue;
+        await walk(fullPath);
+      } else if (s.isFile()) {
+        const hasSourceExt = sourceExts.has(fullPath.slice(fullPath.lastIndexOf('.')));
+        if (!hasSourceExt) continue;
+
+        const isTest = testPatterns.some((p) => fullPath.endsWith(p));
+        if (isTest) continue;
+
+        files.push(fullPath);
+      }
+    }
+  };
+
+  await walk(rootDir);
+  return files;
 }
 
 /**
