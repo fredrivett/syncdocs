@@ -7,7 +7,7 @@ import {
   getRelativePath,
   renderCoverageStats,
   renderNextSuggestion,
-  scanProject,
+  scanProjectAsync,
 } from '../utils/next-suggestion.js';
 
 interface StatusOptions {
@@ -31,11 +31,13 @@ export function registerStatusCommand(cli: CAC) {
 
         // Scan project and show coverage
         const spinner = p.spinner();
-        spinner.start('Scanning project files');
+        spinner.start('Finding source files');
 
-        const scan = scanProject(config.outputDir);
+        const scan = await scanProjectAsync(config.outputDir, (message) => {
+          spinner.message(message);
+        });
 
-        spinner.stop('✅ Analysis complete');
+        spinner.stop('Analysis complete');
 
         renderCoverageStats(scan);
 
