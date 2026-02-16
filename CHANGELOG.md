@@ -1,5 +1,11 @@
 # syncdocs
 
+## 0.1.2
+
+### Patch Changes
+
+- a15e185: Clarify README for end-users vs contributors, add missing command docs, restrict AI provider to Anthropic only
+
 ## 0.1.1
 
 ### Patch Changes
