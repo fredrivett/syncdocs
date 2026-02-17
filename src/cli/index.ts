@@ -15,6 +15,7 @@ cli.version(version).help();
 
 import { registerCheckCommand } from './commands/check.js';
 import { registerGenerateCommand } from './commands/generate.js';
+import { registerGraphCommand } from './commands/graph.js';
 // Register commands
 import { registerInitCommand } from './commands/init.js';
 import { registerRegenerateCommand } from './commands/regenerate.js';
@@ -25,6 +26,7 @@ import { registerValidateCommand } from './commands/validate.js';
 registerInitCommand(cli);
 registerCheckCommand(cli);
 registerGenerateCommand(cli);
+registerGraphCommand(cli);
 registerRegenerateCommand(cli);
 registerServeCommand(cli);
 registerStatusCommand(cli);
