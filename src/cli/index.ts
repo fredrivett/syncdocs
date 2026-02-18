@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 
-// Load environment variables from .env file
-import { config } from 'dotenv';
-
-config({ silent: true });
-
 import { cac } from 'cac';
 import { version } from '../../package.json';
 
@@ -14,23 +9,17 @@ const cli = cac('syncdocs');
 cli.version(version).help();
 
 import { registerCheckCommand } from './commands/check.js';
-import { registerGenerateCommand } from './commands/generate.js';
-import { registerGraphCommand } from './commands/graph.js';
 // Register commands
 import { registerInitCommand } from './commands/init.js';
-import { registerRegenerateCommand } from './commands/regenerate.js';
 import { registerServeCommand } from './commands/serve.js';
 import { registerStatusCommand } from './commands/status.js';
-import { registerValidateCommand } from './commands/validate.js';
+import { registerSyncCommand } from './commands/sync.js';
 
 registerInitCommand(cli);
+registerSyncCommand(cli);
 registerCheckCommand(cli);
-registerGenerateCommand(cli);
-registerGraphCommand(cli);
-registerRegenerateCommand(cli);
 registerServeCommand(cli);
 registerStatusCommand(cli);
-registerValidateCommand(cli);
 
 // Parse CLI arguments
 const parsed = cli.parse();

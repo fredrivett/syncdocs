@@ -12,14 +12,6 @@ interface InitConfig {
     include: string[];
     exclude: string[];
   };
-  generation: {
-    prompt: string;
-    aiProvider: 'anthropic';
-  };
-  git: {
-    includeCommitMessages: boolean;
-    commitDepth: number;
-  };
 }
 
 export function registerInitCommand(cli: CAC) {
@@ -27,7 +19,7 @@ export function registerInitCommand(cli: CAC) {
     // biome-ignore lint/suspicious/noConsole: intentional clear before init wizard
     console.clear();
 
-    p.intro('✨ Welcome to syncdocs');
+    p.intro('Welcome to syncdocs');
 
     // Check if already initialized
     const configPath = join(process.cwd(), '_syncdocs', 'config.yaml');
@@ -77,61 +69,6 @@ export function registerInitCommand(cli: CAC) {
       process.exit(0);
     }
 
-    const docStyle = await p.select({
-      message: 'How should docs be written?',
-      options: [
-        {
-          value: 'senior',
-          label: 'For senior engineers',
-          hint: 'Focus on why, edge cases, trade-offs',
-        },
-        {
-          value: 'onboarding',
-          label: 'For new team members',
-          hint: 'Focus on what, how it works, examples',
-        },
-        {
-          value: 'custom',
-          label: 'Custom prompt (advanced)',
-          hint: 'Define your own doc generation guidelines',
-        },
-      ],
-      initialValue: 'senior',
-    });
-
-    if (p.isCancel(docStyle)) {
-      p.cancel('Setup cancelled');
-      process.exit(0);
-    }
-
-    let customPrompt = '';
-    if (docStyle === 'custom') {
-      const prompt = await p.text({
-        message: 'Enter your documentation prompt:',
-        placeholder: 'Document for...',
-        validate: (value) => {
-          if (!value) return 'Prompt is required';
-        },
-      });
-
-      if (p.isCancel(prompt)) {
-        p.cancel('Setup cancelled');
-        process.exit(0);
-      }
-
-      customPrompt = prompt;
-    }
-
-    const includeCommits = await p.confirm({
-      message: 'Include git commit messages in generation?',
-      initialValue: true,
-    });
-
-    if (p.isCancel(includeCommits)) {
-      p.cancel('Setup cancelled');
-      process.exit(0);
-    }
-
     // Generate config
     const s = p.spinner();
     s.start('Creating configuration...');
@@ -146,14 +83,6 @@ export function registerInitCommand(cli: CAC) {
           .split(',')
           .map((p) => p.trim())
           .filter(Boolean),
-      },
-      generation: {
-        prompt: getPromptForStyle(docStyle as string, customPrompt),
-        aiProvider: 'anthropic',
-      },
-      git: {
-        includeCommitMessages: includeCommits as boolean,
-        commitDepth: 10,
       },
     };
 
@@ -174,29 +103,12 @@ export function registerInitCommand(cli: CAC) {
     s.stop('Configuration created!');
 
     p.note(
-      `Config saved to: ${outputDir}/config.yaml\n\nNext steps:\n  1. Set your API key: export ANTHROPIC_API_KEY=...\n  2. Generate your first doc: syncdocs generate\n  3. Or run: syncdocs check`,
+      `Config saved to: ${outputDir}/config.yaml\n\nNext steps:\n  1. Run: syncdocs sync\n  2. View: syncdocs serve`,
       'Setup complete!',
     );
 
-    p.outro('Happy documenting! 📝');
+    p.outro('Happy documenting!');
   });
-}
-
-function getPromptForStyle(style: string, customPrompt: string): string {
-  if (style === 'custom') return customPrompt;
-
-  const prompts = {
-    senior: `Document for senior engineers joining the team.
-Focus on why decisions were made, not just what the code does.
-Highlight non-obvious behavior, edge cases, and trade-offs.
-Keep explanations concise—link to code for implementation details.`,
-    onboarding: `Document for new team members learning the codebase.
-Focus on what the code does and how it works together.
-Explain the happy path clearly with examples.
-Call out important patterns and conventions.`,
-  };
-
-  return prompts[style as keyof typeof prompts] || prompts.senior;
 }
 
 function generateConfigYAML(config: InitConfig): string {
@@ -215,23 +127,5 @@ ${config.scope.include.map((p) => `    - ${p}`).join('\n')}
   # Files to exclude from documentation
   exclude:
 ${config.scope.exclude.map((p) => `    - ${p}`).join('\n')}
-
-generation:
-  # AI provider to use for generation
-  aiProvider: ${config.generation.aiProvider}
-
-  # How documentation should be written
-  prompt: |
-${config.generation.prompt
-  .split('\n')
-  .map((line) => `    ${line}`)
-  .join('\n')}
-
-git:
-  # Include commit messages when regenerating docs
-  includeCommitMessages: ${config.git.includeCommitMessages}
-
-  # How many commits back to analyze for context
-  commitDepth: ${config.git.commitDepth}
 `;
 }
