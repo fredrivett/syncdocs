@@ -9,10 +9,7 @@
       "filePath": "scripts/test-extractor.ts",
       "isAsync": false,
       "hash": "041812ab6c97e23ac6f4c03704d2f17451f6befa86fa2220093f1b1a5e51cf96",
-      "lineRange": [
-        13,
-        13
-      ]
+      "lineRange": [13, 13]
     },
     {
       "id": "scripts/test-extractor.ts:result",
@@ -21,10 +18,7 @@
       "filePath": "scripts/test-extractor.ts",
       "isAsync": false,
       "hash": "63f545433b06f4c10038262a9946201ae59c8a2d8d87087ef6f8f532c72efda3",
-      "lineRange": [
-        18,
-        18
-      ]
+      "lineRange": [18, 18]
     },
     {
       "id": "scripts/test-extractor.ts:initCommand",
@@ -33,10 +27,7 @@
       "filePath": "scripts/test-extractor.ts",
       "isAsync": false,
       "hash": "7de7de23bab776be13401123cd8fb6963d5c4a4ec500fc88893980f0d98fc71d",
-      "lineRange": [
-        38,
-        38
-      ]
+      "lineRange": [38, 38]
     },
     {
       "id": "src/checker/doc-parser.ts:DocParser",
@@ -45,10 +36,7 @@
       "filePath": "src/checker/doc-parser.ts",
       "isAsync": false,
       "hash": "98cf47944930064050ae50c22f3ca8e64d562018fd0cb05595d275998cddfeb0",
-      "lineRange": [
-        6,
-        88
-      ]
+      "lineRange": [6, 88]
     },
     {
       "id": "src/checker/index.ts:StaleChecker",
@@ -57,10 +45,7 @@
       "filePath": "src/checker/index.ts",
       "isAsync": false,
       "hash": "d258520407ab8a8d7aaaf37fac35f6dba1c34bcc8a5de5ef0dd029eb0d94195d",
-      "lineRange": [
-        11,
-        170
-      ]
+      "lineRange": [11, 170]
     },
     {
       "id": "src/cli/commands/check.ts:registerCheckCommand",
@@ -69,10 +54,7 @@
       "filePath": "src/cli/commands/check.ts",
       "isAsync": false,
       "hash": "02537eebcd3d17c8111f45f843ca596236ec94c27effc4f52c56042d78459f2b",
-      "lineRange": [
-        5,
-        83
-      ]
+      "lineRange": [5, 83]
     },
     {
       "id": "src/cli/commands/check.ts:formatStaleReason",
@@ -81,10 +63,7 @@
       "filePath": "src/cli/commands/check.ts",
       "isAsync": false,
       "hash": "de3ce74b6259adc1023a1f334403eded5a090332760b94e9e21af96e05a3199a",
-      "lineRange": [
-        83,
-        94
-      ]
+      "lineRange": [83, 94]
     },
     {
       "id": "src/cli/commands/check.ts:getRelativePath",
@@ -93,10 +72,7 @@
       "filePath": "src/cli/commands/check.ts",
       "isAsync": false,
       "hash": "193873a035939aa703afb6b94f8902a31b1a01d3d5d6e3fda779861a12eac62f",
-      "lineRange": [
-        94,
-        99
-      ]
+      "lineRange": [94, 99]
     },
     {
       "id": "src/cli/commands/check.ts:loadConfig",
@@ -105,10 +81,7 @@
       "filePath": "src/cli/commands/check.ts",
       "isAsync": false,
       "hash": "c4091737941b37dc4756e9c7306b74c49ef73d368a9440fa7e52c0679b6cca70",
-      "lineRange": [
-        99,
-        114
-      ]
+      "lineRange": [99, 114]
     },
     {
       "id": "src/cli/commands/init.ts:registerInitCommand",
@@ -117,10 +90,7 @@
       "filePath": "src/cli/commands/init.ts",
       "isAsync": false,
       "hash": "387d2390ee339b3c4e661c3c2381fbaf2a5d2c82d1e2d963b579665440f6530e",
-      "lineRange": [
-        15,
-        112
-      ]
+      "lineRange": [15, 112]
     },
     {
       "id": "src/cli/commands/init.ts:generateConfigYAML",
@@ -129,10 +99,7 @@
       "filePath": "src/cli/commands/init.ts",
       "isAsync": false,
       "hash": "f294cb3fefea02587e4010e1cf8f0c2a712bba9223716087c1b40026978be03b",
-      "lineRange": [
-        112,
-        131
-      ]
+      "lineRange": [112, 131]
     },
     {
       "id": "src/cli/commands/serve.ts:registerServeCommand",
@@ -141,10 +108,7 @@
       "filePath": "src/cli/commands/serve.ts",
       "isAsync": false,
       "hash": "ba30ecc1878b4e3d1ac4da23d4bd9d4d5ef7d435a28b8d280981210fde5727ed",
-      "lineRange": [
-        11,
-        59
-      ]
+      "lineRange": [11, 59]
     },
     {
       "id": "src/cli/commands/serve.ts:loadConfig",
@@ -153,10 +117,7 @@
       "filePath": "src/cli/commands/serve.ts",
       "isAsync": false,
       "hash": "c75f9c1e389a98f56e4e8b9dd442644d930c8b33576339eea3b6c7aa00a18ebe",
-      "lineRange": [
-        59,
-        71
-      ]
+      "lineRange": [59, 71]
     },
     {
       "id": "src/cli/commands/status.ts:registerStatusCommand",
@@ -165,10 +126,7 @@
       "filePath": "src/cli/commands/status.ts",
       "isAsync": false,
       "hash": "838cf4e1c174adea7599c3e2daf0608b5ee678d621c6a8cf51eb7081ae85af02",
-      "lineRange": [
-        15,
-        100
-      ]
+      "lineRange": [15, 100]
     },
     {
       "id": "src/cli/commands/status.ts:loadConfig",
@@ -177,10 +135,7 @@
       "filePath": "src/cli/commands/status.ts",
       "isAsync": false,
       "hash": "2791dc4a4660fa037219ee638a9fa6fc20ae5b9d712acf63d9268af8e306a248",
-      "lineRange": [
-        100,
-        121
-      ]
+      "lineRange": [100, 121]
     },
     {
       "id": "src/cli/commands/sync.ts:registerSyncCommand",
@@ -189,10 +144,7 @@
       "filePath": "src/cli/commands/sync.ts",
       "isAsync": false,
       "hash": "dac2c8b456533fb1511c54e0031888574356c13eea69a365b64b57b41b7d68bc",
-      "lineRange": [
-        9,
-        121
-      ]
+      "lineRange": [9, 121]
     },
     {
       "id": "src/cli/commands/sync.ts:loadConfig",
@@ -201,10 +153,7 @@
       "filePath": "src/cli/commands/sync.ts",
       "isAsync": false,
       "hash": "897d9b5155f91f6aeb2b6d5c3c107377fa5067b58582d5802059c49c301d25f6",
-      "lineRange": [
-        121,
-        138
-      ]
+      "lineRange": [121, 138]
     },
     {
       "id": "src/cli/index.ts:cli",
@@ -213,10 +162,7 @@
       "filePath": "src/cli/index.ts",
       "isAsync": false,
       "hash": "757dc0d4b447ef46333d1e0d1fb3cfc667798e7c0988ca4d50e63eaef1f352c2",
-      "lineRange": [
-        6,
-        6
-      ]
+      "lineRange": [6, 6]
     },
     {
       "id": "src/cli/index.ts:parsed",
@@ -225,10 +171,7 @@
       "filePath": "src/cli/index.ts",
       "isAsync": false,
       "hash": "9414a23a483396e472a47f35e0ae9d6d5f6ebd5dcfa3209f117a6fecd3f95fea",
-      "lineRange": [
-        25,
-        25
-      ]
+      "lineRange": [25, 25]
     },
     {
       "id": "src/cli/utils/errors.ts:SyncDocsError",
@@ -237,10 +180,7 @@
       "filePath": "src/cli/utils/errors.ts",
       "isAsync": false,
       "hash": "4a13d1d192068fcdaba85f80615eaa2e332d4470e2a9788108e5e99ea8ca6992",
-      "lineRange": [
-        1,
-        10
-      ]
+      "lineRange": [1, 10]
     },
     {
       "id": "src/cli/utils/errors.ts:ConfigError",
@@ -249,10 +189,7 @@
       "filePath": "src/cli/utils/errors.ts",
       "isAsync": false,
       "hash": "3925ca78508c91988ea19250de516c8dbb1db49b781577e9decb34ccb3a54cc0",
-      "lineRange": [
-        10,
-        17
-      ]
+      "lineRange": [10, 17]
     },
     {
       "id": "src/cli/utils/errors.ts:ValidationError",
@@ -261,10 +198,7 @@
       "filePath": "src/cli/utils/errors.ts",
       "isAsync": false,
       "hash": "c7c7beef35783a69d2b628808828b4712e101629a471e9b4482936ee8011d429",
-      "lineRange": [
-        17,
-        24
-      ]
+      "lineRange": [17, 24]
     },
     {
       "id": "src/cli/utils/errors.ts:ExtractionError",
@@ -273,10 +207,7 @@
       "filePath": "src/cli/utils/errors.ts",
       "isAsync": false,
       "hash": "4ab86d63fa9e0a2c031daedf54492c3cba430aa25d33f1eecbfcc296a6208169",
-      "lineRange": [
-        24,
-        31
-      ]
+      "lineRange": [24, 31]
     },
     {
       "id": "src/cli/utils/errors.ts:GenerationError",
@@ -285,10 +216,7 @@
       "filePath": "src/cli/utils/errors.ts",
       "isAsync": false,
       "hash": "efa13ee6177f4c771562a3dfee72a182fd6bfe9191be534df6a3f11514d9d661",
-      "lineRange": [
-        31,
-        38
-      ]
+      "lineRange": [31, 38]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:computeNextCandidate",
@@ -297,10 +225,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "1ec36b21c2af43bb80b963b92d778b492c66658b1aa3a3ed5ebf6bbe894f59cd",
-      "lineRange": [
-        12,
-        46
-      ]
+      "lineRange": [12, 46]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:renderNextSuggestion",
@@ -309,10 +234,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "8151e2da4c2bda3edabfbcee334545b9745ed038ed8deb51a090297900bc49ea",
-      "lineRange": [
-        46,
-        60
-      ]
+      "lineRange": [46, 60]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:scanProject",
@@ -321,10 +243,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "db09b1df91088c6a24a1d44e444e258341d9d707eae5efb7b44e2ee49e4fdbfc",
-      "lineRange": [
-        70,
-        128
-      ]
+      "lineRange": [70, 128]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:tick",
@@ -333,10 +252,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "3f806bf065e45dbf90dbb01ba552b2c8f37fd293fe0f8778250a8744f78b7938",
-      "lineRange": [
-        130,
-        130
-      ]
+      "lineRange": [130, 130]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:scanProjectAsync",
@@ -345,10 +261,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": true,
       "hash": "215fb912a4b1ce4186d9abe8f4cdc1d115968121b905a88a8c5bfddfcf69e8f6",
-      "lineRange": [
-        130,
-        203
-      ]
+      "lineRange": [130, 203]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:findSourceFilesAsync",
@@ -357,10 +270,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": true,
       "hash": "549af93274aafe845e91049e8397f88ca71d518ff903601174432ddc2e190c12",
-      "lineRange": [
-        203,
-        235
-      ]
+      "lineRange": [203, 235]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:walk",
@@ -369,10 +279,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": true,
       "hash": "f62d788fd5a029c0b2f21802a851eb7d356720ed829e3ecd4324a4569f606403",
-      "lineRange": [
-        211,
-        231
-      ]
+      "lineRange": [211, 231]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:renderCoverageStats",
@@ -381,10 +288,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "791923325bc8b9bc96276b2e8bc84e94a9644abd4131b226abb0e3946faa2100",
-      "lineRange": [
-        235,
-        264
-      ]
+      "lineRange": [235, 264]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:showCoverageAndSuggestion",
@@ -393,10 +297,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "4ddef53988b8d254ff58a025f90cd0d6262eec1190988241235fa65d8b2ca1ab",
-      "lineRange": [
-        264,
-        282
-      ]
+      "lineRange": [264, 282]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:getRelativePath",
@@ -405,10 +306,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "193873a035939aa703afb6b94f8902a31b1a01d3d5d6e3fda779861a12eac62f",
-      "lineRange": [
-        282,
-        289
-      ]
+      "lineRange": [282, 289]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:findSourceFiles",
@@ -417,10 +315,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "202658e680128c5f35773154ac6fe8ca4e7f0ba18a285e9d45c5f4bfe085ea13",
-      "lineRange": [
-        289,
-        340
-      ]
+      "lineRange": [289, 340]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:walk",
@@ -429,10 +324,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "0d3b79436862473566e18031e6031753e8305b0004bfeeaf16629037ff6c02e6",
-      "lineRange": [
-        294,
-        336
-      ]
+      "lineRange": [294, 336]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:findMarkdownFiles",
@@ -441,10 +333,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "bdf5332ee0c19f8df964c394aa26beb8e4e37fedf79444808ba6b9376654d17f",
-      "lineRange": [
-        340,
-        365
-      ]
+      "lineRange": [340, 365]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:countImports",
@@ -453,10 +342,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "9bfd59a25e995860a0b8e1dcb7fb22aece46b0fc26a9c3e874e260e835a76282",
-      "lineRange": [
-        365,
-        392
-      ]
+      "lineRange": [365, 392]
     },
     {
       "id": "src/cli/utils/next-suggestion.ts:resolveImport",
@@ -465,10 +351,7 @@
       "filePath": "src/cli/utils/next-suggestion.ts",
       "isAsync": false,
       "hash": "e580e30aabf21c6c7eb6159341009f5bd1f36413a6541477000c2b5cbdba0fa7",
-      "lineRange": [
-        392,
-        416
-      ]
+      "lineRange": [392, 416]
     },
     {
       "id": "src/cli/utils/paths.ts:toRelativePath",
@@ -477,10 +360,7 @@
       "filePath": "src/cli/utils/paths.ts",
       "isAsync": false,
       "hash": "5ad86677ddf9861599b79f20d3435583e8d40db64d82b534a58e4e08c2962631",
-      "lineRange": [
-        10,
-        36
-      ]
+      "lineRange": [10, 36]
     },
     {
       "id": "src/cli/utils/paths.ts:resolveSourcePath",
@@ -489,10 +369,7 @@
       "filePath": "src/cli/utils/paths.ts",
       "isAsync": false,
       "hash": "fdbb7f89d70caad703c655c0923d66c5da28eec8ea230836885ab57bf4a3dbfe",
-      "lineRange": [
-        36,
-        67
-      ]
+      "lineRange": [36, 67]
     },
     {
       "id": "src/extractor/resolve-import.ts:loadTsconfigPaths",
@@ -501,10 +378,7 @@
       "filePath": "src/extractor/resolve-import.ts",
       "isAsync": false,
       "hash": "09a8cbcd74382b58532cf715f5d68ecd907cb2573dea5432b8ea519df13aeae2",
-      "lineRange": [
-        14,
-        73
-      ]
+      "lineRange": [14, 73]
     },
     {
       "id": "src/extractor/resolve-import.ts:tryResolveFile",
@@ -513,10 +387,7 @@
       "filePath": "src/extractor/resolve-import.ts",
       "isAsync": false,
       "hash": "bb4fedd17c0c78c7b3c9e5a7d2efe008a6ced6e09167205c03e6f4c829fc13ee",
-      "lineRange": [
-        83,
-        117
-      ]
+      "lineRange": [83, 117]
     },
     {
       "id": "src/extractor/resolve-import.ts:resolveImportPath",
@@ -525,10 +396,7 @@
       "filePath": "src/extractor/resolve-import.ts",
       "isAsync": false,
       "hash": "95c337ac5f768754f967a9d44418a5b157740cbec1538cf0b346341ed4f4d712",
-      "lineRange": [
-        117,
-        151
-      ]
+      "lineRange": [117, 151]
     },
     {
       "id": "src/extractor/resolve-import.ts:clearTsconfigCache",
@@ -537,10 +405,7 @@
       "filePath": "src/extractor/resolve-import.ts",
       "isAsync": false,
       "hash": "2a8c4e612b420aec221efe631201d63d1e23567063805899943805aa669879b0",
-      "lineRange": [
-        151,
-        158
-      ]
+      "lineRange": [151, 158]
     },
     {
       "id": "src/extractor/typescript-extractor.ts:TypeScriptExtractor",
@@ -549,10 +414,7 @@
       "filePath": "src/extractor/typescript-extractor.ts",
       "isAsync": false,
       "hash": "673169adb37be7b91ab9386f4533a181456b43914fdbe6b4aee9f8d26142f372",
-      "lineRange": [
-        8,
-        336
-      ]
+      "lineRange": [8, 336]
     },
     {
       "id": "src/extractor/typescript-extractor.ts:visit",
@@ -561,10 +423,7 @@
       "filePath": "src/extractor/typescript-extractor.ts",
       "isAsync": false,
       "hash": "4ad622a8532a3db11d8b510ec74eb8218bbfecbb3fc271be3956e59a84c8b8d9",
-      "lineRange": [
-        22,
-        60
-      ]
+      "lineRange": [22, 60]
     },
     {
       "id": "src/extractor/typescript-extractor.ts:walk",
@@ -573,10 +432,7 @@
       "filePath": "src/extractor/typescript-extractor.ts",
       "isAsync": false,
       "hash": "3f807d333b7bb4ac32e4f4f91e7b4ae223ab6c962380cd552a18c643fd385a4b",
-      "lineRange": [
-        95,
-        106
-      ]
+      "lineRange": [95, 106]
     },
     {
       "id": "src/extractor/typescript-extractor.ts:visit",
@@ -585,10 +441,7 @@
       "filePath": "src/extractor/typescript-extractor.ts",
       "isAsync": false,
       "hash": "7458b829a02aa9cd0d87129c7d6870f852a516e1c9f47bddf397ba5eb99341ae",
-      "lineRange": [
-        165,
-        189
-      ]
+      "lineRange": [165, 189]
     },
     {
       "id": "src/generator/static-doc-generator.ts:StaticDocGenerator",
@@ -597,10 +450,7 @@
       "filePath": "src/generator/static-doc-generator.ts",
       "isAsync": false,
       "hash": "02cdddafe9eb8a0a5ce694ba45cec89a01e3026a8241305006c534e5cc823aed",
-      "lineRange": [
-        15,
-        172
-      ]
+      "lineRange": [15, 172]
     },
     {
       "id": "src/graph/graph-builder.ts:getRelativePath",
@@ -609,10 +459,7 @@
       "filePath": "src/graph/graph-builder.ts",
       "isAsync": false,
       "hash": "ef3684ac4a08f858be418deb45afccd989f15b6ab2e7337c6721d57388da32dc",
-      "lineRange": [
-        16,
-        24
-      ]
+      "lineRange": [16, 24]
     },
     {
       "id": "src/graph/graph-builder.ts:connectionTypeToEdgeType",
@@ -621,10 +468,7 @@
       "filePath": "src/graph/graph-builder.ts",
       "isAsync": false,
       "hash": "25ef796a287ec718c3c81230f9b5dee5aa33b12d716874d86b143a5b47161cea",
-      "lineRange": [
-        24,
-        45
-      ]
+      "lineRange": [24, 45]
     },
     {
       "id": "src/graph/graph-builder.ts:isAsyncSymbol",
@@ -633,10 +477,7 @@
       "filePath": "src/graph/graph-builder.ts",
       "isAsync": false,
       "hash": "d989130721fc97026d75d24a4ba79bbec0ac57770083470fb2e5041796a5be3b",
-      "lineRange": [
-        45,
-        56
-      ]
+      "lineRange": [45, 56]
     },
     {
       "id": "src/graph/graph-builder.ts:GraphBuilder",
@@ -645,10 +486,7 @@
       "filePath": "src/graph/graph-builder.ts",
       "isAsync": false,
       "hash": "37cb7c7611ea04aa8c43c25856fcba7433be30a511466500d2c5dcf72c655851",
-      "lineRange": [
-        56,
-        281
-      ]
+      "lineRange": [56, 281]
     },
     {
       "id": "src/graph/graph-query.ts:entryPoints",
@@ -657,10 +495,7 @@
       "filePath": "src/graph/graph-query.ts",
       "isAsync": false,
       "hash": "f08c46ea5cd47d1b916fc66541a251a74af803557ad79b1ccdce79800ee67047",
-      "lineRange": [
-        10,
-        17
-      ]
+      "lineRange": [10, 17]
     },
     {
       "id": "src/graph/graph-query.ts:reachableFrom",
@@ -669,10 +504,7 @@
       "filePath": "src/graph/graph-query.ts",
       "isAsync": false,
       "hash": "3a92af06492c877bf35827ffa9820df09635d9910dbe004f70860d02be59bca8",
-      "lineRange": [
-        17,
-        51
-      ]
+      "lineRange": [17, 51]
     },
     {
       "id": "src/graph/graph-query.ts:pathsBetween",
@@ -681,10 +513,7 @@
       "filePath": "src/graph/graph-query.ts",
       "isAsync": false,
       "hash": "2c9e4851fcd783621577f10713c04bbe4a43ac2e7aa25792b5bd4af5253fc110",
-      "lineRange": [
-        51,
-        90
-      ]
+      "lineRange": [51, 90]
     },
     {
       "id": "src/graph/graph-query.ts:dfs",
@@ -693,10 +522,7 @@
       "filePath": "src/graph/graph-query.ts",
       "isAsync": false,
       "hash": "4e71d0b5d79ba02f1c8ae0f90c7187197ca371a52d77f732e490db35ec51f179",
-      "lineRange": [
-        65,
-        85
-      ]
+      "lineRange": [65, 85]
     },
     {
       "id": "src/graph/graph-query.ts:buildAdjacencyList",
@@ -705,10 +531,7 @@
       "filePath": "src/graph/graph-query.ts",
       "isAsync": false,
       "hash": "164e8dda9436f98408f40ebcd08213d67520ffadd1b5e0782c293e0639902282",
-      "lineRange": [
-        90,
-        103
-      ]
+      "lineRange": [90, 103]
     },
     {
       "id": "src/graph/graph-store.ts:GraphStore",
@@ -717,10 +540,7 @@
       "filePath": "src/graph/graph-store.ts",
       "isAsync": false,
       "hash": "6356f0c2a1156f75e2df4060fd3b4e412127638351060cf8279885553b9425b5",
-      "lineRange": [
-        7,
-        52
-      ]
+      "lineRange": [7, 52]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:nodeToMermaid",
@@ -729,10 +549,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "1baf4e2b8b3d4e508821398ea63dee7f025eb8d9c023c7d857d51793b9631ba6",
-      "lineRange": [
-        7,
-        46
-      ]
+      "lineRange": [7, 46]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:flowToMermaid",
@@ -741,10 +558,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "27c185cdf919955bbe81651b55d04bd9802afb03a3bd8b966fa616e281451d57",
-      "lineRange": [
-        46,
-        60
-      ]
+      "lineRange": [46, 60]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:buildMermaid",
@@ -753,10 +567,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "f735ea6bc31d9e73f1774c2492b17b5fef632d01db97c0455996ba38b7993b31",
-      "lineRange": [
-        60,
-        124
-      ]
+      "lineRange": [60, 124]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:formatNodeLabel",
@@ -765,10 +576,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "ba1bc940a918499cbd0ae6d8997935114846a5ff02dca9687d957326680ee2fb",
-      "lineRange": [
-        124,
-        139
-      ]
+      "lineRange": [124, 139]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:edgeArrow",
@@ -777,10 +585,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "5e045119cd73c0f961514148bef68285b8ffac246e376e91cd3e2559fb48e999",
-      "lineRange": [
-        139,
-        146
-      ]
+      "lineRange": [139, 146]
     },
     {
       "id": "src/graph/graph-to-mermaid.ts:sanitizeId",
@@ -789,10 +594,7 @@
       "filePath": "src/graph/graph-to-mermaid.ts",
       "isAsync": false,
       "hash": "24dbed29c3876b7eb4715c9e48b692a70314100b6c23bbcbd6c34e5a958b0864",
-      "lineRange": [
-        146,
-        153
-      ]
+      "lineRange": [146, 153]
     },
     {
       "id": "src/hasher/index.ts:ContentHasher",
@@ -801,10 +603,7 @@
       "filePath": "src/hasher/index.ts",
       "isAsync": false,
       "hash": "6bf2acdd6eadbec3589bf9e03a1b6c71ab4e5a012b8b697514d242981278106f",
-      "lineRange": [
-        8,
-        66
-      ]
+      "lineRange": [8, 66]
     },
     {
       "id": "src/hasher/index.ts:hashSymbol",
@@ -813,10 +612,7 @@
       "filePath": "src/hasher/index.ts",
       "isAsync": false,
       "hash": "9f17b3c67367f0748d4df2c54b67789b4bd36f3a8d20c2952d1002744da0b0e6",
-      "lineRange": [
-        66,
-        74
-      ]
+      "lineRange": [66, 74]
     },
     {
       "id": "src/matchers/inngest.ts:extractEventTrigger",
@@ -825,10 +621,7 @@
       "filePath": "src/matchers/inngest.ts",
       "isAsync": false,
       "hash": "1b4c5335c79892998114e91d40be838cf97ec0de8eed02b06eb91904968b0275",
-      "lineRange": [
-        15,
-        25
-      ]
+      "lineRange": [15, 25]
     },
     {
       "id": "src/matchers/inngest.ts:extractFunctionId",
@@ -837,10 +630,7 @@
       "filePath": "src/matchers/inngest.ts",
       "isAsync": false,
       "hash": "050add51d7442e7ab809e7abc01ef59ab666a6ff5da6ef76ffc3a22ef593f1e4",
-      "lineRange": [
-        25,
-        34
-      ]
+      "lineRange": [25, 34]
     },
     {
       "id": "src/matchers/nextjs.ts:extractRoutePath",
@@ -849,10 +639,7 @@
       "filePath": "src/matchers/nextjs.ts",
       "isAsync": false,
       "hash": "044284efa0dd6e4810311777b71503195d683f533a669c1cf6860b132c9c5ec9",
-      "lineRange": [
-        24,
-        34
-      ]
+      "lineRange": [24, 34]
     },
     {
       "id": "src/matchers/nextjs.ts:extractPagePath",
@@ -861,10 +648,7 @@
       "filePath": "src/matchers/nextjs.ts",
       "isAsync": false,
       "hash": "9dc81fd4d2dd5ffea2cb11a404edb280af6b9cb9be773b26b1ad32dd5f926e90",
-      "lineRange": [
-        34,
-        44
-      ]
+      "lineRange": [34, 44]
     },
     {
       "id": "src/matchers/trigger-dev.ts:extractTaskId",
@@ -873,10 +657,7 @@
       "filePath": "src/matchers/trigger-dev.ts",
       "isAsync": false,
       "hash": "050add51d7442e7ab809e7abc01ef59ab666a6ff5da6ef76ffc3a22ef593f1e4",
-      "lineRange": [
-        16,
-        25
-      ]
+      "lineRange": [16, 25]
     },
     {
       "id": "src/server/index.ts:buildSymbolIndex",
@@ -885,10 +666,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "65d7a1015d99286b6a20b67bf43e1e46f197b43a3808dae3dff4f3db6dc10904",
-      "lineRange": [
-        23,
-        64
-      ]
+      "lineRange": [23, 64]
     },
     {
       "id": "src/server/index.ts:extractOverview",
@@ -897,10 +675,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "7bf53b227145eac2c7269cfa0ba017e68dd7dcc5e58d95adec9f786e6f1d0909",
-      "lineRange": [
-        64,
-        73
-      ]
+      "lineRange": [64, 73]
     },
     {
       "id": "src/server/index.ts:extractRelatedSymbols",
@@ -909,10 +684,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "0ff4d1b7e07e814f8fba71765f9881dae114b5a3a718a356e8d052ef1aae4542",
-      "lineRange": [
-        73,
-        104
-      ]
+      "lineRange": [73, 104]
     },
     {
       "id": "src/server/index.ts:addSymbol",
@@ -921,10 +693,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "b80103cbe98b781a768e4007cf2005a8bf961ed5722ecea20f0caf182452cee4",
-      "lineRange": [
-        86,
-        91
-      ]
+      "lineRange": [86, 91]
     },
     {
       "id": "src/server/index.ts:generateDependencyGraph",
@@ -933,10 +702,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "bb45ba927c7535d002c24f46061b6731d9d2ddffc8f1e7008cb9093aa5fcc05e",
-      "lineRange": [
-        104,
-        132
-      ]
+      "lineRange": [104, 132]
     },
     {
       "id": "src/server/index.ts:safeId",
@@ -945,10 +711,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "26a9de54874be88b70230478d7eae64598ed6f6c379c01318138dab9ad027c7b",
-      "lineRange": [
-        115,
-        115
-      ]
+      "lineRange": [115, 115]
     },
     {
       "id": "src/server/index.ts:buildIndexResponse",
@@ -957,10 +720,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "0d6c2a43f13b1020445e9f183a9d42d6972a894c522f570cb30eae2557507a74",
-      "lineRange": [
-        132,
-        155
-      ]
+      "lineRange": [132, 155]
     },
     {
       "id": "src/server/index.ts:buildDocResponse",
@@ -969,10 +729,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "ac9f44c78993bf8d3d0e4d064e3e940b5a72d1df177383e9bd8999b9b1aa4300",
-      "lineRange": [
-        155,
-        198
-      ]
+      "lineRange": [155, 198]
     },
     {
       "id": "src/server/index.ts:serveStaticFile",
@@ -981,10 +738,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": false,
       "hash": "8131a9f57e256532d6becf8708767698b20d05275c71283f82ec56dd42c8d0a8",
-      "lineRange": [
-        207,
-        217
-      ]
+      "lineRange": [207, 217]
     },
     {
       "id": "src/server/index.ts:startServer",
@@ -993,10 +747,7 @@
       "filePath": "src/server/index.ts",
       "isAsync": true,
       "hash": "7bf4d738ca5a0c41662d804b4b7c141fa3b80f42b91dd49e13cc68d751c65040",
-      "lineRange": [
-        217,
-        325
-      ]
+      "lineRange": [217, 325]
     },
     {
       "id": "src/server/template.ts:getTemplate",
@@ -1005,10 +756,7 @@
       "filePath": "src/server/template.ts",
       "isAsync": true,
       "hash": "7440413c6ecee967d1fb6d423c3791e29aee0cc67e1ab38751dea0a2cf2dba91",
-      "lineRange": [
-        1,
-        822
-      ]
+      "lineRange": [1, 822]
     },
     {
       "id": "src/server/viewer/App.tsx:App",
@@ -1017,10 +765,7 @@
       "filePath": "src/server/viewer/App.tsx",
       "isAsync": false,
       "hash": "fcc790d033826509a81c50a6bfc879835f6fa9ecb30807c8811c08fa186d2fc3",
-      "lineRange": [
-        4,
-        102
-      ]
+      "lineRange": [4, 102]
     },
     {
       "id": "src/server/viewer/components/DocContent.tsx:DocContent",
@@ -1029,10 +774,7 @@
       "filePath": "src/server/viewer/components/DocContent.tsx",
       "isAsync": false,
       "hash": "6c537a92d0fa0ca8fe50153331274de7bf7773d6bfd19f5fe0808f404b4ea564",
-      "lineRange": [
-        9,
-        29
-      ]
+      "lineRange": [9, 29]
     },
     {
       "id": "src/server/viewer/components/DocPanel.tsx:nodeToDocPath",
@@ -1041,10 +783,7 @@
       "filePath": "src/server/viewer/components/DocPanel.tsx",
       "isAsync": false,
       "hash": "f5a262a430b42007316ce0dbfe1d5de568e2d0b5c80c51e259bd648849443c3d",
-      "lineRange": [
-        25,
-        30
-      ]
+      "lineRange": [25, 30]
     },
     {
       "id": "src/server/viewer/components/DocPanel.tsx:docPathToUrl",
@@ -1053,10 +792,7 @@
       "filePath": "src/server/viewer/components/DocPanel.tsx",
       "isAsync": false,
       "hash": "157a97ac980c98d3ea67fb151a9d891b6132aa94d1ee5d9b13b98be1c5e33a9d",
-      "lineRange": [
-        30,
-        34
-      ]
+      "lineRange": [30, 34]
     },
     {
       "id": "src/server/viewer/components/DocPanel.tsx:DocPanel",
@@ -1065,10 +801,7 @@
       "filePath": "src/server/viewer/components/DocPanel.tsx",
       "isAsync": false,
       "hash": "b2ef1461a991b538d0232c52ac79fe2b5d079a6979191d91598a95da44ef6ba1",
-      "lineRange": [
-        34,
-        189
-      ]
+      "lineRange": [34, 189]
     },
     {
       "id": "src/server/viewer/components/FlowControls.tsx:FlowControls",
@@ -1077,10 +810,7 @@
       "filePath": "src/server/viewer/components/FlowControls.tsx",
       "isAsync": false,
       "hash": "abb45a7072df590c26fb3f0e43a0b2dc392f992045cdaa785feecef28b30fb26",
-      "lineRange": [
-        12,
-        135
-      ]
+      "lineRange": [12, 135]
     },
     {
       "id": "src/server/viewer/components/FlowGraph.tsx:layoutGraph",
@@ -1089,10 +819,7 @@
       "filePath": "src/server/viewer/components/FlowGraph.tsx",
       "isAsync": true,
       "hash": "c61eb406010a1576ab5cc01b0839e27f1a6d6aa32fa314e14888105cc9d63192",
-      "lineRange": [
-        30,
-        100
-      ]
+      "lineRange": [30, 100]
     },
     {
       "id": "src/server/viewer/components/FlowGraph.tsx:FlowGraph",
@@ -1101,10 +828,7 @@
       "filePath": "src/server/viewer/components/FlowGraph.tsx",
       "isAsync": false,
       "hash": "9f7447808d8ba28aaa49e40eac3d27d5e90e027ef271ece38029e397c03970e3",
-      "lineRange": [
-        104,
-        215
-      ]
+      "lineRange": [104, 215]
     },
     {
       "id": "src/server/viewer/components/NodeTypes.tsx:EntryPointNode",
@@ -1113,10 +837,7 @@
       "filePath": "src/server/viewer/components/NodeTypes.tsx",
       "isAsync": true,
       "hash": "b35fff776b12fe5822a2eda268ee3d29f8023faa6a3f17db4d2525beaf6f42cb",
-      "lineRange": [
-        42,
-        121
-      ]
+      "lineRange": [42, 121]
     },
     {
       "id": "src/server/viewer/components/NodeTypes.tsx:FunctionNode",
@@ -1125,10 +846,7 @@
       "filePath": "src/server/viewer/components/NodeTypes.tsx",
       "isAsync": true,
       "hash": "82285230b7804803bd4efd696bc9c7a879765d6a5c882e0b8453b1bb423c8288",
-      "lineRange": [
-        121,
-        162
-      ]
+      "lineRange": [121, 162]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:Drawer",
@@ -1137,10 +855,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "5a88ac3f69972e8c5d7e2ac0e5dbed89cea1d33f1afd4946d1060fd964d61a28",
-      "lineRange": [
-        4,
-        10
-      ]
+      "lineRange": [4, 10]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerTrigger",
@@ -1149,10 +864,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "5320662f4d06b5ebb10cc539ca53d5bb583fff70d8bb90a40a1ae7dc6a49cb4b",
-      "lineRange": [
-        10,
-        16
-      ]
+      "lineRange": [10, 16]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerPortal",
@@ -1161,10 +873,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "4b7e3b0939bddb2afbc9c7a9031649df363e62b3aaf29091d8edef114911fbaf",
-      "lineRange": [
-        16,
-        22
-      ]
+      "lineRange": [16, 22]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerClose",
@@ -1173,10 +882,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "5b00bb50a6d36f1efb97c3368421efefb9acd2398b32c9cb2be5cfc6ac70eb02",
-      "lineRange": [
-        22,
-        28
-      ]
+      "lineRange": [22, 28]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerOverlay",
@@ -1185,10 +891,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "60699b4d8557d3936d653104830150ada54ff7639feb7eb730f73dde9ee329c3",
-      "lineRange": [
-        28,
-        44
-      ]
+      "lineRange": [28, 44]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerContent",
@@ -1197,10 +900,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "65e8f1667ab7009db2b69689d1870199d2041aac7bd91504981ef4dc7ad49ab8",
-      "lineRange": [
-        44,
-        71
-      ]
+      "lineRange": [44, 71]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerHeader",
@@ -1209,10 +909,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "3318ddb21aa4974a815bc4ad5a7fce8599b7b2b9b16760d8235fb5fc387a3331",
-      "lineRange": [
-        71,
-        84
-      ]
+      "lineRange": [71, 84]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerBody",
@@ -1221,10 +918,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "bd28486cacfe5461d4b169d50188a7b9e3822e8ca70d9c6eae80f70e53f7ab10",
-      "lineRange": [
-        84,
-        94
-      ]
+      "lineRange": [84, 94]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerFooter",
@@ -1233,10 +927,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "4ed7bbcc67e9c1aa5807afce86272a8b019a196f69033eec9430c830b45cc310",
-      "lineRange": [
-        94,
-        104
-      ]
+      "lineRange": [94, 104]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerTitle",
@@ -1245,10 +936,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "ace030f0f6e650bd30f9d4032f68912a9af37914010afd5f7e608226df9e7d38",
-      "lineRange": [
-        104,
-        117
-      ]
+      "lineRange": [104, 117]
     },
     {
       "id": "src/server/viewer/components/ui/drawer.tsx:DrawerDescription",
@@ -1257,10 +945,7 @@
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
       "hash": "25734528b5948986432b2baa0e7d56ca09b11f04b215892dc9381f29854ef8f7",
-      "lineRange": [
-        117,
-        130
-      ]
+      "lineRange": [117, 130]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawer",
@@ -1269,10 +954,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "86954d491d3b07d3fe7f9b5d7283f904689f3210131cfedcad2d3ee5543a2591",
-      "lineRange": [
-        28,
-        41
-      ]
+      "lineRange": [28, 41]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerContent",
@@ -1281,10 +963,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "700ea6028714f0dad401b4b94cd521931b357ade093d7f7456339664d3b7a0dc",
-      "lineRange": [
-        41,
-        66
-      ]
+      "lineRange": [41, 66]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerHeader",
@@ -1293,10 +972,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "ffb5b1f0a18de8a3c750ddc5d776cfaf5d0f781a20366067d254d39dc5f2b39a",
-      "lineRange": [
-        66,
-        79
-      ]
+      "lineRange": [66, 79]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerBody",
@@ -1305,10 +981,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "48856db3ddc65fb30a0a89b6fbba9f70fc06bb2d4390f5708657de93a8873738",
-      "lineRange": [
-        79,
-        92
-      ]
+      "lineRange": [79, 92]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerFooter",
@@ -1317,10 +990,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "344c43a7c818013820bef81514f240993c497bd7a1c85af3b93fcf3a7e2bc2df",
-      "lineRange": [
-        92,
-        105
-      ]
+      "lineRange": [92, 105]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerTitle",
@@ -1329,10 +999,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "1d535e4cc3d14a620fa624f88e8ca97867db52a969e2b8c433398149d5eee550",
-      "lineRange": [
-        105,
-        118
-      ]
+      "lineRange": [105, 118]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerDescription",
@@ -1341,10 +1008,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "252206d397d59c432f51e240c575267cd31a645d23d7167edd2468e31b131ffa",
-      "lineRange": [
-        118,
-        134
-      ]
+      "lineRange": [118, 134]
     },
     {
       "id": "src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerClose",
@@ -1353,10 +1017,7 @@
       "filePath": "src/server/viewer/components/ui/sheet-or-drawer.tsx",
       "isAsync": false,
       "hash": "2f0f28ebf157f4af83f0f2d564f31fbb094ee4982db6f1d57db647b72d00e328",
-      "lineRange": [
-        134,
-        147
-      ]
+      "lineRange": [134, 147]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:Sheet",
@@ -1365,10 +1026,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "366a6a13016d555f0079f0b35a9a1a917a4f681d04acf23f30fa9e79bcf5bec0",
-      "lineRange": [
-        4,
-        8
-      ]
+      "lineRange": [4, 8]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetTrigger",
@@ -1377,10 +1035,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "7a92adba9d773a9eb1255b452099e923903d1967380410990d431ef48af2cdd1",
-      "lineRange": [
-        8,
-        14
-      ]
+      "lineRange": [8, 14]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetClose",
@@ -1389,10 +1044,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "b68574274bc8ba7a28e7dfdd96cbf3e250c691f2892d31632ec64b28d66daf10",
-      "lineRange": [
-        14,
-        20
-      ]
+      "lineRange": [14, 20]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetPortal",
@@ -1401,10 +1053,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "bf97239a566100aec260af5423390348b658e61eeacd3118a4ac00a90546bcd4",
-      "lineRange": [
-        20,
-        26
-      ]
+      "lineRange": [20, 26]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetOverlay",
@@ -1413,10 +1062,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "f1cd26ebf3de4f6d7853b675b03ed031600af86a84f7e832c3130ced4a2f2a05",
-      "lineRange": [
-        26,
-        42
-      ]
+      "lineRange": [26, 42]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetContent",
@@ -1425,10 +1071,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "421b3701dfcd6dc4b66370d0825f793751628e111c2960d62b03b52ccdedd6af",
-      "lineRange": [
-        42,
-        86
-      ]
+      "lineRange": [42, 86]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetHeader",
@@ -1437,10 +1080,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "9751339e7255a54510d5365ad6d934f548b6f81ca19d9ca1c25e49cb38c86136",
-      "lineRange": [
-        86,
-        96
-      ]
+      "lineRange": [86, 96]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetBody",
@@ -1449,10 +1089,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "cc5a3800d5c3cf7cb1b8e0abb2c162319e6cbc37053674a4ff03f3b3a63a908d",
-      "lineRange": [
-        96,
-        106
-      ]
+      "lineRange": [96, 106]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetFooter",
@@ -1461,10 +1098,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "6bc7097f5b21aa3712461bfe8b9011bbee3e3b1ac554098b1baee2bea37715bc",
-      "lineRange": [
-        106,
-        116
-      ]
+      "lineRange": [106, 116]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetTitle",
@@ -1473,10 +1107,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "e6223ca60d45eaf4637d0ff51f4ca77d02560199deadbef771ea1913edd814b8",
-      "lineRange": [
-        116,
-        129
-      ]
+      "lineRange": [116, 129]
     },
     {
       "id": "src/server/viewer/components/ui/sheet.tsx:SheetDescription",
@@ -1485,10 +1116,7 @@
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
       "hash": "e0a492ab1dd97e81307a46f89053b7efbeb6fd856de8f9fece683ac34722b71e",
-      "lineRange": [
-        129,
-        142
-      ]
+      "lineRange": [129, 142]
     },
     {
       "id": "src/server/viewer/lib/utils.ts:cn",
@@ -1497,10 +1125,7 @@
       "filePath": "src/server/viewer/lib/utils.ts",
       "isAsync": false,
       "hash": "f0e52b311e469801461b483fceaa7914d98793cdcba1d6db5fef8c16cdedc735",
-      "lineRange": [
-        2,
-        6
-      ]
+      "lineRange": [2, 6]
     },
     {
       "id": "src/server/viewer/main.tsx:root",
@@ -1509,10 +1134,7 @@
       "filePath": "src/server/viewer/main.tsx",
       "isAsync": false,
       "hash": "87033320aacc330be14b6cc0d766433536147efbc23f6a3cc0010e98418b70ab",
-      "lineRange": [
-        6,
-        6
-      ]
+      "lineRange": [6, 6]
     }
   ],
   "edges": [
