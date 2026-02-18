@@ -591,7 +591,7 @@ export function getTemplate(): string {
           const link = document.createElement('a');
           link.className = 'tree-item';
           link.dataset.docPath = item.sym.docPath;
-          link.href = '#/doc/' + encodeURIComponent(item.sym.docPath);
+          link.href = docPathToUrl(item.sym.docPath);
 
           addGuides(link, childGuides, itemIsLast);
 
@@ -637,10 +637,24 @@ export function getTemplate(): string {
       document.querySelectorAll('#symbol-tree .tree-dir').forEach(d => d.classList.remove('collapsed'));
     });
 
+    // Convert docPath (e.g. "src/checker/index/StaleChecker.md") to URL path
+    function docPathToUrl(docPath) {
+      // Strip "src/" prefix and ".md" extension
+      return '/docs/' + docPath.replace(/^\\/?(src\\/)?/, '').replace(/\\.md$/, '');
+    }
+
+    // Convert URL path back to docPath for API
+    function urlToDocPath(pathname) {
+      // Strip "/docs/" prefix, add "src/" prefix and ".md" extension
+      const rest = pathname.replace(/^\\/docs\\/?/, '');
+      if (!rest) return null;
+      return 'src/' + rest + '.md';
+    }
+
     function updateActiveLink() {
-      const hash = decodeURIComponent(window.location.hash.slice(6) || '');
+      const currentDocPath = urlToDocPath(window.location.pathname);
       document.querySelectorAll('.tree-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.docPath === hash);
+        el.classList.toggle('active', el.dataset.docPath === currentDocPath);
       });
     }
 
@@ -768,7 +782,7 @@ export function getTemplate(): string {
           if (relatedMap.has(text)) {
             const link = document.createElement('a');
             link.className = 'related-link';
-            link.href = '#/doc/' + encodeURIComponent(relatedMap.get(text));
+            link.href = docPathToUrl(relatedMap.get(text));
             link.textContent = codeEl.textContent;
             codeEl.replaceWith(link);
           }
@@ -781,21 +795,27 @@ export function getTemplate(): string {
     }
 
     // --- Routing ---
-    function handleHash() {
-      const hash = window.location.hash;
-      if (hash.startsWith('#/doc/')) {
-        const docPath = decodeURIComponent(hash.slice(6));
+    function handleRoute() {
+      const docPath = urlToDocPath(window.location.pathname);
+      if (docPath) {
         navigate(docPath);
       }
     }
 
-    window.addEventListener('hashchange', handleHash);
+    // Intercept clicks on internal doc links
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href^="/docs/"]');
+      if (!link) return;
+      e.preventDefault();
+      history.pushState(null, '', link.href);
+      handleRoute();
+    });
+
+    window.addEventListener('popstate', handleRoute);
 
     // --- Init ---
     await loadIndex();
-    if (window.location.hash) {
-      handleHash();
-    }
+    handleRoute();
   </script>
 </body>
 </html>`;

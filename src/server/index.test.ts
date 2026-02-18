@@ -218,7 +218,7 @@ describe('generateDependencyGraph', () => {
   it('excludes related symbols that have no docs', () => {
     // AIClient is in related but not in the index
     const index = makeIndex([generatorEntry, extractorEntry]);
-    const graph = generateDependencyGraph(generatorEntry, index)!;
+    const graph = generateDependencyGraph(generatorEntry, index);
 
     expect(graph).toContain('TypeScriptExtractor');
     expect(graph).not.toContain('AIClient');
@@ -241,10 +241,11 @@ describe('generateDependencyGraph', () => {
     expect(generateDependencyGraph(extractorEntry, index)).toBeNull();
   });
 
-  it('encodes doc paths in click directives', () => {
+  it('uses clean URL paths in click directives', () => {
     const index = makeIndex([generatorEntry, extractorEntry]);
-    const graph = generateDependencyGraph(generatorEntry, index)!;
+    const graph = generateDependencyGraph(generatorEntry, index);
 
-    expect(graph).toContain(encodeURIComponent(extractorEntry.docPath));
+    // Doc paths are converted to clean URLs: src/extractor/.../file.md → /docs/extractor/.../file
+    expect(graph).toContain('/docs/extractor/typescript-extractor/type-script-extractor');
   });
 });

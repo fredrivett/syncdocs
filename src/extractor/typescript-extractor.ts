@@ -242,6 +242,7 @@ export class TypeScriptExtractor {
     sourceFile: ts.SourceFile,
   ): SymbolInfo {
     const name = decl.name.getText(sourceFile);
+    // biome-ignore lint/style/noNonNullAssertion: caller guarantees initializer exists for arrow functions
     const func = decl.initializer!;
 
     let params = '';

@@ -43,7 +43,7 @@ describe('toRelativePath', () => {
     expect(result).toBe(
       resolve('/completely/different/path/file.ts')
         .split('/')
-        .reduce((acc, _part, i, parts) => {
+        .reduce((acc, _part, _i, _parts) => {
           // Just verify it doesn't throw and produces some relative path
           return acc;
         }, result),

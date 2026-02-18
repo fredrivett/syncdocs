@@ -17,7 +17,7 @@ export function toRelativePath(filePath: string, cwd = process.cwd()): string {
   const resolved = resolve(filePath);
 
   // If path is already relative to cwd, use it directly
-  if (resolved.startsWith(cwd + '/') || resolved === cwd) {
+  if (resolved.startsWith(`${cwd}/`) || resolved === cwd) {
     return relative(cwd, resolved);
   }
 

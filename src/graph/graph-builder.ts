@@ -1,0 +1,281 @@
+/**
+ * Builds a FlowGraph from static analysis of TypeScript source files.
+ *
+ * For each source file, extracts symbols, detects entry points via framework
+ * matchers, resolves call-site edges (same-file and cross-file), and discovers
+ * runtime connections (event dispatches, task triggers, HTTP calls).
+ */
+
+import { relative } from 'node:path';
+import { TypeScriptExtractor } from '../extractor/index.js';
+import { resolveImportPath } from '../extractor/resolve-import.js';
+import type { CallSite, ImportInfo, SymbolInfo } from '../extractor/types.js';
+import { ContentHasher } from '../hasher/index.js';
+import { matchers } from '../matchers/index.js';
+import type { RuntimeConnection } from '../matchers/types.js';
+import type { EdgeType, FlowGraph, GraphEdge, GraphNode } from './types.js';
+
+/**
+ * Compute a path relative to `process.cwd()`.
+ * Keeps node IDs deterministic and human-readable.
+ */
+function getRelativePath(absolutePath: string): string {
+  return relative(process.cwd(), absolutePath);
+}
+
+/**
+ * Map a RuntimeConnection type string to a GraphEdge EdgeType.
+ * Falls back to 'async-dispatch' for unknown connection types.
+ */
+function connectionTypeToEdgeType(type: string): EdgeType {
+  switch (type) {
+    case 'inngest-send':
+      return 'event-emit';
+    case 'inngest-invoke':
+      return 'async-dispatch';
+    case 'task-trigger':
+      return 'async-dispatch';
+    case 'fetch':
+      return 'http-request';
+    case 'navigation':
+      return 'http-request';
+    default:
+      return 'async-dispatch';
+  }
+}
+
+/**
+ * Check whether a symbol's fullText indicates it is async.
+ * Matches `async function`, `async (`, `async =>`  etc.
+ */
+function isAsyncSymbol(symbol: SymbolInfo): boolean {
+  // Look for the `async` keyword appearing before the function body.
+  // The regex ensures `async` is preceded by a word boundary (or start)
+  // so we don't match strings like "getAsyncData".
+  return /(?:^|\s)async\s/.test(symbol.fullText);
+}
+
+export class GraphBuilder {
+  private extractor = new TypeScriptExtractor();
+  private hasher = new ContentHasher();
+
+  /**
+   * Build a FlowGraph from a set of TypeScript source file paths.
+   */
+  build(sourceFiles: string[]): FlowGraph {
+    const nodes: GraphNode[] = [];
+    const edges: GraphEdge[] = [];
+
+    // Map from node id → GraphNode for quick lookup
+    const nodeMap = new Map<string, GraphNode>();
+
+    // Map from filePath → SymbolInfo[] for cross-file resolution
+    const fileSymbolsMap = new Map<string, SymbolInfo[]>();
+
+    // ── Phase 1: Extract symbols and create nodes ──────────────────────
+
+    for (const filePath of sourceFiles) {
+      const { symbols } = this.extractor.extractSymbols(filePath);
+      fileSymbolsMap.set(filePath, symbols);
+
+      for (const symbol of symbols) {
+        const relPath = getRelativePath(filePath);
+        const id = `${relPath}:${symbol.name}`;
+
+        // Detect entry point via framework matchers
+        let entryType: GraphNode['entryType'];
+        let metadata: GraphNode['metadata'];
+
+        for (const matcher of matchers) {
+          const match = matcher.detectEntryPoint(symbol, filePath);
+          if (match) {
+            entryType = match.entryType;
+            metadata = match.metadata;
+            break;
+          }
+        }
+
+        const node: GraphNode = {
+          id,
+          name: symbol.name,
+          kind: symbol.kind,
+          filePath: relPath,
+          isAsync: isAsyncSymbol(symbol),
+          hash: this.hasher.hashSymbol(symbol),
+          lineRange: [symbol.startLine, symbol.endLine],
+          ...(entryType && { entryType }),
+          ...(metadata && Object.keys(metadata).length > 0 && { metadata }),
+        };
+
+        nodes.push(node);
+        nodeMap.set(id, node);
+      }
+    }
+
+    // ── Phase 2: Build edges ───────────────────────────────────────────
+
+    for (const filePath of sourceFiles) {
+      const symbols = fileSymbolsMap.get(filePath);
+      if (!symbols) continue;
+
+      const imports = this.extractor.extractImports(filePath);
+
+      for (const symbol of symbols) {
+        const sourceRelPath = getRelativePath(filePath);
+        const sourceId = `${sourceRelPath}:${symbol.name}`;
+
+        // 2a. Direct call edges from call-site analysis
+        const callSites = this.extractor.extractCallSites(filePath, symbol.name);
+        let order = 0;
+
+        for (const callSite of callSites) {
+          const targetId = this.resolveCallSite(callSite, filePath, symbols, imports, sourceFiles);
+
+          if (targetId && nodeMap.has(targetId)) {
+            edges.push({
+              id: `${sourceId}->${targetId}`,
+              source: sourceId,
+              target: targetId,
+              type: 'direct-call',
+              isAsync: nodeMap.get(targetId)?.isAsync ?? false,
+              order: order++,
+            });
+          }
+        }
+
+        // 2b. Runtime connection edges from framework matchers
+        for (const matcher of matchers) {
+          const connections = matcher.detectConnections(symbol, filePath);
+
+          for (const connection of connections) {
+            const resolved = matcher.resolveConnection(connection, sourceFiles);
+            if (resolved) {
+              const targetRelPath = getRelativePath(resolved.targetFilePath);
+              const targetId = `${targetRelPath}:${resolved.targetSymbol.name}`;
+
+              if (nodeMap.has(targetId)) {
+                edges.push({
+                  id: `${sourceId}->${targetId}`,
+                  source: sourceId,
+                  target: targetId,
+                  type: resolved.edgeType,
+                  label: connection.targetHint,
+                  isAsync: true,
+                });
+              }
+            } else {
+              // Even if the matcher can't resolve, record the connection
+              // with the information we have (no target node yet)
+              this.addUnresolvedConnectionEdge(sourceId, connection, edges, nodeMap);
+            }
+          }
+        }
+      }
+    }
+
+    // ── Phase 3: Deduplicate edges ─────────────────────────────────────
+
+    const dedupedEdges = this.deduplicateEdges(edges);
+
+    return {
+      version: '1.0',
+      generatedAt: new Date().toISOString(),
+      nodes,
+      edges: dedupedEdges,
+    };
+  }
+
+  /**
+   * Resolve a call site to a target node ID.
+   *
+   * Strategy:
+   * 1. Same-file match — find a symbol in the same file with the call name
+   * 2. Cross-file match — find an import whose local name matches, then
+   *    resolve the import path and look up the original symbol name in the
+   *    target file's symbols
+   */
+  private resolveCallSite(
+    callSite: CallSite,
+    filePath: string,
+    sameFileSymbols: SymbolInfo[],
+    imports: ImportInfo[],
+    sourceFiles: string[],
+  ): string | null {
+    const { name } = callSite;
+
+    // 1. Same-file match
+    const sameFileMatch = sameFileSymbols.find((s) => s.name === name);
+    if (sameFileMatch) {
+      const relPath = getRelativePath(filePath);
+      return `${relPath}:${sameFileMatch.name}`;
+    }
+
+    // 2. Cross-file match via imports
+    const importMatch = imports.find((imp) => imp.name === name);
+    if (!importMatch) return null;
+
+    const resolvedPath = resolveImportPath(filePath, importMatch.source);
+    if (!resolvedPath) return null;
+
+    // Only consider files that are part of the project
+    if (!sourceFiles.includes(resolvedPath)) return null;
+
+    const targetRelPath = getRelativePath(resolvedPath);
+    // The target symbol name is the original export name (handles renaming)
+    return `${targetRelPath}:${importMatch.originalName}`;
+  }
+
+  /**
+   * Try to create an edge for an unresolved runtime connection.
+   * This handles cases where the matcher detected a connection pattern
+   * but couldn't resolve it to a specific target symbol.
+   */
+  private addUnresolvedConnectionEdge(
+    sourceId: string,
+    connection: RuntimeConnection,
+    edges: GraphEdge[],
+    nodeMap: Map<string, GraphNode>,
+  ): void {
+    // Try to find a target node by matching the targetHint against
+    // known node metadata (e.g., matching an event name to an inngest function)
+    for (const [nodeId, node] of nodeMap) {
+      if (!node.metadata) continue;
+
+      const isEventMatch =
+        connection.type === 'inngest-send' && node.metadata.eventTrigger === connection.targetHint;
+
+      const isTaskMatch =
+        connection.type === 'task-trigger' && node.metadata.taskId === connection.targetHint;
+
+      if (isEventMatch || isTaskMatch) {
+        edges.push({
+          id: `${sourceId}->${nodeId}`,
+          source: sourceId,
+          target: nodeId,
+          type: connectionTypeToEdgeType(connection.type),
+          label: connection.targetHint,
+          isAsync: true,
+        });
+        return;
+      }
+    }
+  }
+
+  /**
+   * Deduplicate edges by source+target, keeping the first occurrence.
+   */
+  private deduplicateEdges(edges: GraphEdge[]): GraphEdge[] {
+    const seen = new Set<string>();
+    const result: GraphEdge[] = [];
+
+    for (const edge of edges) {
+      const key = `${edge.source}->${edge.target}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(edge);
+      }
+    }
+
+    return result;
+  }
+}
