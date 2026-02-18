@@ -1,6 +1,6 @@
 ---
 title: scanProjectAsync
-generated: 2026-02-18T21:36:16.130Z
+generated: 2026-02-18T21:53:33.382Z
 graphNode: src/cli/utils/next-suggestion.ts:scanProjectAsync
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

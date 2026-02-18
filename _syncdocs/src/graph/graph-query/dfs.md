@@ -1,6 +1,6 @@
 ---
 title: dfs
-generated: 2026-02-18T21:36:16.133Z
+generated: 2026-02-18T21:53:33.385Z
 graphNode: src/graph/graph-query.ts:dfs
 dependencies:
   - path: src/graph/graph-query.ts

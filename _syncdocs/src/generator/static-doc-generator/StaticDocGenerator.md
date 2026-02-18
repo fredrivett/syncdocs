@@ -1,6 +1,6 @@
 ---
 title: StaticDocGenerator
-generated: 2026-02-18T21:36:16.132Z
+generated: 2026-02-18T21:53:33.384Z
 graphNode: src/generator/static-doc-generator.ts:StaticDocGenerator
 dependencies:
   - path: src/generator/static-doc-generator.ts

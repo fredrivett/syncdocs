@@ -1,6 +1,6 @@
 ---
 title: FunctionNode
-generated: 2026-02-18T21:36:16.135Z
+generated: 2026-02-18T21:53:33.388Z
 graphNode: src/server/viewer/components/NodeTypes.tsx:FunctionNode
 dependencies:
   - path: src/server/viewer/components/NodeTypes.tsx

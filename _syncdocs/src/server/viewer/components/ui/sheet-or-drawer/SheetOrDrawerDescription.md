@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerDescription
-generated: 2026-02-18T21:36:16.136Z
+generated: 2026-02-18T21:53:33.390Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerDescription
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx

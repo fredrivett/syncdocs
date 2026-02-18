@@ -1,19 +1,13 @@
 ---
 title: SheetTitle
-generated: 2026-02-18T21:36:16.137Z
+generated: 2026-02-18T21:53:33.391Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetTitle
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetTitle
-    hash: fe4f37dda8d94eef620eba505e1deeae4d4a0129782f2a27c30d0b7a96e711e7
+    hash: e6223ca60d45eaf4637d0ff51f4ca77d02560199deadbef771ea1913edd814b8
 ---
 
 # SheetTitle
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:77-87`
-
-**Calls:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |
+`function` in `src/server/viewer/components/ui/sheet.tsx:116-129`

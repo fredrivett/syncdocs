@@ -1,6 +1,6 @@
 ---
 title: ValidationError
-generated: 2026-02-18T21:36:16.130Z
+generated: 2026-02-18T21:53:33.381Z
 graphNode: src/cli/utils/errors.ts:ValidationError
 dependencies:
   - path: src/cli/utils/errors.ts

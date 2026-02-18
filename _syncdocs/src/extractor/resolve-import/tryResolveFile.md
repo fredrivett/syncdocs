@@ -1,6 +1,6 @@
 ---
 title: tryResolveFile
-generated: 2026-02-18T21:36:16.132Z
+generated: 2026-02-18T21:53:33.383Z
 graphNode: src/extractor/resolve-import.ts:tryResolveFile
 dependencies:
   - path: src/extractor/resolve-import.ts

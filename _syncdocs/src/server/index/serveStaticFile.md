@@ -1,6 +1,6 @@
 ---
 title: serveStaticFile
-generated: 2026-02-18T21:36:16.134Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/index.ts:serveStaticFile
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # serveStaticFile
 
-`function` in `src/server/index.ts:206-216`
+`function` in `src/server/index.ts:207-217`
 
 **Called by:**
 

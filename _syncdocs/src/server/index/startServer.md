@@ -1,16 +1,16 @@
 ---
 title: startServer
-generated: 2026-02-18T21:36:16.135Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/index.ts:startServer
 dependencies:
   - path: src/server/index.ts
     symbol: startServer
-    hash: d74519f96c3fabdb5882ec74936a8dfafb4c98f369cb2b29cf60b19a0cd1b906
+    hash: 7bf4d738ca5a0c41662d804b4b7c141fa3b80f42b91dd49e13cc68d751c65040
 ---
 
 # startServer
 
-`function` in `src/server/index.ts:216-324`
+`function` in `src/server/index.ts:217-325`
 
 **Calls:**
 

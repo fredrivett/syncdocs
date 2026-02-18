@@ -1,16 +1,16 @@
 ---
 title: getTemplate
-generated: 2026-02-18T21:36:16.135Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/template.ts:getTemplate
 dependencies:
   - path: src/server/template.ts
     symbol: getTemplate
-    hash: 594304f569a6147182ffa8d1a320c013b2ad34a9a0e8498bd919cf6433cbdaa7
+    hash: 7440413c6ecee967d1fb6d423c3791e29aee0cc67e1ab38751dea0a2cf2dba91
 ---
 
 # getTemplate
 
-`function` in `src/server/template.ts:1-802`
+`function` in `src/server/template.ts:1-822`
 
 **Called by:**
 

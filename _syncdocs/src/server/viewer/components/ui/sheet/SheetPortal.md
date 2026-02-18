@@ -1,13 +1,13 @@
 ---
 title: SheetPortal
-generated: 2026-02-18T21:36:16.137Z
+generated: 2026-02-18T21:53:33.390Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetPortal
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetPortal
-    hash: f7b09d229364e21bfd5724d76dc3d8017a916e045e131d613b72d4afbbeb997c
+    hash: bf97239a566100aec260af5423390348b658e61eeacd3118a4ac00a90546bcd4
 ---
 
 # SheetPortal
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:7-11`
+`function` in `src/server/viewer/components/ui/sheet.tsx:20-26`

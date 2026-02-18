@@ -1,6 +1,6 @@
 ---
 title: cli
-generated: 2026-02-18T21:36:16.129Z
+generated: 2026-02-18T21:53:33.381Z
 graphNode: src/cli/index.ts:cli
 dependencies:
   - path: src/cli/index.ts

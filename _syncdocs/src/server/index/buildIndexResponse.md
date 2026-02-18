@@ -1,6 +1,6 @@
 ---
 title: buildIndexResponse
-generated: 2026-02-18T21:36:16.134Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/index.ts:buildIndexResponse
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # buildIndexResponse
 
-`function` in `src/server/index.ts:131-154`
+`function` in `src/server/index.ts:132-155`
 
 **Called by:**
 

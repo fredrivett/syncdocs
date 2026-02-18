@@ -1,19 +1,13 @@
 ---
 title: DrawerHeader
-generated: 2026-02-18T21:36:16.136Z
+generated: 2026-02-18T21:53:33.389Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerHeader
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerHeader
-    hash: 5d70b9fe42f26fdef24515d6a3a237870bcdf79eafa6cbc471c96cc451a06423
+    hash: 3318ddb21aa4974a815bc4ad5a7fce8599b7b2b9b16760d8235fb5fc387a3331
 ---
 
 # DrawerHeader
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:60-70`
-
-**Calls:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |
+`function` in `src/server/viewer/components/ui/drawer.tsx:71-84`

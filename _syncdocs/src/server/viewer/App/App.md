@@ -1,6 +1,6 @@
 ---
 title: App
-generated: 2026-02-18T21:36:16.135Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/viewer/App.tsx:App
 dependencies:
   - path: src/server/viewer/App.tsx

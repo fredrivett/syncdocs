@@ -1,6 +1,6 @@
 ---
 title: result
-generated: 2026-02-18T21:36:16.128Z
+generated: 2026-02-18T21:53:33.379Z
 graphNode: scripts/test-extractor.ts:result
 dependencies:
   - path: scripts/test-extractor.ts

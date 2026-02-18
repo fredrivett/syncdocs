@@ -1,6 +1,6 @@
 ---
 title: buildDocResponse
-generated: 2026-02-18T21:36:16.134Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/index.ts:buildDocResponse
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # buildDocResponse
 
-`function` in `src/server/index.ts:154-197`
+`function` in `src/server/index.ts:155-198`
 
 **Calls:**
 

@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-18T21:36:16.131Z
+generated: 2026-02-18T21:53:33.382Z
 graphNode: src/cli/utils/next-suggestion.ts:getRelativePath
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

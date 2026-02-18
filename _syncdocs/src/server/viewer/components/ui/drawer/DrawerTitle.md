@@ -1,19 +1,13 @@
 ---
 title: DrawerTitle
-generated: 2026-02-18T21:36:16.136Z
+generated: 2026-02-18T21:53:33.389Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerTitle
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerTitle
-    hash: c32b0a7dad3c3d77bd4da1200b7c4529c871299178daaa0696a368c93f475184
+    hash: ace030f0f6e650bd30f9d4032f68912a9af37914010afd5f7e608226df9e7d38
 ---
 
 # DrawerTitle
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:90-100`
-
-**Calls:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |
+`function` in `src/server/viewer/components/ui/drawer.tsx:104-117`

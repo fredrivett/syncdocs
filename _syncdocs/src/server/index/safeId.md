@@ -1,6 +1,6 @@
 ---
 title: safeId
-generated: 2026-02-18T21:36:16.134Z
+generated: 2026-02-18T21:53:33.387Z
 graphNode: src/server/index.ts:safeId
 dependencies:
   - path: src/server/index.ts

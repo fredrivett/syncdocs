@@ -1,19 +1,13 @@
 ---
 title: DrawerOverlay
-generated: 2026-02-18T21:36:16.136Z
+generated: 2026-02-18T21:53:33.389Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerOverlay
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerOverlay
-    hash: 538e04e2330ae264d3c69853090836cbcbdb909489c361693e9e5a3784536de5
+    hash: 60699b4d8557d3936d653104830150ada54ff7639feb7eb730f73dde9ee329c3
 ---
 
 # DrawerOverlay
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:24-37`
-
-**Calls:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |
+`function` in `src/server/viewer/components/ui/drawer.tsx:28-44`

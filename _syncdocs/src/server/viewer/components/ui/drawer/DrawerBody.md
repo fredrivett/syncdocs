@@ -1,19 +1,13 @@
 ---
 title: DrawerBody
-generated: 2026-02-18T21:36:16.136Z
+generated: 2026-02-18T21:53:33.389Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerBody
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerBody
-    hash: 19c8bbbdc3de39a46ed1c0e8be536960712466c3a8dc5b606bb4a7619991de50
+    hash: bd28486cacfe5461d4b169d50188a7b9e3822e8ca70d9c6eae80f70e53f7ab10
 ---
 
 # DrawerBody
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:70-80`
-
-**Calls:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |
+`function` in `src/server/viewer/components/ui/drawer.tsx:84-94`

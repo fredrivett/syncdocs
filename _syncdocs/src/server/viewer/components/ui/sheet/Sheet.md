@@ -1,13 +1,13 @@
 ---
 title: Sheet
-generated: 2026-02-18T21:36:16.137Z
+generated: 2026-02-18T21:53:33.390Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:Sheet
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: Sheet
-    hash: 2d6aa95a1abd085e97acb125a6582a5d5c40b489e28a6a3de65ebce98e31fa10
+    hash: 366a6a13016d555f0079f0b35a9a1a917a4f681d04acf23f30fa9e79bcf5bec0
 ---
 
 # Sheet
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:3-7`
+`function` in `src/server/viewer/components/ui/sheet.tsx:4-8`

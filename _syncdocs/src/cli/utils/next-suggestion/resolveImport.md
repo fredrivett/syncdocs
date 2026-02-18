@@ -1,6 +1,6 @@
 ---
 title: resolveImport
-generated: 2026-02-18T21:36:16.131Z
+generated: 2026-02-18T21:53:33.383Z
 graphNode: src/cli/utils/next-suggestion.ts:resolveImport
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

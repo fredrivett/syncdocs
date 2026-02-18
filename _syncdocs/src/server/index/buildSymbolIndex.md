@@ -1,6 +1,6 @@
 ---
 title: buildSymbolIndex
-generated: 2026-02-18T21:36:16.134Z
+generated: 2026-02-18T21:53:33.386Z
 graphNode: src/server/index.ts:buildSymbolIndex
 dependencies:
   - path: src/server/index.ts

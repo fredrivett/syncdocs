@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-18T21:36:16.126Z",
+  "generatedAt": "2026-02-18T21:53:33.377Z",
   "nodes": [
     {
       "id": "scripts/test-extractor.ts:testFile",
@@ -932,10 +932,10 @@
       "kind": "function",
       "filePath": "src/server/index.ts",
       "isAsync": false,
-      "hash": "102a9380bdf571b2751154c267c3c6e8b9dd3ed2ef5f373ac265c8a7abaea2d0",
+      "hash": "bb45ba927c7535d002c24f46061b6731d9d2ddffc8f1e7008cb9093aa5fcc05e",
       "lineRange": [
         104,
-        131
+        132
       ]
     },
     {
@@ -958,8 +958,8 @@
       "isAsync": false,
       "hash": "0d6c2a43f13b1020445e9f183a9d42d6972a894c522f570cb30eae2557507a74",
       "lineRange": [
-        131,
-        154
+        132,
+        155
       ]
     },
     {
@@ -970,8 +970,8 @@
       "isAsync": false,
       "hash": "ac9f44c78993bf8d3d0e4d064e3e940b5a72d1df177383e9bd8999b9b1aa4300",
       "lineRange": [
-        154,
-        197
+        155,
+        198
       ]
     },
     {
@@ -982,8 +982,8 @@
       "isAsync": false,
       "hash": "8131a9f57e256532d6becf8708767698b20d05275c71283f82ec56dd42c8d0a8",
       "lineRange": [
-        206,
-        216
+        207,
+        217
       ]
     },
     {
@@ -992,10 +992,10 @@
       "kind": "function",
       "filePath": "src/server/index.ts",
       "isAsync": true,
-      "hash": "d74519f96c3fabdb5882ec74936a8dfafb4c98f369cb2b29cf60b19a0cd1b906",
+      "hash": "7bf4d738ca5a0c41662d804b4b7c141fa3b80f42b91dd49e13cc68d751c65040",
       "lineRange": [
-        216,
-        324
+        217,
+        325
       ]
     },
     {
@@ -1004,10 +1004,10 @@
       "kind": "function",
       "filePath": "src/server/template.ts",
       "isAsync": true,
-      "hash": "594304f569a6147182ffa8d1a320c013b2ad34a9a0e8498bd919cf6433cbdaa7",
+      "hash": "7440413c6ecee967d1fb6d423c3791e29aee0cc67e1ab38751dea0a2cf2dba91",
       "lineRange": [
         1,
-        802
+        822
       ]
     },
     {
@@ -1047,15 +1047,27 @@
       ]
     },
     {
+      "id": "src/server/viewer/components/DocPanel.tsx:docPathToUrl",
+      "name": "docPathToUrl",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/DocPanel.tsx",
+      "isAsync": false,
+      "hash": "157a97ac980c98d3ea67fb151a9d891b6132aa94d1ee5d9b13b98be1c5e33a9d",
+      "lineRange": [
+        30,
+        34
+      ]
+    },
+    {
       "id": "src/server/viewer/components/DocPanel.tsx:DocPanel",
       "name": "DocPanel",
       "kind": "function",
       "filePath": "src/server/viewer/components/DocPanel.tsx",
       "isAsync": false,
-      "hash": "5eb56dd0020e0ac2f0c10dc39dd90cbb22557b5304e57d90d01dc10b601308a0",
+      "hash": "b2ef1461a991b538d0232c52ac79fe2b5d079a6979191d91598a95da44ef6ba1",
       "lineRange": [
-        30,
-        185
+        34,
+        189
       ]
     },
     {
@@ -1124,9 +1136,21 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "4061854ddeaf79c2f92a1c66bb9e327b3961b4d2a5fd47444ae451be878ff280",
+      "hash": "5a88ac3f69972e8c5d7e2ac0e5dbed89cea1d33f1afd4946d1060fd964d61a28",
       "lineRange": [
-        3,
+        4,
+        10
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerTrigger",
+      "name": "DrawerTrigger",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/drawer.tsx",
+      "isAsync": false,
+      "hash": "5320662f4d06b5ebb10cc539ca53d5bb583fff70d8bb90a40a1ae7dc6a49cb4b",
+      "lineRange": [
+        10,
         16
       ]
     },
@@ -1136,10 +1160,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "09f75150a2893fe6b65e805f5273c1cfe681d73ff98b6512787472787c48e6f3",
+      "hash": "4b7e3b0939bddb2afbc9c7a9031649df363e62b3aaf29091d8edef114911fbaf",
       "lineRange": [
         16,
-        20
+        22
       ]
     },
     {
@@ -1148,10 +1172,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "be07ec98d52f7625aaa0df8b850529190211df7636a62e9dcc24fc00cd28fda2",
+      "hash": "5b00bb50a6d36f1efb97c3368421efefb9acd2398b32c9cb2be5cfc6ac70eb02",
       "lineRange": [
-        20,
-        24
+        22,
+        28
       ]
     },
     {
@@ -1160,10 +1184,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "538e04e2330ae264d3c69853090836cbcbdb909489c361693e9e5a3784536de5",
+      "hash": "60699b4d8557d3936d653104830150ada54ff7639feb7eb730f73dde9ee329c3",
       "lineRange": [
-        24,
-        37
+        28,
+        44
       ]
     },
     {
@@ -1172,10 +1196,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "9a7a18d74f37831da1f728c90a3313e67e05ef5caabf0cae243dae60c21c59ea",
+      "hash": "65e8f1667ab7009db2b69689d1870199d2041aac7bd91504981ef4dc7ad49ab8",
       "lineRange": [
-        37,
-        60
+        44,
+        71
       ]
     },
     {
@@ -1184,10 +1208,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "5d70b9fe42f26fdef24515d6a3a237870bcdf79eafa6cbc471c96cc451a06423",
+      "hash": "3318ddb21aa4974a815bc4ad5a7fce8599b7b2b9b16760d8235fb5fc387a3331",
       "lineRange": [
-        60,
-        70
+        71,
+        84
       ]
     },
     {
@@ -1196,10 +1220,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "19c8bbbdc3de39a46ed1c0e8be536960712466c3a8dc5b606bb4a7619991de50",
+      "hash": "bd28486cacfe5461d4b169d50188a7b9e3822e8ca70d9c6eae80f70e53f7ab10",
       "lineRange": [
-        70,
-        80
+        84,
+        94
       ]
     },
     {
@@ -1208,10 +1232,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "c267dbce126a7110877f49d7c31136677de05d51a0d95587fb01c41c68e53a6a",
+      "hash": "4ed7bbcc67e9c1aa5807afce86272a8b019a196f69033eec9430c830b45cc310",
       "lineRange": [
-        80,
-        90
+        94,
+        104
       ]
     },
     {
@@ -1220,10 +1244,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "c32b0a7dad3c3d77bd4da1200b7c4529c871299178daaa0696a368c93f475184",
+      "hash": "ace030f0f6e650bd30f9d4032f68912a9af37914010afd5f7e608226df9e7d38",
       "lineRange": [
-        90,
-        100
+        104,
+        117
       ]
     },
     {
@@ -1232,10 +1256,10 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/drawer.tsx",
       "isAsync": false,
-      "hash": "81154b42da6e73682d0532bfd34408156ca8a8600b4b54a90733281d5855484a",
+      "hash": "25734528b5948986432b2baa0e7d56ca09b11f04b215892dc9381f29854ef8f7",
       "lineRange": [
-        100,
-        113
+        117,
+        130
       ]
     },
     {
@@ -1340,106 +1364,22 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
-      "hash": "2d6aa95a1abd085e97acb125a6582a5d5c40b489e28a6a3de65ebce98e31fa10",
+      "hash": "366a6a13016d555f0079f0b35a9a1a917a4f681d04acf23f30fa9e79bcf5bec0",
       "lineRange": [
-        3,
-        7
+        4,
+        8
       ]
     },
     {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetPortal",
-      "name": "SheetPortal",
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetTrigger",
+      "name": "SheetTrigger",
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
-      "hash": "f7b09d229364e21bfd5724d76dc3d8017a916e045e131d613b72d4afbbeb997c",
+      "hash": "7a92adba9d773a9eb1255b452099e923903d1967380410990d431ef48af2cdd1",
       "lineRange": [
-        7,
-        11
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetOverlay",
-      "name": "SheetOverlay",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "791b18eb27d9d6716388025a500230ba382a00d7c926e77b1f9f00cbb2b28a62",
-      "lineRange": [
-        11,
-        24
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetContent",
-      "name": "SheetContent",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "6705187b878a1c475688db6e7b956b802355f65c1786b75de4ca2218cf6e0a3a",
-      "lineRange": [
-        24,
-        51
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetHeader",
-      "name": "SheetHeader",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "c1388058ba63b9d8ad81b6b55cf12270c787b604f07846b8eeabb4cd780d653e",
-      "lineRange": [
-        51,
-        61
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetBody",
-      "name": "SheetBody",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "bcbf0501264dde6db269aeb18c53828cd5bae6bb51501c16de6986ffbe8c7cae",
-      "lineRange": [
-        61,
-        71
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetFooter",
-      "name": "SheetFooter",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "d4f30226859dedd090350598062adfdff4401bd4f1a9b215df63f54afb9468e1",
-      "lineRange": [
-        71,
-        77
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetTitle",
-      "name": "SheetTitle",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "fe4f37dda8d94eef620eba505e1deeae4d4a0129782f2a27c30d0b7a96e711e7",
-      "lineRange": [
-        77,
-        87
-      ]
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetDescription",
-      "name": "SheetDescription",
-      "kind": "function",
-      "filePath": "src/server/viewer/components/ui/sheet.tsx",
-      "isAsync": false,
-      "hash": "13cb97c73d4281144c0d91f38c04398d88192253892e20f626ce098de7b6046b",
-      "lineRange": [
-        87,
-        100
+        8,
+        14
       ]
     },
     {
@@ -1448,10 +1388,106 @@
       "kind": "function",
       "filePath": "src/server/viewer/components/ui/sheet.tsx",
       "isAsync": false,
-      "hash": "3bb81a06e664e70e2716b2bc95a3e219116d81ad64f86bdca3525e488a7e947e",
+      "hash": "b68574274bc8ba7a28e7dfdd96cbf3e250c691f2892d31632ec64b28d66daf10",
       "lineRange": [
-        100,
-        104
+        14,
+        20
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetPortal",
+      "name": "SheetPortal",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "bf97239a566100aec260af5423390348b658e61eeacd3118a4ac00a90546bcd4",
+      "lineRange": [
+        20,
+        26
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetOverlay",
+      "name": "SheetOverlay",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "f1cd26ebf3de4f6d7853b675b03ed031600af86a84f7e832c3130ced4a2f2a05",
+      "lineRange": [
+        26,
+        42
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetContent",
+      "name": "SheetContent",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "421b3701dfcd6dc4b66370d0825f793751628e111c2960d62b03b52ccdedd6af",
+      "lineRange": [
+        42,
+        86
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetHeader",
+      "name": "SheetHeader",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "9751339e7255a54510d5365ad6d934f548b6f81ca19d9ca1c25e49cb38c86136",
+      "lineRange": [
+        86,
+        96
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetBody",
+      "name": "SheetBody",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "cc5a3800d5c3cf7cb1b8e0abb2c162319e6cbc37053674a4ff03f3b3a63a908d",
+      "lineRange": [
+        96,
+        106
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetFooter",
+      "name": "SheetFooter",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "6bc7097f5b21aa3712461bfe8b9011bbee3e3b1ac554098b1baee2bea37715bc",
+      "lineRange": [
+        106,
+        116
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetTitle",
+      "name": "SheetTitle",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "e6223ca60d45eaf4637d0ff51f4ca77d02560199deadbef771ea1913edd814b8",
+      "lineRange": [
+        116,
+        129
+      ]
+    },
+    {
+      "id": "src/server/viewer/components/ui/sheet.tsx:SheetDescription",
+      "name": "SheetDescription",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/ui/sheet.tsx",
+      "isAsync": false,
+      "hash": "e0a492ab1dd97e81307a46f89053b7efbeb6fd856de8f9fece683ac34722b71e",
+      "lineRange": [
+        129,
+        142
       ]
     },
     {
@@ -2009,123 +2045,19 @@
       "order": 0
     },
     {
+      "id": "src/server/viewer/components/DocPanel.tsx:DocPanel->src/server/viewer/components/DocPanel.tsx:docPathToUrl",
+      "source": "src/server/viewer/components/DocPanel.tsx:DocPanel",
+      "target": "src/server/viewer/components/DocPanel.tsx:docPathToUrl",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 1
+    },
+    {
       "id": "src/server/viewer/components/FlowGraph.tsx:FlowGraph->src/server/viewer/components/FlowGraph.tsx:layoutGraph",
       "source": "src/server/viewer/components/FlowGraph.tsx:FlowGraph",
       "target": "src/server/viewer/components/FlowGraph.tsx:layoutGraph",
       "type": "direct-call",
       "isAsync": true,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerOverlay->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerOverlay",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerContent->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerContent",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerHeader->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerHeader",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerBody->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerBody",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerFooter->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerFooter",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerTitle->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerTitle",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/drawer.tsx:DrawerDescription->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/drawer.tsx:DrawerDescription",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetOverlay->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetOverlay",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetContent->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetContent",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetHeader->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetHeader",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetBody->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetBody",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetFooter->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetFooter",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetTitle->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetTitle",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
-      "order": 0
-    },
-    {
-      "id": "src/server/viewer/components/ui/sheet.tsx:SheetDescription->src/server/viewer/lib/utils.ts:cn",
-      "source": "src/server/viewer/components/ui/sheet.tsx:SheetDescription",
-      "target": "src/server/viewer/lib/utils.ts:cn",
-      "type": "direct-call",
-      "isAsync": false,
       "order": 0
     }
   ]
