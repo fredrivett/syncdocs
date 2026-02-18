@@ -29,6 +29,10 @@ function nodeToDocPath(node: GraphNode): string {
   return `${withoutExt}/${node.name}.md`;
 }
 
+function docPathToUrl(docPath: string): string {
+  return `/docs/${docPath.replace(/^\/?src\//, '').replace(/\.md$/, '')}`;
+}
+
 export function DocPanel({ node, onClose }: DocPanelProps) {
   const [doc, setDoc] = useState<DocResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -84,7 +88,7 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
             <div className="flex items-center gap-1">
               {doc && (
                 <a
-                  href={`/docs#/doc/${encodeURIComponent(docPath)}`}
+                  href={docPathToUrl(docPath)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
@@ -156,7 +160,7 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
         {doc && (
           <SheetOrDrawerFooter>
             <a
-              href={`/docs#/doc/${encodeURIComponent(docPath)}`}
+              href={docPathToUrl(docPath)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"

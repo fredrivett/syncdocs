@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, watch } from 'node:fs';
 import { createServer } from 'node:http';
 import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -124,7 +124,8 @@ export function generateDependencyGraph(entry: SymbolEntry, index: SymbolIndex):
     const targetId = safeId(name);
     lines.push(`    ${targetId}[${name}]`);
     lines.push(`    ${currentId} --> ${targetId}`);
-    lines.push(`    click ${targetId} href "/docs#/doc/${encodeURIComponent(target.docPath)}"`);
+    const urlPath = '/docs/' + target.docPath.replace(/^\/?src\//, '').replace(/\.md$/, '');
+    lines.push(`    click ${targetId} href "${urlPath}"`);
   }
 
   return lines.join('\n');
@@ -154,9 +155,6 @@ function buildIndexResponse(index: SymbolIndex) {
 }
 
 function buildDocResponse(docPath: string, index: SymbolIndex, outputDir: string) {
-  const entry = index.entries.get(docPath);
-  if (!entry) return null;
-
   const absPath = resolve(process.cwd(), outputDir, docPath);
   let content: string;
   try {
@@ -168,22 +166,34 @@ function buildDocResponse(docPath: string, index: SymbolIndex, outputDir: string
   // Strip frontmatter for display
   const markdown = content.replace(/^---[\s\S]*?---\s*/, '');
 
-  const dependencyGraph = generateDependencyGraph(entry, index);
+  const entry = index.entries.get(docPath);
 
+  // If entry exists in index, include rich metadata
+  if (entry) {
+    const dependencyGraph = generateDependencyGraph(entry, index);
+    return {
+      name: entry.name,
+      sourcePath: entry.sourcePath,
+      syncdocsVersion: entry.syncdocsVersion,
+      generated: entry.generated,
+      markdown,
+      dependencyGraph,
+      related: entry.related
+        .map((name) => {
+          const targets = index.byName.get(name);
+          if (!targets || targets.length === 0) return { name, docPath: null };
+          return { name, docPath: targets[0].docPath };
+        })
+        .filter((r) => r.docPath),
+    };
+  }
+
+  // Fallback: file exists on disk but index is stale — return basic response
+  const nameMatch = content.match(/^#\s+(.+)/m);
   return {
-    name: entry.name,
-    sourcePath: entry.sourcePath,
-    syncdocsVersion: entry.syncdocsVersion,
-    generated: entry.generated,
+    name: nameMatch?.[1] ?? docPath.split('/').pop()?.replace('.md', '') ?? '',
+    sourcePath: '',
     markdown,
-    dependencyGraph,
-    related: entry.related
-      .map((name) => {
-        const targets = index.byName.get(name);
-        if (!targets || targets.length === 0) return { name, docPath: null };
-        return { name, docPath: targets[0].docPath };
-      })
-      .filter((r) => r.docPath),
   };
 }
 
@@ -207,9 +217,25 @@ function serveStaticFile(filePath: string, res: import('node:http').ServerRespon
 }
 
 export async function startServer(outputDir: string, port: number) {
-  const index = buildSymbolIndex(outputDir);
+  let index = buildSymbolIndex(outputDir);
   const template = getTemplate();
   const graphStore = new GraphStore(outputDir);
+
+  // Watch output directory for changes and rebuild index
+  const absOutputDir = resolve(process.cwd(), outputDir);
+  let rebuildTimer: ReturnType<typeof setTimeout> | null = null;
+  try {
+    watch(absOutputDir, { recursive: true }, (_event, filename) => {
+      if (!filename?.endsWith('.md')) return;
+      // Debounce: sync writes many files at once
+      if (rebuildTimer) clearTimeout(rebuildTimer);
+      rebuildTimer = setTimeout(() => {
+        index = buildSymbolIndex(outputDir);
+      }, 500);
+    });
+  } catch {
+    // Directory may not exist yet — index will still work via disk fallback
+  }
 
   // Resolve viewer-dist directory (relative to this file's location in dist/)
   const __filename = fileURLToPath(import.meta.url);
@@ -219,8 +245,8 @@ export async function startServer(outputDir: string, port: number) {
   const server = createServer((req, res) => {
     const url = new URL(req.url ?? '/', `http://localhost:${port}`);
 
-    // Serve old docs template at /docs
-    if (url.pathname === '/docs' || url.pathname === '/docs/') {
+    // Serve docs template at /docs and /docs/*
+    if (url.pathname === '/docs' || url.pathname.startsWith('/docs/')) {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(template);
       return;
