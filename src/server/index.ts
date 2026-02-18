@@ -317,9 +317,26 @@ export async function startServer(outputDir: string, port: number) {
     res.end('Not found');
   });
 
-  return new Promise<{ server: typeof server; url: string }>((resolve) => {
-    server.listen(port, () => {
-      resolve({ server, url: `http://localhost:${port}` });
-    });
-  });
+  const maxRetries = 10;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const tryPort = port + attempt;
+    try {
+      const result = await new Promise<{ server: typeof server; url: string }>(
+        (resolve, reject) => {
+          server.once('error', reject);
+          server.listen(tryPort, () => {
+            server.removeListener('error', reject);
+            resolve({ server, url: `http://localhost:${tryPort}` });
+          });
+        },
+      );
+      return result;
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'code' in err && err.code === 'EADDRINUSE') {
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error(`No available port found (tried ${port}-${port + maxRetries - 1})`);
 }
