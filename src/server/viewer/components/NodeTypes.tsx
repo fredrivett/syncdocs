@@ -103,10 +103,11 @@ function EntryPointNode({ data }: NodeProps) {
   const route = d.metadata?.route;
   const eventTrigger = d.metadata?.eventTrigger;
   const taskId = d.metadata?.taskId;
+  const isDashedBorder = d.isAsync;
 
   return (
     <div
-      className={`border-2 ${config.border} rounded-xl px-3.5 py-2.5 min-w-[160px] transition-all duration-200 ${
+      className={`border-2 ${isDashedBorder ? 'border-dashed' : ''} ${config.border} rounded-xl px-3.5 py-2.5 min-w-[160px] transition-all duration-200 ${
         d.highlighted ? `${config.bg} ring-2 ${config.ring} shadow-md` : 'bg-white shadow'
       } ${dimClass(d)}`}
     >
@@ -136,7 +137,7 @@ function ComponentNode({ data }: NodeProps) {
 
   return (
     <div
-      className={`border-[1.5px] rounded-[10px] px-3 py-2 min-w-[140px] transition-all duration-200 ${
+      className={`border-[1.5px] rounded-[10px] px-3 py-2 min-w-[140px] transition-all duration-200 ${d.isAsync ? 'border-dashed' : ''} ${
         d.highlighted
           ? 'border-orange-600 bg-orange-50 ring-2 ring-orange-500/25 shadow'
           : 'border-orange-200 bg-white shadow-sm'
@@ -159,7 +160,7 @@ function HookNode({ data }: NodeProps) {
 
   return (
     <div
-      className={`border-[1.5px] rounded-[10px] px-3 py-2 min-w-[140px] transition-all duration-200 ${
+      className={`border-[1.5px] rounded-[10px] px-3 py-2 min-w-[140px] transition-all duration-200 ${d.isAsync ? 'border-dashed' : ''} ${
         d.highlighted
           ? 'border-lime-600 bg-lime-50 ring-2 ring-lime-500/25 shadow'
           : 'border-lime-200 bg-white shadow-sm'
@@ -182,7 +183,7 @@ function FunctionNode({ data }: NodeProps) {
 
   return (
     <div
-      className={`border rounded-lg px-3 py-2 min-w-[120px] transition-all duration-200 ${
+      className={`border rounded-lg px-3 py-2 min-w-[120px] transition-all duration-200 ${d.isAsync ? 'border-dashed' : ''} ${
         d.highlighted
           ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/25 shadow'
           : 'border-gray-200 bg-white shadow-sm'

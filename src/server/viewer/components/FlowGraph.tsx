@@ -25,7 +25,7 @@ const elk = new ELK();
 
 const edgeStyleByType: Record<string, React.CSSProperties> = {
   'direct-call': { stroke: '#6b7280' },
-  'async-dispatch': { stroke: '#ec4899', strokeDasharray: '3 6' },
+  'async-dispatch': { stroke: '#ec4899' },
   'event-emit': { stroke: '#ec4899', strokeDasharray: '4 4' },
   'http-request': { stroke: '#f97316', strokeDasharray: '8 4' },
   'conditional-call': { stroke: '#f59e0b' },
@@ -92,7 +92,7 @@ function toReactFlowEdges(graphEdges: FlowGraphData['edges']): Edge[] {
       id: edge.id,
       source: edge.source,
       target: edge.target,
-      animated: edge.isAsync,
+      animated: edge.type === 'async-dispatch' || edge.type === 'event-emit',
       label:
         edge.type === 'direct-call' || edge.type === 'async-dispatch'
           ? undefined
@@ -328,7 +328,7 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
       setNodes(rfNodes);
       setNeedsLayout(true);
     }
-  }, [visibleGraph, setNodes, setEdges, layoutOptions, applyPositionsAndFit]);
+  }, [visibleGraph, setNodes, setEdges, layoutOptions, applyPositionsAndFit, selectedEntry]);
 
   // Pass 2: once nodes are measured, cache sizes and run ELK with real dimensions
   useEffect(() => {
