@@ -40,6 +40,34 @@ function getNodeType(node: GraphNode): string {
   return 'functionNode';
 }
 
+export type NodeCategory = string;
+
+const entryTypeCategoryLabels: Record<string, string> = {
+  'api-route': 'API Routes',
+  page: 'Pages',
+  'inngest-function': 'Inngest Jobs',
+  'trigger-task': 'Trigger Tasks',
+  middleware: 'Middleware',
+  'server-action': 'Server Actions',
+};
+
+const nonEntryCategoryLabels: Record<string, string> = {
+  component: 'Components',
+  hook: 'Hooks',
+  function: 'Functions',
+};
+
+function getNodeCategory(node: GraphNode): NodeCategory {
+  if (node.entryType) return node.entryType;
+  if (node.kind === 'component') return 'component';
+  if (node.kind === 'function' && /^use[A-Z]/.test(node.name)) return 'hook';
+  return 'function';
+}
+
+export function getCategoryLabel(category: NodeCategory): string {
+  return entryTypeCategoryLabels[category] || nonEntryCategoryLabels[category] || category;
+}
+
 function toReactFlowNode(node: GraphNode): Node {
   return {
     id: node.id,
@@ -119,12 +147,75 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
   const [needsLayout, setNeedsLayout] = useState(false);
+  const [enabledTypes, setEnabledTypes] = useState<Set<NodeCategory> | null>(null);
   const { fitView } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
   const visibleGraphRef = useRef<FlowGraphData | null>(null);
   const sizeCache = useRef<SizeCache>(new Map());
 
+  // Shared helper: apply ELK positions to nodes and fit the view
+  const applyPositionsAndFit = useCallback(
+    (positions: Map<string, { x: number; y: number }>, initialNodes?: Node[]) => {
+      if (initialNodes) {
+        // Fast path: set nodes with positions already applied (no prior render)
+        const positioned = initialNodes.map((node) => {
+          const pos = positions.get(node.id);
+          return pos ? { ...node, position: pos } : node;
+        });
+        setNodes(positioned);
+      } else {
+        // Update existing nodes in place
+        setNodes((prev) =>
+          prev.map((node) => {
+            const pos = positions.get(node.id);
+            return pos ? { ...node, position: pos } : node;
+          }),
+        );
+      }
+      requestAnimationFrame(() => {
+        fitView({ padding: 0.15 });
+        requestAnimationFrame(() => {
+          onLayoutReady?.();
+        });
+      });
+    },
+    [setNodes, fitView, onLayoutReady],
+  );
+
   const entryPoints = useMemo(() => graph.nodes.filter((n) => n.entryType), [graph.nodes]);
+
+  // Compute available categories and their counts
+  const availableTypes = useMemo(() => {
+    const counts = new Map<NodeCategory, number>();
+    for (const node of graph.nodes) {
+      const cat = getNodeCategory(node);
+      counts.set(cat, (counts.get(cat) || 0) + 1);
+    }
+    return counts;
+  }, [graph.nodes]);
+
+  const onToggleType = useCallback(
+    (category: NodeCategory) => {
+      setEnabledTypes((prev) => {
+        // If null (all enabled), start with all enabled minus the toggled one
+        if (!prev) {
+          const all = new Set(availableTypes.keys());
+          all.delete(category);
+          return all;
+        }
+        const next = new Set(prev);
+        if (next.has(category)) {
+          next.delete(category);
+        } else {
+          next.add(category);
+        }
+        // If all are enabled, go back to null
+        if (next.size === availableTypes.size) return null;
+        return next;
+      });
+    },
+    [availableTypes],
+  );
 
   // Compute connected nodes: trace callers upward and callees downward separately
   const highlightedIds = useMemo(() => {
@@ -156,28 +247,50 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     return connected;
   }, [selectedEntry, graph.edges]);
 
-  // Apply search filter
+  // Apply type and search filters
   const filteredGraph = useMemo(() => {
-    if (!searchQuery.trim()) return graph;
-    const q = searchQuery.toLowerCase();
-    const matchingIds = new Set(
-      graph.nodes
-        .filter(
-          (n) =>
-            n.name.toLowerCase().includes(q) ||
-            n.filePath.toLowerCase().includes(q) ||
-            n.metadata?.route?.toLowerCase().includes(q) ||
-            n.metadata?.eventTrigger?.toLowerCase().includes(q) ||
-            n.metadata?.taskId?.toLowerCase().includes(q),
-        )
-        .map((n) => n.id),
-    );
-    return {
-      ...graph,
-      nodes: graph.nodes.filter((n) => matchingIds.has(n.id)),
-      edges: graph.edges.filter((e) => matchingIds.has(e.source) && matchingIds.has(e.target)),
-    };
-  }, [graph, searchQuery]);
+    let filtered = graph;
+
+    // Type filter
+    if (enabledTypes) {
+      const typeMatchIds = new Set(
+        filtered.nodes.filter((n) => enabledTypes.has(getNodeCategory(n))).map((n) => n.id),
+      );
+      filtered = {
+        ...filtered,
+        nodes: filtered.nodes.filter((n) => typeMatchIds.has(n.id)),
+        edges: filtered.edges.filter(
+          (e) => typeMatchIds.has(e.source) && typeMatchIds.has(e.target),
+        ),
+      };
+    }
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchingIds = new Set(
+        filtered.nodes
+          .filter(
+            (n) =>
+              n.name.toLowerCase().includes(q) ||
+              n.filePath.toLowerCase().includes(q) ||
+              n.metadata?.route?.toLowerCase().includes(q) ||
+              n.metadata?.eventTrigger?.toLowerCase().includes(q) ||
+              n.metadata?.taskId?.toLowerCase().includes(q),
+          )
+          .map((n) => n.id),
+      );
+      filtered = {
+        ...filtered,
+        nodes: filtered.nodes.filter((n) => matchingIds.has(n.id)),
+        edges: filtered.edges.filter(
+          (e) => matchingIds.has(e.source) && matchingIds.has(e.target),
+        ),
+      };
+    }
+
+    return filtered;
+  }, [graph, searchQuery, enabledTypes]);
 
   // Filter to only highlighted nodes
   const visibleGraph = useMemo(() => {
@@ -201,26 +314,14 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     if (allCached && visibleGraph.nodes.length > 0) {
       // Fast path: compute positions before rendering so nodes never appear at origin
       runElkLayout(rfNodes, visibleGraph.edges, layoutOptions, sizeCache.current).then(
-        (positions) => {
-          const positioned = rfNodes.map((node) => {
-            const pos = positions.get(node.id);
-            return pos ? { ...node, position: pos } : node;
-          });
-          setNodes(positioned);
-          requestAnimationFrame(() => {
-            fitView({ padding: 0.15 });
-            requestAnimationFrame(() => {
-              onLayoutReady?.();
-            });
-          });
-        },
+        (positions) => applyPositionsAndFit(positions, rfNodes),
       );
     } else {
       // Slow path: render at origin so React Flow can measure, then layout in Pass 2
       setNodes(rfNodes);
       setNeedsLayout(true);
     }
-  }, [visibleGraph, setNodes, setEdges, layoutOptions, fitView, onLayoutReady]);
+  }, [visibleGraph, setNodes, setEdges, layoutOptions, applyPositionsAndFit]);
 
   // Pass 2: once nodes are measured, cache sizes and run ELK with real dimensions
   useEffect(() => {
@@ -235,39 +336,17 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     }
 
     const currentGraph = visibleGraphRef.current;
-    runElkLayout(nodes, currentGraph.edges, layoutOptions, sizeCache.current).then((positions) => {
-      setNodes((prev) =>
-        prev.map((node) => {
-          const pos = positions.get(node.id);
-          return pos ? { ...node, position: pos } : node;
-        }),
-      );
-      requestAnimationFrame(() => {
-        fitView({ padding: 0.15 });
-        requestAnimationFrame(() => {
-          onLayoutReady?.();
-        });
-      });
-    });
-  }, [needsLayout, nodesInitialized, nodes, layoutOptions, setNodes, fitView]);
+    runElkLayout(nodes, currentGraph.edges, layoutOptions, sizeCache.current).then(
+      (positions) => applyPositionsAndFit(positions),
+    );
+  }, [needsLayout, nodesInitialized, nodes, layoutOptions, setNodes, fitView, applyPositionsAndFit]);
 
   // Re-layout when layout options change (without re-measuring)
   useEffect(() => {
     if (!visibleGraphRef.current || needsLayout) return;
-    runElkLayout(nodes, visibleGraphRef.current.edges, layoutOptions, sizeCache.current).then((positions) => {
-      setNodes((prev) =>
-        prev.map((node) => {
-          const pos = positions.get(node.id);
-          return pos ? { ...node, position: pos } : node;
-        }),
-      );
-      requestAnimationFrame(() => {
-        fitView({ padding: 0.15 });
-        requestAnimationFrame(() => {
-          onLayoutReady?.();
-        });
-      });
-    });
+    runElkLayout(nodes, visibleGraphRef.current.edges, layoutOptions, sizeCache.current).then(
+      (positions) => applyPositionsAndFit(positions),
+    );
     // Only re-run when layoutOptions change, not on every nodes change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layoutOptions]);
@@ -292,6 +371,9 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
         onSearch={setSearchQuery}
         nodeCount={visibleGraph.nodes.length}
         edgeCount={visibleGraph.edges.length}
+        availableTypes={availableTypes}
+        enabledTypes={enabledTypes}
+        onToggleType={onToggleType}
       />
       <div style={{ flex: 1, position: 'relative' }}>
         <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />

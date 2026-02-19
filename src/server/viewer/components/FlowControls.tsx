@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import type { GraphNode } from '../types';
+import { type NodeCategory, getCategoryLabel } from './FlowGraph';
 
 interface FlowControlsProps {
   entryPoints: GraphNode[];
@@ -9,6 +10,9 @@ interface FlowControlsProps {
   onSearch: (query: string) => void;
   nodeCount: number;
   edgeCount: number;
+  availableTypes: Map<NodeCategory, number>;
+  enabledTypes: Set<NodeCategory> | null;
+  onToggleType: (category: NodeCategory) => void;
 }
 
 export function FlowControls({
@@ -19,6 +23,9 @@ export function FlowControls({
   onSearch,
   nodeCount,
   edgeCount,
+  availableTypes,
+  enabledTypes,
+  onToggleType,
 }: FlowControlsProps) {
   const entryTypeLabels: Record<string, string> = {
     'api-route': 'API',
@@ -64,6 +71,41 @@ export function FlowControls({
       <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 12 }}>
         {nodeCount} nodes, {edgeCount} edges
       </div>
+
+      {availableTypes.size > 0 && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+            Node Types
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {Array.from(availableTypes.entries()).map(([category, count]) => {
+              const checked = !enabledTypes || enabledTypes.has(category);
+              return (
+                <label
+                  key={category}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    fontSize: 12,
+                    color: '#374151',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => onToggleType(category)}
+                    style={{ margin: 0 }}
+                  />
+                  <span>{getCategoryLabel(category)}</span>
+                  <span style={{ color: '#9ca3af', fontSize: 11 }}>({count})</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {entryPoints.length > 0 && (
         <>
