@@ -277,7 +277,6 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
       const graphNode = graph.nodes.find((n) => n.id === node.id);
       if (!graphNode) return;
 
-      setSelectedNode((prev) => (prev?.id === graphNode.id ? null : graphNode));
       setSelectedEntry((prev) => (prev === node.id ? null : node.id));
     },
     [graph.nodes],
