@@ -122,22 +122,37 @@ export function FlowGraph({ graph }: FlowGraphProps) {
 
   const entryPoints = useMemo(() => graph.nodes.filter((n) => n.entryType), [graph.nodes]);
 
-  // Compute reachable nodes from selected entry point
+  // Compute connected nodes: trace callers upward and callees downward separately
+  // so we don't leak into sibling branches
   const highlightedIds = useMemo(() => {
     if (!selectedEntry) return null;
-    const reachable = new Set<string>();
-    const queue = [selectedEntry];
-    while (queue.length > 0) {
-      const current = queue.shift() as string;
-      if (reachable.has(current)) continue;
-      reachable.add(current);
+    const connected = new Set<string>([selectedEntry]);
+
+    // Trace downstream (callees)
+    const downQueue = [selectedEntry];
+    while (downQueue.length > 0) {
+      const current = downQueue.shift() as string;
       for (const edge of graph.edges) {
-        if (edge.source === current && !reachable.has(edge.target)) {
-          queue.push(edge.target);
+        if (edge.source === current && !connected.has(edge.target)) {
+          connected.add(edge.target);
+          downQueue.push(edge.target);
         }
       }
     }
-    return reachable;
+
+    // Trace upstream (callers)
+    const upQueue = [selectedEntry];
+    while (upQueue.length > 0) {
+      const current = upQueue.shift() as string;
+      for (const edge of graph.edges) {
+        if (edge.target === current && !connected.has(edge.source)) {
+          connected.add(edge.source);
+          upQueue.push(edge.source);
+        }
+      }
+    }
+
+    return connected;
   }, [selectedEntry, graph.edges]);
 
   // Apply search filter
@@ -178,10 +193,8 @@ export function FlowGraph({ graph }: FlowGraphProps) {
       // Toggle doc panel for any node
       setSelectedNode((prev) => (prev?.id === graphNode.id ? null : graphNode));
 
-      // Entry points also toggle flow highlighting
-      if (graphNode.entryType) {
-        setSelectedEntry((prev) => (prev === node.id ? null : node.id));
-      }
+      // Toggle flow highlighting for any node
+      setSelectedEntry((prev) => (prev === node.id ? null : node.id));
     },
     [graph.nodes],
   );
