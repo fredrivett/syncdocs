@@ -32,17 +32,12 @@ export function FlowControls({
   return (
     <div
       style={{
-        position: 'absolute',
-        top: 12,
-        left: 12,
-        zIndex: 10,
         background: '#ffffff',
-        borderRadius: 12,
+        borderRight: '1px solid #e5e7eb',
         padding: 16,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        border: '1px solid #e5e7eb',
         width: 280,
-        maxHeight: 'calc(100vh - 24px)',
+        minWidth: 280,
+        height: '100%',
         overflow: 'auto',
       }}
     >
@@ -115,6 +110,8 @@ export function FlowControls({
                     fontSize: 12,
                     textAlign: 'left',
                     transition: 'all 0.15s ease',
+                    overflow: 'hidden',
+                    width: '100%',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -123,7 +120,19 @@ export function FlowControls({
                     )}
                     <span style={{ fontWeight: 500, color: '#1f2937' }}>{ep.name}</span>
                   </div>
-                  {detail && <div style={{ fontSize: 11, color: '#9ca3af' }}>{detail}</div>}
+                  {detail && (
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: '#9ca3af',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {detail}
+                    </div>
+                  )}
                 </button>
               );
             })}

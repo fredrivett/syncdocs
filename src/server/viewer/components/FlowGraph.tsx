@@ -283,7 +283,7 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
   );
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex' }}>
       <FlowControls
         entryPoints={entryPoints}
         selectedEntry={selectedEntry}
@@ -293,8 +293,9 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
         nodeCount={visibleGraph.nodes.length}
         edgeCount={visibleGraph.edges.length}
       />
-      <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
-      <ReactFlow
+      <div style={{ flex: 1, position: 'relative' }}>
+        <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
+        <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -315,8 +316,9 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
           style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
           maskColor="rgba(0,0,0,0.05)"
         />
-      </ReactFlow>
-      <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+        </ReactFlow>
+        <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+      </div>
     </div>
   );
 }
