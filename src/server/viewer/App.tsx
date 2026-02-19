@@ -31,25 +31,11 @@ export default function App() {
 
   if (error) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-          fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-          color: '#ef4444',
-          gap: 8,
-        }}
-      >
-        <div style={{ fontWeight: 600 }}>Error loading graph</div>
-        <div style={{ color: '#6b7280', fontSize: 14 }}>{error}</div>
-        <div style={{ color: '#9ca3af', fontSize: 13, marginTop: 8 }}>
-          Make sure you've run{' '}
-          <code style={{ background: '#f3f4f6', padding: '2px 6px', borderRadius: 4 }}>
-            syncdocs graph
-          </code>{' '}
+      <div className="flex flex-col items-center justify-center h-full font-sans text-red-500 gap-2">
+        <div className="font-semibold">Error loading graph</div>
+        <div className="text-gray-500 text-sm">{error}</div>
+        <div className="text-gray-400 text-[13px] mt-2">
+          Make sure you've run <code className="bg-gray-100 px-1.5 rounded">syncdocs graph</code>{' '}
           first.
         </div>
       </div>
@@ -58,41 +44,20 @@ export default function App() {
 
   if (!loading && (!graph || graph.nodes.length === 0)) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-          fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-          color: '#6b7280',
-          gap: 8,
-        }}
-      >
-        <div style={{ fontWeight: 600, fontSize: 16 }}>No graph data</div>
-        <div style={{ fontSize: 14 }}>
-          Run{' '}
-          <code style={{ background: '#f3f4f6', padding: '2px 6px', borderRadius: 4 }}>
-            syncdocs graph
-          </code>{' '}
-          to build the project call graph.
+      <div className="flex flex-col items-center justify-center h-full font-sans text-gray-500 gap-2">
+        <div className="font-semibold text-base">No graph data</div>
+        <div className="text-sm">
+          Run <code className="bg-gray-100 px-1.5 rounded">syncdocs graph</code> to build the
+          project call graph.
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div className="w-full h-full relative">
       {!layoutReady && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 20,
-            background: '#ffffff',
-          }}
-        >
+        <div className="absolute inset-0 z-20 bg-white">
           <LoadingSpinner />
         </div>
       )}

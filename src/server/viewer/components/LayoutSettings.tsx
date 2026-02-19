@@ -53,22 +53,10 @@ const edgeRoutingOptions = [
   { value: 'SPLINES', label: 'Splines' },
 ];
 
-const selectStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '4px 6px',
-  border: '1px solid #e5e7eb',
-  borderRadius: 4,
-  fontSize: 12,
-  background: '#fff',
-  color: '#1f2937',
-};
+const selectClasses =
+  'w-full px-1.5 py-1 border border-gray-200 rounded text-xs bg-white text-gray-800';
 
-const labelStyle: React.CSSProperties = {
-  fontSize: 11,
-  fontWeight: 500,
-  color: '#6b7280',
-  marginBottom: 2,
-};
+const labelClasses = 'text-[11px] font-medium text-gray-500 mb-0.5';
 
 interface LayoutSettingsProps {
   options: LayoutOptions;
@@ -85,53 +73,27 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
   }
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        zIndex: 10,
-      }}
-    >
+    <div className="absolute top-3 right-3 z-10">
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        style={{
-          background: open ? '#1f2937' : '#ffffff',
-          color: open ? '#ffffff' : '#374151',
-          border: '1px solid #e5e7eb',
-          borderRadius: 8,
-          padding: '6px 12px',
-          fontSize: 12,
-          fontWeight: 600,
-          cursor: 'pointer',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-        }}
+        className={`border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-semibold cursor-pointer shadow-sm ${
+          open ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'
+        }`}
       >
         Layout
       </button>
 
       {open && (
-        <div
-          style={{
-            marginTop: 8,
-            background: '#ffffff',
-            borderRadius: 12,
-            padding: 14,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-            border: '1px solid #e5e7eb',
-            width: 220,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-          }}
-        >
+        <div className="mt-2 bg-white rounded-xl p-3.5 shadow-lg border border-gray-200 w-[220px] flex flex-col gap-2.5">
           <div>
-            <div style={labelStyle}>Algorithm</div>
+            <div className={labelClasses}>Algorithm</div>
             <select
-              style={selectStyle}
+              className={selectClasses}
               value={options['elk.algorithm']}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => update('elk.algorithm', e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                update('elk.algorithm', e.target.value)
+              }
             >
               {algorithms.map((a) => (
                 <option key={a.value} value={a.value}>
@@ -142,11 +104,13 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
           </div>
 
           <div>
-            <div style={labelStyle}>Direction</div>
+            <div className={labelClasses}>Direction</div>
             <select
-              style={selectStyle}
+              className={selectClasses}
               value={options['elk.direction']}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => update('elk.direction', e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                update('elk.direction', e.target.value)
+              }
             >
               {directions.map((d) => (
                 <option key={d.value} value={d.value}>
@@ -157,7 +121,7 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
           </div>
 
           <div>
-            <div style={labelStyle}>Node spacing</div>
+            <div className={labelClasses}>Node spacing</div>
             <input
               type="range"
               min="10"
@@ -166,15 +130,15 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 update('elk.spacing.nodeNode', e.target.value)
               }
-              style={{ width: '100%' }}
+              className="w-full"
             />
-            <div style={{ fontSize: 10, color: '#9ca3af', textAlign: 'right' }}>
+            <div className="text-[10px] text-gray-400 text-right">
               {options['elk.spacing.nodeNode']}px
             </div>
           </div>
 
           <div>
-            <div style={labelStyle}>Layer spacing</div>
+            <div className={labelClasses}>Layer spacing</div>
             <input
               type="range"
               min="20"
@@ -183,9 +147,9 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 update('elk.layered.spacing.nodeNodeBetweenLayers', e.target.value)
               }
-              style={{ width: '100%' }}
+              className="w-full"
             />
-            <div style={{ fontSize: 10, color: '#9ca3af', textAlign: 'right' }}>
+            <div className="text-[10px] text-gray-400 text-right">
               {options['elk.layered.spacing.nodeNodeBetweenLayers']}px
             </div>
           </div>
@@ -193,9 +157,9 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
           {isLayered && (
             <>
               <div>
-                <div style={labelStyle}>Edge routing</div>
+                <div className={labelClasses}>Edge routing</div>
                 <select
-                  style={selectStyle}
+                  className={selectClasses}
                   value={options['elk.layered.edgeRouting']}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     update('elk.layered.edgeRouting', e.target.value)
@@ -210,9 +174,9 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
               </div>
 
               <div>
-                <div style={labelStyle}>Node placement</div>
+                <div className={labelClasses}>Node placement</div>
                 <select
-                  style={selectStyle}
+                  className={selectClasses}
                   value={options['elk.layered.nodePlacement.strategy']}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     update('elk.layered.nodePlacement.strategy', e.target.value)
@@ -227,9 +191,9 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
               </div>
 
               <div>
-                <div style={labelStyle}>Crossing minimization</div>
+                <div className={labelClasses}>Crossing minimization</div>
                 <select
-                  style={selectStyle}
+                  className={selectClasses}
                   value={options['elk.layered.crossingMinimization.strategy']}
                   onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                     update('elk.layered.crossingMinimization.strategy', e.target.value)
@@ -248,16 +212,7 @@ export function LayoutSettings({ options, onChange }: LayoutSettingsProps) {
           <button
             type="button"
             onClick={() => onChange({ ...defaultLayoutOptions })}
-            style={{
-              padding: '4px 8px',
-              border: '1px solid #e5e7eb',
-              borderRadius: 4,
-              background: '#f9fafb',
-              fontSize: 11,
-              color: '#6b7280',
-              cursor: 'pointer',
-              marginTop: 2,
-            }}
+            className="px-2 py-1 border border-gray-200 rounded bg-gray-50 text-[11px] text-gray-500 cursor-pointer mt-0.5"
           >
             Reset defaults
           </button>

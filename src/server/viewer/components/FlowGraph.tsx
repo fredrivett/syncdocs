@@ -18,7 +18,7 @@ import '@xyflow/react/dist/style.css';
 import type { FlowGraph as FlowGraphData, GraphNode } from '../types';
 import { DocPanel } from './DocPanel';
 import { FlowControls } from './FlowControls';
-import { type LayoutOptions, LayoutSettings, defaultLayoutOptions } from './LayoutSettings';
+import { defaultLayoutOptions, type LayoutOptions, LayoutSettings } from './LayoutSettings';
 import { nodeTypes } from './NodeTypes';
 
 const elk = new ELK();
@@ -283,9 +283,7 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
       filtered = {
         ...filtered,
         nodes: filtered.nodes.filter((n) => matchingIds.has(n.id)),
-        edges: filtered.edges.filter(
-          (e) => matchingIds.has(e.source) && matchingIds.has(e.target),
-        ),
+        edges: filtered.edges.filter((e) => matchingIds.has(e.source) && matchingIds.has(e.target)),
       };
     }
 
@@ -331,24 +329,26 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     // Cache measured sizes for future fast-path layouts
     for (const node of nodes) {
       if (node.measured?.width && node.measured?.height) {
-        sizeCache.current.set(node.id, { width: node.measured.width, height: node.measured.height });
+        sizeCache.current.set(node.id, {
+          width: node.measured.width,
+          height: node.measured.height,
+        });
       }
     }
 
     const currentGraph = visibleGraphRef.current;
-    runElkLayout(nodes, currentGraph.edges, layoutOptions, sizeCache.current).then(
-      (positions) => applyPositionsAndFit(positions),
+    runElkLayout(nodes, currentGraph.edges, layoutOptions, sizeCache.current).then((positions) =>
+      applyPositionsAndFit(positions),
     );
-  }, [needsLayout, nodesInitialized, nodes, layoutOptions, setNodes, fitView, applyPositionsAndFit]);
+  }, [needsLayout, nodesInitialized, nodes, layoutOptions, applyPositionsAndFit]);
 
   // Re-layout when layout options change (without re-measuring)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only re-run on layoutOptions change
   useEffect(() => {
     if (!visibleGraphRef.current || needsLayout) return;
     runElkLayout(nodes, visibleGraphRef.current.edges, layoutOptions, sizeCache.current).then(
       (positions) => applyPositionsAndFit(positions),
     );
-    // Only re-run when layoutOptions change, not on every nodes change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layoutOptions]);
 
   const onNodeClick = useCallback(
@@ -362,7 +362,7 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
   );
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex' }}>
+    <div className="w-full h-full flex">
       <FlowControls
         entryPoints={entryPoints}
         selectedEntry={selectedEntry}
@@ -377,29 +377,29 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
         onSoloType={(category) => setEnabledTypes(new Set([category]))}
         onResetTypes={() => setEnabledTypes(null)}
       />
-      <div style={{ flex: 1, position: 'relative' }}>
+      <div className="flex-1 relative">
         <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
         <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onNodeClick={onNodeClick}
-        nodeTypes={nodeTypes}
-        fitView
-        minZoom={0.1}
-        maxZoom={2}
-        defaultEdgeOptions={{
-          type: 'smoothstep',
-        }}
-      >
-        <Background color="#f3f4f6" gap={20} />
-        <Controls position="bottom-right" />
-        <MiniMap
-          position="bottom-right"
-          style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
-          maskColor="rgba(0,0,0,0.05)"
-        />
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          fitView
+          minZoom={0.1}
+          maxZoom={2}
+          defaultEdgeOptions={{
+            type: 'smoothstep',
+          }}
+        >
+          <Background color="#f3f4f6" gap={20} />
+          <Controls position="bottom-right" />
+          <MiniMap
+            position="bottom-right"
+            style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
+            maskColor="rgba(0,0,0,0.05)"
+          />
         </ReactFlow>
         <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
       </div>
