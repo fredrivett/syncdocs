@@ -16,45 +16,47 @@ interface NodeData {
   highlighted?: boolean;
 }
 
-const entryTypeConfig: Record<string, { border: string; bg: string; ring: string; handle: string }> =
-  {
-    'api-route': {
-      border: 'border-blue-500',
-      bg: 'bg-blue-50',
-      ring: 'ring-blue-500/25',
-      handle: '#3b82f6',
-    },
-    page: {
-      border: 'border-violet-500',
-      bg: 'bg-violet-50',
-      ring: 'ring-violet-500/25',
-      handle: '#8b5cf6',
-    },
-    'inngest-function': {
-      border: 'border-pink-500',
-      bg: 'bg-pink-50',
-      ring: 'ring-pink-500/25',
-      handle: '#ec4899',
-    },
-    'trigger-task': {
-      border: 'border-pink-500',
-      bg: 'bg-pink-50',
-      ring: 'ring-pink-500/25',
-      handle: '#ec4899',
-    },
-    middleware: {
-      border: 'border-cyan-500',
-      bg: 'bg-cyan-50',
-      ring: 'ring-cyan-500/25',
-      handle: '#06b6d4',
-    },
-    'server-action': {
-      border: 'border-emerald-500',
-      bg: 'bg-emerald-50',
-      ring: 'ring-emerald-500/25',
-      handle: '#10b981',
-    },
-  };
+const entryTypeConfig: Record<
+  string,
+  { border: string; bg: string; ring: string; handle: string }
+> = {
+  'api-route': {
+    border: 'border-blue-500',
+    bg: 'bg-blue-50',
+    ring: 'ring-blue-500/25',
+    handle: '#3b82f6',
+  },
+  page: {
+    border: 'border-violet-500',
+    bg: 'bg-violet-50',
+    ring: 'ring-violet-500/25',
+    handle: '#8b5cf6',
+  },
+  'inngest-function': {
+    border: 'border-pink-500',
+    bg: 'bg-pink-50',
+    ring: 'ring-pink-500/25',
+    handle: '#ec4899',
+  },
+  'trigger-task': {
+    border: 'border-pink-500',
+    bg: 'bg-pink-50',
+    ring: 'ring-pink-500/25',
+    handle: '#ec4899',
+  },
+  middleware: {
+    border: 'border-cyan-500',
+    bg: 'bg-cyan-50',
+    ring: 'ring-cyan-500/25',
+    handle: '#06b6d4',
+  },
+  'server-action': {
+    border: 'border-emerald-500',
+    bg: 'bg-emerald-50',
+    ring: 'ring-emerald-500/25',
+    handle: '#10b981',
+  },
+};
 
 const entryTypeBadgeVariant: Record<string, BadgeVariant> = {
   'api-route': 'api-route',
@@ -88,11 +90,9 @@ const defaultConfig = {
 
 function EntryPointNode({ data }: NodeProps) {
   const d = data as unknown as NodeData;
-  const config = d.entryType ? (entryTypeConfig[d.entryType] || defaultConfig) : defaultConfig;
-  const badgeVariant = d.entryType
-    ? (entryTypeBadgeVariant[d.entryType] || 'default')
-    : 'default';
-  const typeLabel = d.entryType ? (entryTypeLabels[d.entryType] || d.entryType) : '';
+  const config = d.entryType ? entryTypeConfig[d.entryType] || defaultConfig : defaultConfig;
+  const badgeVariant = d.entryType ? entryTypeBadgeVariant[d.entryType] || 'default' : 'default';
+  const typeLabel = d.entryType ? entryTypeLabels[d.entryType] || d.entryType : '';
   const impl = d.entryType ? entryTypeImpl[d.entryType] : undefined;
   const httpMethod = d.metadata?.httpMethod;
   const route = d.metadata?.route;
@@ -102,9 +102,7 @@ function EntryPointNode({ data }: NodeProps) {
   return (
     <div
       className={`border-2 ${config.border} rounded-xl px-3.5 py-2.5 min-w-[160px] transition-all duration-200 ${
-        d.highlighted
-          ? `${config.bg} ring-2 ${config.ring} shadow-md`
-          : 'bg-white shadow'
+        d.highlighted ? `${config.bg} ring-2 ${config.ring} shadow-md` : 'bg-white shadow'
       }`}
     >
       <Handle type="target" position={Position.Top} style={{ background: config.handle }} />

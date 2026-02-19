@@ -43,8 +43,8 @@ scope:
 
     const config = loadConfig('/project');
 
-    expect(config!.scope.include).toEqual(['src/**/*.ts']);
-    expect(config!.scope.exclude).toEqual(['**/*.test.*']);
+    expect(config?.scope.include).toEqual(['src/**/*.ts']);
+    expect(config?.scope.exclude).toEqual(['**/*.test.*']);
   });
 
   it('should strip single quotes from values', () => {
@@ -59,8 +59,8 @@ scope:
 
     const config = loadConfig('/project');
 
-    expect(config!.scope.include).toEqual(['src/**/*.ts']);
-    expect(config!.scope.exclude).toEqual(['**/*.test.*']);
+    expect(config?.scope.include).toEqual(['src/**/*.ts']);
+    expect(config?.scope.exclude).toEqual(['**/*.test.*']);
   });
 
   it('should strip quotes from dir value', () => {
@@ -73,7 +73,7 @@ scope:
 
     const config = loadConfig('/project');
 
-    expect(config!.outputDir).toBe('docs');
+    expect(config?.outputDir).toBe('docs');
   });
 
   it('should return null when config file does not exist', () => {
