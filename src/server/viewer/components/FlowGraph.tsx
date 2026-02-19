@@ -5,8 +5,10 @@ import {
   MiniMap,
   type Node,
   ReactFlow,
+  ReactFlowProvider,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from '@xyflow/react';
 import ELK, { type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import type React from 'react';
@@ -30,11 +32,7 @@ const edgeStyleByType: Record<string, React.CSSProperties> = {
   'middleware-chain': { stroke: '#06b6d4', strokeDasharray: '4 2' },
 };
 
-async function layoutGraph(
-  graphData: FlowGraphData,
-  highlightedIds: Set<string> | null,
-  layoutOptions: LayoutOptions,
-) {
+async function layoutGraph(graphData: FlowGraphData, layoutOptions: LayoutOptions) {
   const elkGraph: ElkNode = {
     id: 'root',
     layoutOptions: { ...layoutOptions },
@@ -61,7 +59,6 @@ async function layoutGraph(
     .map((elkNode) => {
       const graphNode = nodeMap.get(elkNode.id);
       if (!graphNode) return null;
-      const isHighlighted = highlightedIds ? highlightedIds.has(graphNode.id) : false;
 
       return {
         id: graphNode.id,
@@ -80,18 +77,14 @@ async function layoutGraph(
           isAsync: graphNode.isAsync,
           entryType: graphNode.entryType,
           metadata: graphNode.metadata,
-          highlighted: isHighlighted,
+          highlighted: true,
         },
-        hidden: highlightedIds ? !highlightedIds.has(graphNode.id) : false,
       };
     })
     .filter((n): n is Node => n !== null);
 
   const edges: Edge[] = graphData.edges.map((edge) => {
     const style = edgeStyleByType[edge.type] || { stroke: '#9ca3af' };
-    const hidden = highlightedIds
-      ? !highlightedIds.has(edge.source) || !highlightedIds.has(edge.target)
-      : false;
 
     return {
       id: edge.id,
@@ -100,7 +93,6 @@ async function layoutGraph(
       animated: edge.isAsync,
       label: edge.label || (edge.type !== 'direct-call' ? edge.type : undefined),
       style,
-      hidden,
       labelStyle: { fontSize: 10, fill: '#6b7280' },
     };
   });
@@ -112,13 +104,14 @@ interface FlowGraphProps {
   graph: FlowGraphData;
 }
 
-export function FlowGraph({ graph }: FlowGraphProps) {
+function FlowGraphInner({ graph }: FlowGraphProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
+  const { fitView } = useReactFlow();
 
   const entryPoints = useMemo(() => graph.nodes.filter((n) => n.entryType), [graph.nodes]);
 
@@ -178,12 +171,28 @@ export function FlowGraph({ graph }: FlowGraphProps) {
     };
   }, [graph, searchQuery]);
 
+  // Filter to only highlighted nodes for layout
+  const visibleGraph = useMemo(() => {
+    if (!highlightedIds) return filteredGraph;
+    return {
+      ...filteredGraph,
+      nodes: filteredGraph.nodes.filter((n) => highlightedIds.has(n.id)),
+      edges: filteredGraph.edges.filter(
+        (e) => highlightedIds.has(e.source) && highlightedIds.has(e.target),
+      ),
+    };
+  }, [filteredGraph, highlightedIds]);
+
   useEffect(() => {
-    layoutGraph(filteredGraph, highlightedIds, layoutOptions).then(({ nodes: n, edges: e }) => {
+    layoutGraph(visibleGraph, layoutOptions).then(({ nodes: n, edges: e }) => {
       setNodes(n);
       setEdges(e);
+      // Wait for React to render new nodes, then fit view
+      requestAnimationFrame(() => {
+        fitView({ padding: 0.15, duration: 200 });
+      });
     });
-  }, [filteredGraph, highlightedIds, layoutOptions, setNodes, setEdges]);
+  }, [visibleGraph, layoutOptions, setNodes, setEdges, fitView]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -207,8 +216,8 @@ export function FlowGraph({ graph }: FlowGraphProps) {
         onSelectEntry={setSelectedEntry}
         searchQuery={searchQuery}
         onSearch={setSearchQuery}
-        nodeCount={filteredGraph.nodes.length}
-        edgeCount={filteredGraph.edges.length}
+        nodeCount={visibleGraph.nodes.length}
+        edgeCount={visibleGraph.edges.length}
       />
       <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
       <ReactFlow
@@ -235,5 +244,13 @@ export function FlowGraph({ graph }: FlowGraphProps) {
       </ReactFlow>
       <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
     </div>
+  );
+}
+
+export function FlowGraph({ graph }: FlowGraphProps) {
+  return (
+    <ReactFlowProvider>
+      <FlowGraphInner graph={graph} />
+    </ReactFlowProvider>
   );
 }
