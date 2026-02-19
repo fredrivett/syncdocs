@@ -15,6 +15,7 @@ import '@xyflow/react/dist/style.css';
 import type { FlowGraph as FlowGraphData, GraphNode } from '../types';
 import { DocPanel } from './DocPanel';
 import { FlowControls } from './FlowControls';
+import { type LayoutOptions, LayoutSettings, defaultLayoutOptions } from './LayoutSettings';
 import { nodeTypes } from './NodeTypes';
 
 const elk = new ELK();
@@ -29,16 +30,14 @@ const edgeStyleByType: Record<string, React.CSSProperties> = {
   'middleware-chain': { stroke: '#06b6d4', strokeDasharray: '4 2' },
 };
 
-async function layoutGraph(graphData: FlowGraphData, highlightedIds: Set<string> | null) {
+async function layoutGraph(
+  graphData: FlowGraphData,
+  highlightedIds: Set<string> | null,
+  layoutOptions: LayoutOptions,
+) {
   const elkGraph: ElkNode = {
     id: 'root',
-    layoutOptions: {
-      'elk.algorithm': 'layered',
-      'elk.direction': 'DOWN',
-      'elk.spacing.nodeNode': '40',
-      'elk.layered.spacing.nodeNodeBetweenLayers': '60',
-      'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
-    },
+    layoutOptions: { ...layoutOptions },
     children: graphData.nodes.map((node) => {
       const isComponent = node.kind === 'component';
       const isHook = node.kind === 'function' && /^use[A-Z]/.test(node.name);
@@ -119,6 +118,7 @@ export function FlowGraph({ graph }: FlowGraphProps) {
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
 
   const entryPoints = useMemo(() => graph.nodes.filter((n) => n.entryType), [graph.nodes]);
 
@@ -179,11 +179,11 @@ export function FlowGraph({ graph }: FlowGraphProps) {
   }, [graph, searchQuery]);
 
   useEffect(() => {
-    layoutGraph(filteredGraph, highlightedIds).then(({ nodes: n, edges: e }) => {
+    layoutGraph(filteredGraph, highlightedIds, layoutOptions).then(({ nodes: n, edges: e }) => {
       setNodes(n);
       setEdges(e);
     });
-  }, [filteredGraph, highlightedIds, setNodes, setEdges]);
+  }, [filteredGraph, highlightedIds, layoutOptions, setNodes, setEdges]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -210,6 +210,7 @@ export function FlowGraph({ graph }: FlowGraphProps) {
         nodeCount={filteredGraph.nodes.length}
         edgeCount={filteredGraph.edges.length}
       />
+      <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
       <ReactFlow
         nodes={nodes}
         edges={edges}
