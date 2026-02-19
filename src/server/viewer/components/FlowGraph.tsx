@@ -214,7 +214,7 @@ export function FlowGraph({ graph }: FlowGraphProps) {
         <Background color="#f3f4f6" gap={20} />
         <Controls position="bottom-right" />
         <MiniMap
-          position="bottom-left"
+          position="bottom-right"
           style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
           maskColor="rgba(0,0,0,0.05)"
         />
