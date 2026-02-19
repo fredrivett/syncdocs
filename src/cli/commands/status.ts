@@ -73,7 +73,7 @@ export function registerStatusCommand(cli: CAC) {
           }
           lines.push('');
           lines.push(
-            '💡 Generate docs with: syncdocs generate <file> or syncdocs generate <file>:<symbol>',
+            '💡 Generate docs with: syncdocs sync <file> or syncdocs sync <file>:<symbol>',
           );
 
           p.log.warn('Undocumented symbols:');
