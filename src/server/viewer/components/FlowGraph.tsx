@@ -1,5 +1,6 @@
 import {
   Background,
+  BackgroundVariant,
   Controls,
   type Edge,
   MiniMap,
@@ -15,6 +16,8 @@ import ELK, { type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import '@xyflow/react/dist/style.css';
+
+import { GRID_SIZE, snapCeil } from '../grid';
 import type { FlowGraph as FlowGraphData, GraphNode } from '../types';
 import { DocPanel } from './DocPanel';
 import { FlowControls } from './FlowControls';
@@ -118,8 +121,8 @@ async function runElkLayout(
       const cached = sizeCache?.get(node.id);
       return {
         id: node.id,
-        width: cached?.width || node.measured?.width || 150,
-        height: cached?.height || node.measured?.height || 60,
+        width: snapCeil(cached?.width || node.measured?.width || 150),
+        height: snapCeil(cached?.height || node.measured?.height || 60),
       };
     }),
     edges: graphEdges.map((edge) => ({
@@ -132,7 +135,10 @@ async function runElkLayout(
   const layout = await elk.layout(elkGraph);
   const positions = new Map<string, { x: number; y: number }>();
   for (const child of layout.children || []) {
-    positions.set(child.id, { x: child.x || 0, y: child.y || 0 });
+    positions.set(child.id, {
+      x: Math.round((child.x || 0) / GRID_SIZE) * GRID_SIZE,
+      y: Math.round((child.y || 0) / GRID_SIZE) * GRID_SIZE,
+    });
   }
   return positions;
 }
@@ -159,21 +165,20 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
   // Shared helper: apply ELK positions to nodes and fit the view
   const applyPositionsAndFit = useCallback(
     (positions: Map<string, { x: number; y: number }>, initialNodes?: Node[]) => {
+      const apply = (node: Node): Node => {
+        const pos = positions.get(node.id);
+        if (!pos) return node;
+        const cached = sizeCache.current.get(node.id);
+        return {
+          ...node,
+          position: pos,
+          ...(cached && { width: cached.width, height: cached.height }),
+        };
+      };
       if (initialNodes) {
-        // Fast path: set nodes with positions already applied (no prior render)
-        const positioned = initialNodes.map((node) => {
-          const pos = positions.get(node.id);
-          return pos ? { ...node, position: pos } : node;
-        });
-        setNodes(positioned);
+        setNodes(initialNodes.map(apply));
       } else {
-        // Update existing nodes in place
-        setNodes((prev) =>
-          prev.map((node) => {
-            const pos = positions.get(node.id);
-            return pos ? { ...node, position: pos } : node;
-          }),
-        );
+        setNodes((prev) => prev.map(apply));
       }
       requestAnimationFrame(() => {
         fitView({ padding: 0.15 });
@@ -339,8 +344,8 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     for (const node of nodes) {
       if (node.measured?.width && node.measured?.height) {
         sizeCache.current.set(node.id, {
-          width: node.measured.width,
-          height: node.measured.height,
+          width: snapCeil(node.measured.width),
+          height: snapCeil(node.measured.height),
         });
       }
     }
@@ -398,11 +403,13 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
           fitView
           minZoom={0.1}
           maxZoom={2}
+          snapToGrid
+          snapGrid={[GRID_SIZE, GRID_SIZE]}
           defaultEdgeOptions={{
             type: 'smoothstep',
           }}
         >
-          <Background color="#f3f4f6" gap={20} />
+          <Background variant={BackgroundVariant.Dots} color="#d1d5db" gap={GRID_SIZE} size={1} />
           <Controls position="bottom-right" />
           <MiniMap
             position="bottom-right"
