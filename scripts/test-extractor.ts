@@ -7,14 +7,16 @@
 import { join } from 'node:path';
 import { TypeScriptExtractor } from '../src/extractor/index.js';
 
+/** Extractor instance used for the test run. */
 const extractor = new TypeScriptExtractor();
 
-// Test on our own init command
+/** Path to the init command file used as the extraction test target. */
 const testFile = join(process.cwd(), 'src/cli/commands/init.ts');
 
 console.log('🔍 Extracting symbols from:', testFile);
 console.log('─'.repeat(60));
 
+/** Extraction result containing all symbols found in the test file. */
 const result = extractor.extractSymbols(testFile);
 
 console.log(`\n✅ Found ${result.symbols.length} symbols:\n`);
@@ -35,6 +37,7 @@ if (result.errors.length > 0) {
 console.log('─'.repeat(60));
 console.log('\n🎯 Extracting specific symbol: registerInitCommand\n');
 
+/** Single-symbol extraction test targeting `registerInitCommand`. */
 const initCommand = extractor.extractSymbol(testFile, 'registerInitCommand');
 if (initCommand) {
   console.log('Name:', initCommand.name);

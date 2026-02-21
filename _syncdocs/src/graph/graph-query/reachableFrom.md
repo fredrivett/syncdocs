@@ -1,6 +1,6 @@
 ---
 title: reachableFrom
-generated: 2026-02-21T14:15:29.899Z
+generated: 2026-02-21T14:17:38.726Z
 graphNode: src/graph/graph-query.ts:reachableFrom
 dependencies:
   - path: src/graph/graph-query.ts

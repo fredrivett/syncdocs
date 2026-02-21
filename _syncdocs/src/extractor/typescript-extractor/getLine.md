@@ -1,6 +1,6 @@
 ---
 title: getLine
-generated: 2026-02-21T14:15:29.898Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:getLine
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # getLine
 
-`const` in `src/extractor/typescript-extractor.ts:109-110`
+`const` in `src/extractor/typescript-extractor.ts:110-111`
 
 **Parameters:**
 

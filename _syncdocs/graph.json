@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-21T14:15:29.889Z",
+  "generatedAt": "2026-02-21T14:17:38.718Z",
   "nodes": [
     {
       "id": "src/checker/doc-parser.ts:DocParser",
@@ -25,8 +25,9 @@
       "hash": "8c337ed31c358621be95b184b893fef41e414805ec9f1659bbd8286b698ce946",
       "lineRange": [
         11,
-        171
+        172
       ],
+      "description": "Detects when generated docs are out of sync with source code by comparing content hashes.",
       "isExported": true
     },
     {
@@ -216,9 +217,10 @@
       "isAsync": false,
       "hash": "757dc0d4b447ef46333d1e0d1fb3cfc667798e7c0988ca4d50e63eaef1f352c2",
       "lineRange": [
-        6,
-        6
+        7,
+        7
       ],
+      "description": "The syncdocs CLI instance, powered by cac.",
       "isExported": false
     },
     {
@@ -229,9 +231,10 @@
       "isAsync": false,
       "hash": "9414a23a483396e472a47f35e0ae9d6d5f6ebd5dcfa3209f117a6fecd3f95fea",
       "lineRange": [
-        25,
-        25
+        26,
+        26
       ],
+      "description": "Parsed CLI arguments and options.",
       "isExported": false
     },
     {
@@ -1149,8 +1152,9 @@
       "hash": "b10a069224789fd0a715bc50512a37abb183f4b87c04fe0f7628b126717dd997",
       "lineRange": [
         18,
-        685
+        686
       ],
+      "description": "Extracts symbols (functions, classes, arrow functions, call expressions) from TypeScript/JavaScript files using the TS Compiler API.",
       "isExported": true
     },
     {
@@ -1161,8 +1165,8 @@
       "isAsync": false,
       "hash": "4ad622a8532a3db11d8b510ec74eb8218bbfecbb3fc271be3956e59a84c8b8d9",
       "lineRange": [
-        32,
-        70
+        33,
+        71
       ],
       "structuredParams": [
         {
@@ -1182,8 +1186,8 @@
       "isAsync": false,
       "hash": "08ec194bd0cdf376521d81485ca43514210279376baeab7ca3d53902d76ab887",
       "lineRange": [
-        106,
-        107
+        107,
+        108
       ],
       "structuredParams": [
         {
@@ -1203,8 +1207,8 @@
       "isAsync": false,
       "hash": "6e49e28b4971399b0e46672aae2ce17e30de9daa575a30ccadf1315f195e986d",
       "lineRange": [
-        109,
-        110
+        110,
+        111
       ],
       "structuredParams": [
         {
@@ -1225,8 +1229,8 @@
       "isAsync": false,
       "hash": "97cfd27155368b252ed1df393e0a2b77bb52422b85b434272b004971f55e1006",
       "lineRange": [
-        112,
-        143
+        113,
+        144
       ],
       "structuredParams": [
         {
@@ -1265,8 +1269,8 @@
       "isAsync": false,
       "hash": "d1d9f1b05417760c37dbf11fe7fc86312e469b67559ee4f4a07353d799a077b5",
       "lineRange": [
-        145,
-        237
+        146,
+        238
       ],
       "structuredParams": [
         {
@@ -1292,8 +1296,8 @@
       "isAsync": false,
       "hash": "43e83465c836469e04dbc8b094837932a3b2fe40471f1f48cd9956c1c08adfc4",
       "lineRange": [
-        392,
-        421
+        393,
+        422
       ],
       "entryType": "inngest-function",
       "structuredParams": [
@@ -1315,8 +1319,9 @@
       "hash": "47d1a080ab1e47ad8f571504413a9c17bb24d5e6808e3d2febe5013515889411",
       "lineRange": [
         15,
-        247
+        248
       ],
+      "description": "Generates static markdown documentation files from graph nodes. No AI involved — all content comes from static analysis.",
       "isExported": true
     },
     {
@@ -4394,7 +4399,7 @@
         {
           "condition": "if (ts.isIfStatement(node.elseStatement))",
           "branch": "then",
-          "branchGroup": "branch:130"
+          "branchGroup": "branch:131"
         }
       ],
       "label": "if (ts.isIfStatement(node.elseStatement))",
@@ -4410,7 +4415,7 @@
         {
           "condition": "if (ts.isIfStatement(node))",
           "branch": "then",
-          "branchGroup": "branch:144"
+          "branchGroup": "branch:145"
         }
       ],
       "label": "if (ts.isIfStatement(node))",
@@ -4450,7 +4455,7 @@
         {
           "condition": "if (ts.isIfStatement(node.elseStatement))",
           "branch": "then",
-          "branchGroup": "branch:130"
+          "branchGroup": "branch:131"
         }
       ],
       "label": "if (ts.isIfStatement(node.elseStatement))",
@@ -4466,7 +4471,7 @@
         {
           "condition": "if (ts.isIfStatement(node))",
           "branch": "then",
-          "branchGroup": "branch:144"
+          "branchGroup": "branch:145"
         }
       ],
       "label": "if (ts.isIfStatement(node))",
@@ -4482,7 +4487,7 @@
         {
           "condition": "if (ts.isIfStatement(node))",
           "branch": "then",
-          "branchGroup": "branch:144"
+          "branchGroup": "branch:145"
         }
       ],
       "label": "if (ts.isIfStatement(node))",
@@ -4498,7 +4503,7 @@
         {
           "condition": "if (ts.isSwitchStatement(node))",
           "branch": "then",
-          "branchGroup": "branch:150"
+          "branchGroup": "branch:151"
         }
       ],
       "label": "if (ts.isSwitchStatement(node))",

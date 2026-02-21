@@ -1,6 +1,6 @@
 ---
 title: getTemplate
-generated: 2026-02-21T14:15:29.902Z
+generated: 2026-02-21T14:17:38.728Z
 graphNode: src/server/template.ts:getTemplate
 dependencies:
   - path: src/server/template.ts

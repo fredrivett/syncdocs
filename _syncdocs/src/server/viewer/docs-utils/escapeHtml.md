@@ -1,6 +1,6 @@
 ---
 title: escapeHtml
-generated: 2026-02-21T14:15:29.907Z
+generated: 2026-02-21T14:17:38.734Z
 graphNode: src/server/viewer/docs-utils.ts:escapeHtml
 dependencies:
   - path: src/server/viewer/docs-utils.ts

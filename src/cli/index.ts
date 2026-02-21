@@ -3,6 +3,7 @@
 import { cac } from 'cac';
 import { version } from '../../package.json';
 
+/** The syncdocs CLI instance, powered by cac. */
 const cli = cac('syncdocs');
 
 // Global options
@@ -21,7 +22,7 @@ registerCheckCommand(cli);
 registerServeCommand(cli);
 registerStatusCommand(cli);
 
-// Parse CLI arguments
+/** Parsed CLI arguments and options. */
 const parsed = cli.parse();
 
 // Show help if no command was matched (e.g. "syncdocs" or "syncdocs help")

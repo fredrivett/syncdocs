@@ -1,6 +1,6 @@
 ---
 title: extractParamDescriptions
-generated: 2026-02-21T14:15:29.897Z
+generated: 2026-02-21T14:17:38.724Z
 graphNode: src/extractor/jsdoc-extractor.ts:extractParamDescriptions
 dependencies:
   - path: src/extractor/jsdoc-extractor.ts

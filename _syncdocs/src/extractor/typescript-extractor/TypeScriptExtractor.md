@@ -1,6 +1,6 @@
 ---
 title: TypeScriptExtractor
-generated: 2026-02-21T14:15:29.898Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:TypeScriptExtractor
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -12,7 +12,9 @@ dependencies:
 
 `exported`
 
-`class` in `src/extractor/typescript-extractor.ts:18-685`
+`class` in `src/extractor/typescript-extractor.ts:18-686`
+
+Extracts symbols (functions, classes, arrow functions, call expressions) from TypeScript/JavaScript files using the TS Compiler API.
 
 **Calls:**
 

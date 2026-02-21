@@ -1,6 +1,6 @@
 ---
 title: extractOverview
-generated: 2026-02-21T14:15:29.901Z
+generated: 2026-02-21T14:17:38.728Z
 graphNode: src/server/index.ts:extractOverview
 dependencies:
   - path: src/server/index.ts

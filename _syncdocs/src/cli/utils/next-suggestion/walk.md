@@ -1,6 +1,6 @@
 ---
 title: walk
-generated: 2026-02-21T14:15:29.896Z
+generated: 2026-02-21T14:17:38.723Z
 graphNode: src/cli/utils/next-suggestion.ts:walk
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

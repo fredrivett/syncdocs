@@ -1,6 +1,6 @@
 ---
 title: extractEventTrigger
-generated: 2026-02-21T14:15:29.901Z
+generated: 2026-02-21T14:17:38.727Z
 graphNode: src/matchers/inngest.ts:extractEventTrigger
 dependencies:
   - path: src/matchers/inngest.ts

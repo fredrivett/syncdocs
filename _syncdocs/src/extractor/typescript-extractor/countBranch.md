@@ -1,6 +1,6 @@
 ---
 title: countBranch
-generated: 2026-02-21T14:15:29.898Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:countBranch
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # countBranch
 
-`const` in `src/extractor/typescript-extractor.ts:106-107`
+`const` in `src/extractor/typescript-extractor.ts:107-108`
 
 **Parameters:**
 

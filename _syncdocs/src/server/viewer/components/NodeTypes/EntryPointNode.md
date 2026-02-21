@@ -1,6 +1,6 @@
 ---
 title: EntryPointNode
-generated: 2026-02-21T14:15:29.904Z
+generated: 2026-02-21T14:17:38.731Z
 graphNode: src/server/viewer/components/NodeTypes.tsx:EntryPointNode
 dependencies:
   - path: src/server/viewer/components/NodeTypes.tsx

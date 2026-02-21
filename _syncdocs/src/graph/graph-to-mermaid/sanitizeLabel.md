@@ -1,6 +1,6 @@
 ---
 title: sanitizeLabel
-generated: 2026-02-21T14:15:29.900Z
+generated: 2026-02-21T14:17:38.727Z
 graphNode: src/graph/graph-to-mermaid.ts:sanitizeLabel
 dependencies:
   - path: src/graph/graph-to-mermaid.ts

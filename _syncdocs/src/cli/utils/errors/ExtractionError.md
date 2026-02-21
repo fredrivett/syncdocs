@@ -1,6 +1,6 @@
 ---
 title: ExtractionError
-generated: 2026-02-21T14:15:29.895Z
+generated: 2026-02-21T14:17:38.722Z
 graphNode: src/cli/utils/errors.ts:ExtractionError
 dependencies:
   - path: src/cli/utils/errors.ts

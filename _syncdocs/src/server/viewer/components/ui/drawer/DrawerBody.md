@@ -1,6 +1,6 @@
 ---
 title: DrawerBody
-generated: 2026-02-21T14:15:29.905Z
+generated: 2026-02-21T14:17:38.732Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerBody
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx

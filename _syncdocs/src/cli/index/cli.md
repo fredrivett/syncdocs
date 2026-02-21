@@ -1,6 +1,6 @@
 ---
 title: cli
-generated: 2026-02-21T14:15:29.894Z
+generated: 2026-02-21T14:17:38.721Z
 graphNode: src/cli/index.ts:cli
 dependencies:
   - path: src/cli/index.ts
@@ -10,4 +10,6 @@ dependencies:
 
 # cli
 
-`const` in `src/cli/index.ts:6-6`
+`const` in `src/cli/index.ts:7-7`
+
+The syncdocs CLI instance, powered by cac.

@@ -17,6 +17,7 @@ import type {
   SymbolInfo,
 } from './types.js';
 
+/** Extracts symbols (functions, classes, arrow functions, call expressions) from TypeScript/JavaScript files using the TS Compiler API. */
 export class TypeScriptExtractor {
   /**
    * Extract all symbols from a TypeScript/JavaScript file

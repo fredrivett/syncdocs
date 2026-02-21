@@ -1,6 +1,6 @@
 ---
 title: StaleChecker
-generated: 2026-02-21T14:15:29.893Z
+generated: 2026-02-21T14:17:38.720Z
 graphNode: src/checker/index.ts:StaleChecker
 dependencies:
   - path: src/checker/index.ts
@@ -12,7 +12,9 @@ dependencies:
 
 `exported`
 
-`class` in `src/checker/index.ts:11-171`
+`class` in `src/checker/index.ts:11-172`
+
+Detects when generated docs are out of sync with source code by comparing content hashes.
 
 **Calls:**
 

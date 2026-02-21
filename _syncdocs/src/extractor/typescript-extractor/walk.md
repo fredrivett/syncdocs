@@ -1,6 +1,6 @@
 ---
 title: walk
-generated: 2026-02-21T14:15:29.899Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:walk
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # walk
 
-`const` in `src/extractor/typescript-extractor.ts:145-237`
+`const` in `src/extractor/typescript-extractor.ts:146-238`
 
 **Parameters:**
 

@@ -1,6 +1,6 @@
 ---
 title: computeNextCandidate
-generated: 2026-02-21T14:15:29.895Z
+generated: 2026-02-21T14:17:38.722Z
 graphNode: src/cli/utils/next-suggestion.ts:computeNextCandidate
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

@@ -14,6 +14,7 @@ export interface StaticDocResult {
   error?: string;
 }
 
+/** Generates static markdown documentation files from graph nodes. No AI involved — all content comes from static analysis. */
 export class StaticDocGenerator {
   private outputDir: string;
 

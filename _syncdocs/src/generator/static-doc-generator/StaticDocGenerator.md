@@ -1,6 +1,6 @@
 ---
 title: StaticDocGenerator
-generated: 2026-02-21T14:15:29.899Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/generator/static-doc-generator.ts:StaticDocGenerator
 dependencies:
   - path: src/generator/static-doc-generator.ts
@@ -12,4 +12,6 @@ dependencies:
 
 `exported`
 
-`class` in `src/generator/static-doc-generator.ts:15-247`
+`class` in `src/generator/static-doc-generator.ts:15-248`
+
+Generates static markdown documentation files from graph nodes. No AI involved — all content comes from static analysis.

@@ -1,6 +1,6 @@
 ---
 title: walkIfElseChain
-generated: 2026-02-21T14:15:29.898Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:walkIfElseChain
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # walkIfElseChain
 
-`const` in `src/extractor/typescript-extractor.ts:112-143`
+`const` in `src/extractor/typescript-extractor.ts:113-144`
 
 **Parameters:**
 

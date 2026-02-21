@@ -1,6 +1,6 @@
 ---
 title: visit
-generated: 2026-02-21T14:15:29.899Z
+generated: 2026-02-21T14:17:38.725Z
 graphNode: src/extractor/typescript-extractor.ts:visit
 dependencies:
   - path: src/extractor/typescript-extractor.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # visit
 
-`const` in `src/extractor/typescript-extractor.ts:392-421`
+`const` in `src/extractor/typescript-extractor.ts:393-422`
 
 **Entry point:** `inngest-function`
 

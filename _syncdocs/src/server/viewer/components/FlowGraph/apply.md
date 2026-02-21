@@ -1,6 +1,6 @@
 ---
 title: apply
-generated: 2026-02-21T14:15:29.904Z
+generated: 2026-02-21T14:17:38.730Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:apply
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx

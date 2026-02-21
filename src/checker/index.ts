@@ -10,6 +10,7 @@ import { ContentHasher } from '../hasher/index.js';
 import { DocParser } from './doc-parser.js';
 import type { CheckResult, StaleDependency, StaleDoc } from './types.js';
 
+/** Detects when generated docs are out of sync with source code by comparing content hashes. */
 export class StaleChecker {
   private extractor: TypeScriptExtractor;
   private hasher: ContentHasher;

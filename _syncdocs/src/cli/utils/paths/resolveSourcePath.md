@@ -1,6 +1,6 @@
 ---
 title: resolveSourcePath
-generated: 2026-02-21T14:15:29.897Z
+generated: 2026-02-21T14:17:38.723Z
 graphNode: src/cli/utils/paths.ts:resolveSourcePath
 dependencies:
   - path: src/cli/utils/paths.ts
