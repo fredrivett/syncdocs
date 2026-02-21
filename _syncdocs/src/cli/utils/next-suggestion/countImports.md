@@ -1,6 +1,6 @@
 ---
 title: countImports
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:countImports
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,13 +12,19 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:344-371`
+`function` in `src/cli/utils/next-suggestion.ts:365-402`
+
+Count how many times each source file is imported by other files.
+
+Parses import/export statements from all source files, resolves relative
+specifiers, and tallies import counts per file. Used to rank documentation
+priority (most-imported files first).
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| sourceFiles | `string[]` | Yes |  |
+| sourceFiles | `string[]` | Yes | List of absolute source file paths |
 
 **Returns:** `Map<string, number>`
 

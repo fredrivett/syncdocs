@@ -1,6 +1,6 @@
 ---
 title: SheetDescription
-generated: 2026-02-21T13:51:58.724Z
+generated: 2026-02-21T14:13:44.235Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetDescription
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx

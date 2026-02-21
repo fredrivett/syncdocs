@@ -1,6 +1,6 @@
 ---
 title: scanProjectAsync
-generated: 2026-02-21T13:51:58.713Z
+generated: 2026-02-21T14:13:44.222Z
 graphNode: src/cli/utils/next-suggestion.ts:scanProjectAsync
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,7 +12,7 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:132-206`
+`function` in `src/cli/utils/next-suggestion.ts:133-207`
 
 Async version of scanProject that yields throughout
 so spinner animations stay smooth.

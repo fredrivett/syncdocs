@@ -1,6 +1,6 @@
 ---
 title: ValidationError
-generated: 2026-02-21T13:51:58.713Z
+generated: 2026-02-21T14:13:44.222Z
 graphNode: src/cli/utils/errors.ts:ValidationError
 dependencies:
   - path: src/cli/utils/errors.ts
@@ -12,4 +12,6 @@ dependencies:
 
 `exported`
 
-`class` in `src/cli/utils/errors.ts:17-24`
+`class` in `src/cli/utils/errors.ts:19-27`
+
+Thrown when input validation fails (e.g. invalid file paths or symbol names).

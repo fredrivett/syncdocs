@@ -1,6 +1,6 @@
 ---
 title: getNodeType
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:getNodeType
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
@@ -10,7 +10,7 @@ dependencies:
 
 # getNodeType
 
-`function` in `src/server/viewer/components/FlowGraph.tsx:37-44`
+`function` in `src/server/viewer/components/FlowGraph.tsx:39-46`
 
 **Parameters:**
 

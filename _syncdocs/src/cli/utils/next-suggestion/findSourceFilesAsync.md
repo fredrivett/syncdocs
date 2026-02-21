@@ -1,6 +1,6 @@
 ---
 title: findSourceFilesAsync
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.222Z
 graphNode: src/cli/utils/next-suggestion.ts:findSourceFilesAsync
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,12 @@ dependencies:
 
 # findSourceFilesAsync
 
-`function` in `src/cli/utils/next-suggestion.ts:206-237`
+`function` in `src/cli/utils/next-suggestion.ts:207-242`
+
+/**
+ * Async version of {@link findSourceFiles}that yields to the event loop
+ * between I/O operations so spinner animations stay smooth.
+ 
 
 **Parameters:**
 

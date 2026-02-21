@@ -1,6 +1,6 @@
 ---
 title: addSymbol
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.228Z
 graphNode: src/server/index.ts:addSymbol
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # addSymbol
 
-`const` in `src/server/index.ts:86-91`
+`const` in `src/server/index.ts:112-117`
 
 **Parameters:**
 

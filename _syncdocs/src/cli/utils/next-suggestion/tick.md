@@ -1,6 +1,6 @@
 ---
 title: tick
-generated: 2026-02-21T13:51:58.713Z
+generated: 2026-02-21T14:13:44.222Z
 graphNode: src/cli/utils/next-suggestion.ts:tick
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # tick
 
-`const` in `src/cli/utils/next-suggestion.ts:132-132`
+`const` in `src/cli/utils/next-suggestion.ts:133-133`
+
+Yield to the event loop so spinner animations stay smooth during CPU-bound work.
 
 **Called by:**
 

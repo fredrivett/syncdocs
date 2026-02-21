@@ -1,6 +1,6 @@
 ---
 title: sanitizeId
-generated: 2026-02-21T13:51:58.718Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-to-mermaid.ts:sanitizeId
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # sanitizeId
 
-`function` in `src/graph/graph-to-mermaid.ts:154-161`
+`function` in `src/graph/graph-to-mermaid.ts:162-169`
 
 Sanitize a node ID for mermaid (replace special characters)
 

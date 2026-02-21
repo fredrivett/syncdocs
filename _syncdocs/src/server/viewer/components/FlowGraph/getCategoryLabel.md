@@ -1,6 +1,6 @@
 ---
 title: getCategoryLabel
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:getCategoryLabel
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
@@ -12,7 +12,7 @@ dependencies:
 
 `exported`
 
-`function` in `src/server/viewer/components/FlowGraph.tsx:68-72`
+`function` in `src/server/viewer/components/FlowGraph.tsx:70-74`
 
 **Parameters:**
 

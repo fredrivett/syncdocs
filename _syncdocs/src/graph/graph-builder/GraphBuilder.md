@@ -1,6 +1,6 @@
 ---
 title: GraphBuilder
-generated: 2026-02-21T13:51:58.717Z
+generated: 2026-02-21T14:13:44.226Z
 graphNode: src/graph/graph-builder.ts:GraphBuilder
 dependencies:
   - path: src/graph/graph-builder.ts

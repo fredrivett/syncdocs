@@ -1,6 +1,6 @@
 ---
 title: edgeArrow
-generated: 2026-02-21T13:51:58.718Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-to-mermaid.ts:edgeArrow
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # edgeArrow
 
-`function` in `src/graph/graph-to-mermaid.ts:139-147`
+`function` in `src/graph/graph-to-mermaid.ts:146-155`
+
+Return the mermaid arrow syntax for a given edge type.
 
 **Parameters:**
 

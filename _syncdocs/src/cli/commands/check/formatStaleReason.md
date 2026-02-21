@@ -1,6 +1,6 @@
 ---
 title: formatStaleReason
-generated: 2026-02-21T13:51:58.711Z
+generated: 2026-02-21T14:13:44.220Z
 graphNode: src/cli/commands/check.ts:formatStaleReason
 dependencies:
   - path: src/cli/commands/check.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # formatStaleReason
 
-`function` in `src/cli/commands/check.ts:84-95`
+`function` in `src/cli/commands/check.ts:91-103`
+
+Map a staleness reason code to a human-readable label.
 
 **Parameters:**
 

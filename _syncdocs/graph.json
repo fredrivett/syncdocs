@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-21T13:51:58.709Z",
+  "generatedAt": "2026-02-21T14:13:44.217Z",
   "nodes": [
     {
       "id": "src/checker/doc-parser.ts:DocParser",
@@ -21,10 +21,10 @@
       "kind": "class",
       "filePath": "src/checker/index.ts",
       "isAsync": false,
-      "hash": "d258520407ab8a8d7aaaf37fac35f6dba1c34bcc8a5de5ef0dd029eb0d94195d",
+      "hash": "8c337ed31c358621be95b184b893fef41e414805ec9f1659bbd8286b698ce946",
       "lineRange": [
         11,
-        170
+        171
       ],
       "isExported": true
     },
@@ -37,8 +37,9 @@
       "hash": "02537eebcd3d17c8111f45f843ca596236ec94c27effc4f52c56042d78459f2b",
       "lineRange": [
         6,
-        84
+        91
       ],
+      "description": "Register the `syncdocs check` CLI command.\n\nScans all generated docs for staleness by comparing source code hashes\nagainst the hashes stored in doc frontmatter. Exits with code 1 if any\nstale docs are found (useful for CI).",
       "structuredParams": [
         {
           "name": "cli",
@@ -57,9 +58,10 @@
       "isAsync": false,
       "hash": "de3ce74b6259adc1023a1f334403eded5a090332760b94e9e21af96e05a3199a",
       "lineRange": [
-        84,
-        95
+        91,
+        103
       ],
+      "description": "Map a staleness reason code to a human-readable label.",
       "structuredParams": [
         {
           "name": "reason",
@@ -79,9 +81,10 @@
       "isAsync": false,
       "hash": "193873a035939aa703afb6b94f8902a31b1a01d3d5d6e3fda779861a12eac62f",
       "lineRange": [
-        95,
-        100
+        103,
+        109
       ],
+      "description": "Convert an absolute path to a path relative to the current working directory.",
       "structuredParams": [
         {
           "name": "absolutePath",
@@ -102,8 +105,9 @@
       "hash": "387d2390ee339b3c4e661c3c2381fbaf2a5d2c82d1e2d963b579665440f6530e",
       "lineRange": [
         15,
-        112
+        118
       ],
+      "description": "Register the `syncdocs init` CLI command.\n\nRuns an interactive setup wizard that prompts for output directory,\ninclude/exclude patterns, and writes a `config.yaml` file.",
       "structuredParams": [
         {
           "name": "cli",
@@ -122,9 +126,10 @@
       "isAsync": false,
       "hash": "f294cb3fefea02587e4010e1cf8f0c2a712bba9223716087c1b40026978be03b",
       "lineRange": [
-        112,
-        131
+        118,
+        138
       ],
+      "description": "Serialize an init config object to a YAML config file string.",
       "structuredParams": [
         {
           "name": "config",
@@ -145,8 +150,9 @@
       "hash": "ba30ecc1878b4e3d1ac4da23d4bd9d4d5ef7d435a28b8d280981210fde5727ed",
       "lineRange": [
         10,
-        58
+        64
       ],
+      "description": "Register the `syncdocs serve` CLI command.\n\nStarts the documentation viewer HTTP server and optionally opens it\nin the default browser.",
       "structuredParams": [
         {
           "name": "cli",
@@ -166,8 +172,9 @@
       "hash": "55a57a5e9170f7f668cc262713770d4cd54cb258e2ad86b2cb2c5b7bf31068b4",
       "lineRange": [
         14,
-        100
+        107
       ],
+      "description": "Register the `syncdocs status` CLI command.\n\nScans the project for documentation coverage and displays statistics\nincluding a coverage bar, undocumented symbols, and a suggestion for\nthe next file to document.",
       "structuredParams": [
         {
           "name": "cli",
@@ -187,8 +194,9 @@
       "hash": "0b4c6589b32724fb59d642e1339d4761873875b8efb2020bdc9fd9ee99b5a731",
       "lineRange": [
         9,
-        121
+        127
       ],
+      "description": "Register the `syncdocs sync` CLI command.\n\nFinds source files, builds the dependency graph, and generates static\nmarkdown documentation for every node. Optionally filters to a target path.",
       "structuredParams": [
         {
           "name": "cli",
@@ -234,15 +242,17 @@
       "hash": "c87da552db5b78d15019bc3acfa6508273e5d6dc95d91e6726a4ef90808bf559",
       "lineRange": [
         10,
-        28
+        36
       ],
+      "description": "Load the syncdocs configuration from `_syncdocs/config.yaml`.\n\nParses the YAML config file to extract the output directory and\ninclude/exclude scope patterns. Returns null if no config file exists.",
       "structuredParams": [
         {
           "name": "cwd",
           "type": "unknown",
           "isOptional": true,
           "isRest": false,
-          "defaultValue": "process.cwd()"
+          "defaultValue": "process.cwd()",
+          "description": "Working directory to resolve the config path from"
         }
       ],
       "returnType": "SyncdocsConfig | null",
@@ -256,8 +266,8 @@
       "isAsync": false,
       "hash": "558bb140bcf6fc293e19e91a39024669ef9145def14e4da1808983b54fc57379",
       "lineRange": [
-        28,
-        54
+        36,
+        62
       ],
       "description": "Parse a YAML list under a given key.\nFinds `key:` on its own line, then collects subsequent `- value` lines.",
       "structuredParams": [
@@ -285,9 +295,10 @@
       "isAsync": false,
       "hash": "f8a587abb15d6654b8ee0c83aafe38cb2fb8ce14f969b8452518b9a9f7a8baf4",
       "lineRange": [
-        54,
-        64
+        62,
+        73
       ],
+      "description": "Remove surrounding single or double quotes from a string value.",
       "structuredParams": [
         {
           "name": "value",
@@ -308,9 +319,9 @@
       "hash": "4a13d1d192068fcdaba85f80615eaa2e332d4470e2a9788108e5e99ea8ca6992",
       "lineRange": [
         1,
-        10
+        11
       ],
-      "description": "Custom error classes for syncdocs CLI",
+      "description": "Base error class for all syncdocs errors.",
       "isExported": true
     },
     {
@@ -321,9 +332,10 @@
       "isAsync": false,
       "hash": "3925ca78508c91988ea19250de516c8dbb1db49b781577e9decb34ccb3a54cc0",
       "lineRange": [
-        10,
-        17
+        11,
+        19
       ],
+      "description": "Thrown when the syncdocs configuration file is invalid or missing required fields.",
       "isExported": true
     },
     {
@@ -334,9 +346,10 @@
       "isAsync": false,
       "hash": "c7c7beef35783a69d2b628808828b4712e101629a471e9b4482936ee8011d429",
       "lineRange": [
-        17,
-        24
+        19,
+        27
       ],
+      "description": "Thrown when input validation fails (e.g. invalid file paths or symbol names).",
       "isExported": true
     },
     {
@@ -347,9 +360,10 @@
       "isAsync": false,
       "hash": "4ab86d63fa9e0a2c031daedf54492c3cba430aa25d33f1eecbfcc296a6208169",
       "lineRange": [
-        24,
-        31
+        27,
+        35
       ],
+      "description": "Thrown when symbol extraction from a source file fails.",
       "isExported": true
     },
     {
@@ -360,9 +374,10 @@
       "isAsync": false,
       "hash": "efa13ee6177f4c771562a3dfee72a182fd6bfe9191be534df6a3f11514d9d661",
       "lineRange": [
-        31,
-        38
+        35,
+        43
       ],
+      "description": "Thrown when documentation generation fails for a symbol.",
       "isExported": true
     },
     {
@@ -448,9 +463,10 @@
       "isAsync": false,
       "hash": "3f806bf065e45dbf90dbb01ba552b2c8f37fd293fe0f8778250a8744f78b7938",
       "lineRange": [
-        132,
-        132
+        133,
+        133
       ],
+      "description": "Yield to the event loop so spinner animations stay smooth during CPU-bound work.",
       "isExported": false
     },
     {
@@ -461,8 +477,8 @@
       "isAsync": true,
       "hash": "2d4337759704458555fbb396a463ebd39abb07ee0fa25616d519f28ef7f310d4",
       "lineRange": [
-        132,
-        206
+        133,
+        207
       ],
       "description": "Async version of scanProject that yields throughout\nso spinner animations stay smooth.",
       "structuredParams": [
@@ -496,9 +512,10 @@
       "isAsync": true,
       "hash": "0c23590120c25211a006807f22139b6836cceb9951d09fbcab3e0b67c1ae5b0b",
       "lineRange": [
-        206,
-        237
+        207,
+        242
       ],
+      "description": "/**\n * Async version of {@link findSourceFiles}that yields to the event loop\n * between I/O operations so spinner animations stay smooth.\n ",
       "structuredParams": [
         {
           "name": "rootDir",
@@ -524,8 +541,8 @@
       "isAsync": true,
       "hash": "90bba68ba62bf4b71f274a6c47dc623e3c42a49964b48d9894753b36b1108c94",
       "lineRange": [
-        216,
-        233
+        221,
+        238
       ],
       "structuredParams": [
         {
@@ -545,8 +562,8 @@
       "isAsync": false,
       "hash": "791923325bc8b9bc96276b2e8bc84e94a9644abd4131b226abb0e3946faa2100",
       "lineRange": [
-        237,
-        266
+        242,
+        271
       ],
       "description": "Render coverage stats (source files, symbols, coverage bar).",
       "structuredParams": [
@@ -568,8 +585,8 @@
       "isAsync": false,
       "hash": "e98d811607ad521391ebaac130f88b0451f16463d0b46a4587b774fffae47cb4",
       "lineRange": [
-        266,
-        284
+        271,
+        289
       ],
       "description": "Self-contained: scan the project, show coverage stats and next suggestion.\nUse this from commands that don't already have scanning data (e.g. generate).",
       "structuredParams": [
@@ -597,9 +614,10 @@
       "isAsync": false,
       "hash": "193873a035939aa703afb6b94f8902a31b1a01d3d5d6e3fda779861a12eac62f",
       "lineRange": [
-        284,
-        291
+        289,
+        297
       ],
+      "description": "Convert an absolute path to a path relative to the current working directory.",
       "structuredParams": [
         {
           "name": "absolutePath",
@@ -619,21 +637,24 @@
       "isAsync": false,
       "hash": "a53de60c0a3087b5f14e6c23c98d8c634d2b393cf94eaa525222f0772c7d8e38",
       "lineRange": [
-        291,
-        319
+        297,
+        334
       ],
+      "description": "Find all source files matching the scope's include/exclude patterns.\n\nRecursively walks the directory tree, applying picomatch patterns to filter\nfiles. Skips `.git` and `node_modules` directories.",
       "structuredParams": [
         {
           "name": "rootDir",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Root directory to search from"
         },
         {
           "name": "scope",
           "type": "SyncdocsConfig['scope']",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Include and exclude glob patterns"
         }
       ],
       "returnType": "string[]",
@@ -647,8 +668,8 @@
       "isAsync": false,
       "hash": "96a78e598db0d90a4cad03c8241b2c7ba869e8c566a04188eaa55d49a499f0dc",
       "lineRange": [
-        298,
-        315
+        313,
+        330
       ],
       "structuredParams": [
         {
@@ -668,9 +689,10 @@
       "isAsync": false,
       "hash": "bdf5332ee0c19f8df964c394aa26beb8e4e37fedf79444808ba6b9376654d17f",
       "lineRange": [
-        319,
-        344
+        334,
+        365
       ],
+      "description": "Recursively find all `.md` files in a directory.\n\nSkips `node_modules` and `.git` directories. Returns an empty array\nif the directory doesn't exist or can't be read.",
       "structuredParams": [
         {
           "name": "dir",
@@ -690,15 +712,17 @@
       "isAsync": false,
       "hash": "9bfd59a25e995860a0b8e1dcb7fb22aece46b0fc26a9c3e874e260e835a76282",
       "lineRange": [
-        344,
-        371
+        365,
+        402
       ],
+      "description": "Count how many times each source file is imported by other files.\n\nParses import/export statements from all source files, resolves relative\nspecifiers, and tallies import counts per file. Used to rank documentation\npriority (most-imported files first).",
       "structuredParams": [
         {
           "name": "sourceFiles",
           "type": "string[]",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "List of absolute source file paths"
         }
       ],
       "returnType": "Map<string, number>",
@@ -712,9 +736,10 @@
       "isAsync": false,
       "hash": "e580e30aabf21c6c7eb6159341009f5bd1f36413a6541477000c2b5cbdba0fa7",
       "lineRange": [
-        371,
-        395
+        402,
+        432
       ],
+      "description": "Resolve a relative import specifier to an absolute file path.\n\nTries the exact path, then common extensions (`.ts`, `.tsx`, `.js`, `.jsx`),\nthen `index.*` variants. Only resolves to files in the `sourceFiles` list.",
       "structuredParams": [
         {
           "name": "fromDir",
@@ -1120,10 +1145,10 @@
       "kind": "class",
       "filePath": "src/extractor/typescript-extractor.ts",
       "isAsync": false,
-      "hash": "952e13636f996fd37f2923dcf563b3d0db3b9a0e2220020b72b57aaa22b2f554",
+      "hash": "b10a069224789fd0a715bc50512a37abb183f4b87c04fe0f7628b126717dd997",
       "lineRange": [
         18,
-        684
+        685
       ],
       "isExported": true
     },
@@ -1286,10 +1311,10 @@
       "kind": "class",
       "filePath": "src/generator/static-doc-generator.ts",
       "isAsync": false,
-      "hash": "57de49514b625952a744e1d72b8d75074e01b92af4d4ec5c1dc06adf7fd0c35a",
+      "hash": "47d1a080ab1e47ad8f571504413a9c17bb24d5e6808e3d2febe5013515889411",
       "lineRange": [
         15,
-        246
+        247
       ],
       "isExported": true
     },
@@ -1532,10 +1557,10 @@
       "kind": "class",
       "filePath": "src/graph/graph-store.ts",
       "isAsync": false,
-      "hash": "6356f0c2a1156f75e2df4060fd3b4e412127638351060cf8279885553b9425b5",
+      "hash": "a6dd0d3c4f9f86e9f19b7c149b439abcffa58181f0e232bac5b769a23403f996",
       "lineRange": [
         7,
-        52
+        54
       ],
       "isExported": true
     },
@@ -1619,8 +1644,9 @@
       "hash": "301f6918d0c3139da387bc45a167d3baa7569ce5b19a0cf2b63d8934abb9e080",
       "lineRange": [
         60,
-        124
+        130
       ],
+      "description": "Build a mermaid flowchart string from a set of nodes and edges.\n\nGroups nodes into subgraphs by file path, applies styling to the\nhighlighted node and entry points, and renders edge arrows based on type.",
       "structuredParams": [
         {
           "name": "highlightId",
@@ -1658,9 +1684,10 @@
       "isAsync": false,
       "hash": "ba1bc940a918499cbd0ae6d8997935114846a5ff02dca9687d957326680ee2fb",
       "lineRange": [
-        124,
-        139
+        130,
+        146
       ],
+      "description": "Build a display label for a graph node, including async prefix and metadata.",
       "structuredParams": [
         {
           "name": "node",
@@ -1680,9 +1707,10 @@
       "isAsync": false,
       "hash": "d097f6cc33d49fd1983eb4b30446e90774b25fe7f4bc69e49cb74e84f061982b",
       "lineRange": [
-        139,
-        147
+        146,
+        155
       ],
+      "description": "Return the mermaid arrow syntax for a given edge type.",
       "structuredParams": [
         {
           "name": "edge",
@@ -1702,8 +1730,8 @@
       "isAsync": false,
       "hash": "4e32ef11830135e16d23b1f831de0348b99b4aafeaa4c9ac05d185fef8001cf6",
       "lineRange": [
-        147,
-        154
+        155,
+        162
       ],
       "description": "Sanitize a label for mermaid (escape characters that break parsing)",
       "structuredParams": [
@@ -1725,8 +1753,8 @@
       "isAsync": false,
       "hash": "24dbed29c3876b7eb4715c9e48b692a70314100b6c23bbcbd6c34e5a958b0864",
       "lineRange": [
-        154,
-        161
+        162,
+        169
       ],
       "description": "Sanitize a node ID for mermaid (replace special characters)",
       "structuredParams": [
@@ -1899,15 +1927,17 @@
       "isAsync": false,
       "hash": "65d7a1015d99286b6a20b67bf43e1e46f197b43a3808dae3dff4f3db6dc10904",
       "lineRange": [
-        23,
-        64
+        22,
+        71
       ],
+      "description": "Build a lookup index of all documented symbols from the output directory.\n\nParses every markdown doc file, extracts frontmatter metadata, and builds\ntwo maps: one keyed by doc path, one keyed by symbol name (for cross-referencing).",
       "structuredParams": [
         {
           "name": "outputDir",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Path to the syncdocs output directory"
         }
       ],
       "returnType": "SymbolIndex",
@@ -1921,15 +1951,17 @@
       "isAsync": false,
       "hash": "7bf53b227145eac2c7269cfa0ba017e68dd7dcc5e58d95adec9f786e6f1d0909",
       "lineRange": [
-        64,
-        73
+        71,
+        89
       ],
+      "description": "Extract the overview text from a markdown doc file.\n\nStrips frontmatter and the title heading, then returns everything up to\nthe first `<details>` block or `##` heading.",
       "structuredParams": [
         {
           "name": "content",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Raw markdown content of the doc file"
         }
       ],
       "returnType": "string",
@@ -1943,21 +1975,24 @@
       "isAsync": false,
       "hash": "0ff4d1b7e07e814f8fba71765f9881dae114b5a3a718a356e8d052ef1aae4542",
       "lineRange": [
-        73,
-        104
+        89,
+        130
       ],
+      "description": "Extract related symbol names from a doc file's Related section.\n\nLooks for backtick-wrapped (`SymbolName`) and bold (**SymbolName**) references\ninside `<details><summary>Related</summary>` blocks, deduplicating and\nexcluding the symbol's own name.",
       "structuredParams": [
         {
           "name": "content",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Raw markdown content of the doc file"
         },
         {
           "name": "selfName",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Name of the current symbol (excluded from results)"
         }
       ],
       "returnType": "string[]",
@@ -1971,8 +2006,8 @@
       "isAsync": false,
       "hash": "b80103cbe98b781a768e4007cf2005a8bf961ed5722ecea20f0caf182452cee4",
       "lineRange": [
-        86,
-        91
+        112,
+        117
       ],
       "structuredParams": [
         {
@@ -1992,21 +2027,24 @@
       "isAsync": false,
       "hash": "1dd94ebbfcda22c827d87693ff30aea9a9b544d735f5605fe2057e9fd6d6cab3",
       "lineRange": [
-        104,
-        132
+        130,
+        167
       ],
+      "description": "Generate a mermaid flowchart showing a symbol's related dependencies.\n\nCreates a left-to-right flowchart with clickable nodes linking to each\nrelated symbol's doc page. Returns null if no related symbols exist in the index.",
       "structuredParams": [
         {
           "name": "entry",
           "type": "SymbolEntry",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "The symbol entry to generate the graph for"
         },
         {
           "name": "index",
           "type": "SymbolIndex",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "The full symbol index for resolving related names"
         }
       ],
       "returnType": "string | null",
@@ -2020,8 +2058,8 @@
       "isAsync": false,
       "hash": "26a9de54874be88b70230478d7eae64598ed6f6c379c01318138dab9ad027c7b",
       "lineRange": [
-        115,
-        115
+        150,
+        150
       ],
       "structuredParams": [
         {
@@ -2041,9 +2079,10 @@
       "isAsync": false,
       "hash": "0d6c2a43f13b1020445e9f183a9d42d6972a894c522f570cb30eae2557507a74",
       "lineRange": [
-        132,
-        155
+        167,
+        196
       ],
+      "description": "Build the JSON response for the `/api/index` endpoint.\n\nGroups symbol entries by source directory and sorts both directories\nand entries alphabetically for the sidebar tree.",
       "structuredParams": [
         {
           "name": "index",
@@ -2062,27 +2101,31 @@
       "isAsync": false,
       "hash": "ac9f44c78993bf8d3d0e4d064e3e940b5a72d1df177383e9bd8999b9b1aa4300",
       "lineRange": [
-        155,
-        198
+        196,
+        251
       ],
+      "description": "Build the JSON response for the `/api/doc` endpoint.\n\nReads the markdown file, strips frontmatter, and enriches the response\nwith metadata from the symbol index (dependency graph, related symbols).\nFalls back to a basic response if the index is stale.",
       "structuredParams": [
         {
           "name": "docPath",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Relative path to the doc file within the output directory"
         },
         {
           "name": "index",
           "type": "SymbolIndex",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "The symbol index for metadata enrichment"
         },
         {
           "name": "outputDir",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Path to the syncdocs output directory"
         }
       ],
       "isExported": false
@@ -2095,21 +2138,24 @@
       "isAsync": false,
       "hash": "8131a9f57e256532d6becf8708767698b20d05275c71283f82ec56dd42c8d0a8",
       "lineRange": [
-        207,
-        217
+        260,
+        277
       ],
+      "description": "Serve a static file with the appropriate Content-Type header.",
       "structuredParams": [
         {
           "name": "filePath",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Absolute path to the file"
         },
         {
           "name": "res",
           "type": "import('node:http').ServerResponse",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "HTTP response object"
         }
       ],
       "returnType": "boolean",
@@ -2121,26 +2167,32 @@
       "kind": "function",
       "filePath": "src/server/index.ts",
       "isAsync": true,
-      "hash": "2745450d26f12744e33ea05982a2d38d04f320cb674556e80a1b44b4b87685ed",
+      "hash": "8bc7695d720b408a4036fcfec10bf950ba9fe4c78b452db36e693d6fc802868e",
       "lineRange": [
-        217,
-        342
+        277,
+        408
       ],
+      "description": "Start the syncdocs documentation viewer HTTP server.\n\nServes the single-page viewer app, a JSON API for the symbol index and\nindividual doc pages, and the graph data. Watches the output directory\nfor changes and rebuilds the index automatically.\n\nIf the requested port is taken, retries up to 10 consecutive ports.",
       "structuredParams": [
         {
           "name": "outputDir",
           "type": "string",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Path to the syncdocs output directory (e.g. `_syncdocs`)"
         },
         {
           "name": "port",
           "type": "number",
           "isOptional": false,
-          "isRest": false
+          "isRest": false,
+          "description": "Preferred port number to listen on"
         }
       ],
-      "isExported": true
+      "isExported": true,
+      "throws": [
+        "If no available port is found after 10 attempts"
+      ]
     },
     {
       "id": "src/server/template.ts:getTemplate",
@@ -2151,10 +2203,50 @@
       "hash": "6ac38e4bf0a242d583ba4287778d10dfd88a06244eb673057214c3fe95045c04",
       "lineRange": [
         1,
-        822
+        828
       ],
+      "description": "Return the HTML template for the legacy documentation viewer SPA.\n\nThis is a self-contained single-page app with inline CSS and JavaScript\nthat renders a sidebar tree, search, and markdown doc content.",
       "returnType": "string",
       "isExported": true
+    },
+    {
+      "id": "src/server/viewer/App.tsx:GraphView",
+      "name": "GraphView",
+      "kind": "component",
+      "filePath": "src/server/viewer/App.tsx",
+      "isAsync": false,
+      "hash": "87ac4c033795281f66ba1d1d4df812cecf0b4bbba84bc143955abbd0fee14b58",
+      "lineRange": [
+        10,
+        73
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/App.tsx:SidebarContent",
+      "name": "SidebarContent",
+      "kind": "component",
+      "filePath": "src/server/viewer/App.tsx",
+      "isAsync": false,
+      "hash": "9d19c25a28b0ff981d980ee0a8b0b042340b951fb10211ea14909fa3a131b5e7",
+      "lineRange": [
+        73,
+        84
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/App.tsx:Layout",
+      "name": "Layout",
+      "kind": "component",
+      "filePath": "src/server/viewer/App.tsx",
+      "isAsync": false,
+      "hash": "e49984cf8510b0356ee1bb4239f29a43b744e5bf4111c7e69db463aa44d592c2",
+      "lineRange": [
+        84,
+        102
+      ],
+      "isExported": false
     },
     {
       "id": "src/server/viewer/App.tsx:App",
@@ -2162,10 +2254,10 @@
       "kind": "component",
       "filePath": "src/server/viewer/App.tsx",
       "isAsync": false,
-      "hash": "87ac4c033795281f66ba1d1d4df812cecf0b4bbba84bc143955abbd0fee14b58",
+      "hash": "28f3f1a2be94adec0ef31d8818dd95121a3bb28b3649c12bf17230c156ec60b8",
       "lineRange": [
-        4,
-        67
+        102,
+        110
       ],
       "isExported": true
     },
@@ -2198,8 +2290,8 @@
       "isAsync": false,
       "hash": "f5a262a430b42007316ce0dbfe1d5de568e2d0b5c80c51e259bd648849443c3d",
       "lineRange": [
-        26,
-        31
+        27,
+        32
       ],
       "structuredParams": [
         {
@@ -2220,8 +2312,8 @@
       "isAsync": false,
       "hash": "157a97ac980c98d3ea67fb151a9d891b6132aa94d1ee5d9b13b98be1c5e33a9d",
       "lineRange": [
-        31,
-        35
+        32,
+        36
       ],
       "structuredParams": [
         {
@@ -2240,10 +2332,10 @@
       "kind": "component",
       "filePath": "src/server/viewer/components/DocPanel.tsx",
       "isAsync": false,
-      "hash": "d548b5237d01b99c435f76ae7681cbbd63c6ef3299ac06d126369601ec89141d",
+      "hash": "8b8ecf5f2deeeb953fe6c3bb1ea2d44eb7406777910029407d22f933ac76d696",
       "lineRange": [
-        35,
-        198
+        36,
+        204
       ],
       "structuredParams": [
         {
@@ -2256,15 +2348,192 @@
       "isExported": true
     },
     {
+      "id": "src/server/viewer/components/DocsTree.tsx:buildTree",
+      "name": "buildTree",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/DocsTree.tsx",
+      "isAsync": false,
+      "hash": "3b13121bebcc03c1192de7b05b57bb86b126bf213f273efb7c1d74577a9082dc",
+      "lineRange": [
+        11,
+        33
+      ],
+      "structuredParams": [
+        {
+          "name": "index",
+          "type": "DocsIndex",
+          "isOptional": false,
+          "isRest": false
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "returnType": "TreeNode",
+      "isExported": true
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:Guides",
+      "name": "Guides",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/DocsTree.tsx",
+      "isAsync": false,
+      "hash": "d33be8f3917e0979e4d7879d488089df56891b23d805b92c537b6c96c4ee2842",
+      "lineRange": [
+        33,
+        45
+      ],
+      "structuredParams": [
+        {
+          "name": "{ guides, isLast }",
+          "type": "{ guides: boolean[]; isLast: boolean }",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:TreeDir",
+      "name": "TreeDir",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/DocsTree.tsx",
+      "isAsync": false,
+      "hash": "90a04060973045e889348216387e84ff0f733b8be8ac98c603861343e22c0afa",
+      "lineRange": [
+        58,
+        136
+      ],
+      "structuredParams": [
+        {
+          "name": "{\n  name,\n  node,\n  depth,\n  guides,\n  isLast,\n  activeDocPath,\n  forceExpand,\n  collapsedDirs,\n  onToggleDir,\n  dirPath,\n}",
+          "type": "TreeDirProps",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:DocsTree",
+      "name": "DocsTree",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/DocsTree.tsx",
+      "isAsync": false,
+      "hash": "3a33c6707508b1624fad86fd62bb2eed6258a0d69cb6a35c4133111444572bc4",
+      "lineRange": [
+        136,
+        244
+      ],
+      "isExported": true
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "name": "collectPaths",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/DocsTree.tsx",
+      "isAsync": false,
+      "hash": "25227986a80365d07c219e758d00e9285d3ca53e941b67e446b613556f256608",
+      "lineRange": [
+        171,
+        178
+      ],
+      "structuredParams": [
+        {
+          "name": "node",
+          "type": "TreeNode",
+          "isOptional": false,
+          "isRest": false
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:renderMermaidDiagrams",
+      "name": "renderMermaidDiagrams",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/DocsViewer.tsx",
+      "isAsync": true,
+      "hash": "a5b78cf6ac161e067302166af1ac5853bee7469a2e5ac5d5b0e006f290ae3338",
+      "lineRange": [
+        14,
+        50
+      ],
+      "structuredParams": [
+        {
+          "name": "container",
+          "type": "HTMLElement",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:makeRelatedLinksClickable",
+      "name": "makeRelatedLinksClickable",
+      "kind": "function",
+      "filePath": "src/server/viewer/components/DocsViewer.tsx",
+      "isAsync": false,
+      "hash": "6d65bcb50b2e5e2326ffa0f0cb3a3521b6872bd663b5e48ae6af59de2609d723",
+      "lineRange": [
+        50,
+        78
+      ],
+      "structuredParams": [
+        {
+          "name": "container",
+          "type": "HTMLElement",
+          "isOptional": false,
+          "isRest": false
+        },
+        {
+          "name": "related",
+          "type": "DocData['related']",
+          "isOptional": false,
+          "isRest": false
+        },
+        {
+          "name": "navigate",
+          "type": "(path: string) => void",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:DocsViewer",
+      "name": "DocsViewer",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/DocsViewer.tsx",
+      "isAsync": false,
+      "hash": "4bdced24ca5d493695edbc867da15dee4de0f448a83b91d76c5be5a619e0213a",
+      "lineRange": [
+        78,
+        226
+      ],
+      "isExported": true
+    },
+    {
       "id": "src/server/viewer/components/FlowControls.tsx:FlowControls",
       "name": "FlowControls",
       "kind": "component",
       "filePath": "src/server/viewer/components/FlowControls.tsx",
       "isAsync": false,
-      "hash": "9ee8c1c852a15c9b9028e139440ee2daac53c03344ebb25e03584ad5276ea037",
+      "hash": "a42d09822e7ac6706a077f36b81ddfe92901af962db30c7ca85cd8ae76c7430f",
       "lineRange": [
         21,
-        171
+        169
       ],
       "structuredParams": [
         {
@@ -2284,8 +2553,8 @@
       "isAsync": false,
       "hash": "07da06467e4b96f13b7f90fcf2a68be407aed5ebf9f9ab8b9c1724bae991134a",
       "lineRange": [
-        37,
-        44
+        39,
+        46
       ],
       "structuredParams": [
         {
@@ -2306,8 +2575,8 @@
       "isAsync": false,
       "hash": "d8bb9027fbd1e97c6e68c2fbc8b73510a052e8187eaa846d0319fb34df328584",
       "lineRange": [
-        61,
-        68
+        63,
+        70
       ],
       "structuredParams": [
         {
@@ -2328,8 +2597,8 @@
       "isAsync": false,
       "hash": "2715c980acd3228c2eca1f77b3c4709e28a62dfe251d32aa76c481fd8bef6137",
       "lineRange": [
-        68,
-        72
+        70,
+        74
       ],
       "structuredParams": [
         {
@@ -2350,8 +2619,8 @@
       "isAsync": false,
       "hash": "ad2ac947b6cf189bcf550c65a4862c92be877408a2c8caffc3a45d2d26fb7764",
       "lineRange": [
-        72,
-        89
+        74,
+        91
       ],
       "structuredParams": [
         {
@@ -2372,8 +2641,8 @@
       "isAsync": false,
       "hash": "ecc00cfa0510fd93b93965a5f654bfb3015ba081fa320438107f99f7a0db5de8",
       "lineRange": [
-        89,
-        115
+        91,
+        117
       ],
       "structuredParams": [
         {
@@ -2400,8 +2669,8 @@
       "isAsync": true,
       "hash": "5cea563ee8eca55ceceee3185480d4206b523c95c6ee7845075ae91a094026e7",
       "lineRange": [
-        117,
-        152
+        119,
+        154
       ],
       "structuredParams": [
         {
@@ -2438,10 +2707,10 @@
       "kind": "component",
       "filePath": "src/server/viewer/components/FlowGraph.tsx",
       "isAsync": false,
-      "hash": "ef77ed2b67b05b3713c6918883abfcb9ecbc2ad20e3d7266d9065c9533753345",
+      "hash": "e41df2e1b873734b95137a483bc20da4e54af885479ac2e0c189a697d7871c7d",
       "lineRange": [
-        157,
-        449
+        159,
+        455
       ],
       "structuredParams": [
         {
@@ -2461,8 +2730,8 @@
       "isAsync": false,
       "hash": "804dc5ea6422d0c9802c7a097a71031eb127c1d0674e358426dc3151261c02a2",
       "lineRange": [
-        177,
-        186
+        179,
+        188
       ],
       "structuredParams": [
         {
@@ -2483,8 +2752,8 @@
       "isAsync": false,
       "hash": "f497518f3c90002642509acd66a55fc07fa2ead49a6b15d8f91cfec4c8f2c7c9",
       "lineRange": [
-        449,
-        457
+        455,
+        463
       ],
       "structuredParams": [
         {
@@ -2667,6 +2936,61 @@
         }
       ],
       "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/Sidebar.tsx:Sidebar",
+      "name": "Sidebar",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/Sidebar.tsx",
+      "isAsync": false,
+      "hash": "adb8db429083d9716478e15a0f217fdcc59cdbd8b2a0e7496a492b6e3da5202a",
+      "lineRange": [
+        5,
+        13
+      ],
+      "structuredParams": [
+        {
+          "name": "{ children }",
+          "type": "SidebarProps",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": true
+    },
+    {
+      "id": "src/server/viewer/components/ViewNav.tsx:NavLink",
+      "name": "NavLink",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/ViewNav.tsx",
+      "isAsync": false,
+      "hash": "884c8ba766df40e20c9306c2f705ea65ced68e7a7b5d1ad2a2ab79cfb4b6a679",
+      "lineRange": [
+        3,
+        29
+      ],
+      "structuredParams": [
+        {
+          "name": "{\n  to,\n  label,\n  icon: Icon,\n  isActive,\n}",
+          "type": "{\n  to: string;\n  label: string;\n  icon: LucideIcon;\n  isActive: boolean;\n}",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "isExported": false
+    },
+    {
+      "id": "src/server/viewer/components/ViewNav.tsx:ViewNav",
+      "name": "ViewNav",
+      "kind": "component",
+      "filePath": "src/server/viewer/components/ViewNav.tsx",
+      "isAsync": false,
+      "hash": "28b14043a4043a60dfb3721a0ec3cf474a34f6392e64f1ec401cb892b20f7802",
+      "lineRange": [
+        29,
+        45
+      ],
+      "isExported": true
     },
     {
       "id": "src/server/viewer/components/ui/badge.tsx:Badge",
@@ -3320,6 +3644,74 @@
       "isExported": false
     },
     {
+      "id": "src/server/viewer/docs-utils.ts:docPathToUrl",
+      "name": "docPathToUrl",
+      "kind": "function",
+      "filePath": "src/server/viewer/docs-utils.ts",
+      "isAsync": false,
+      "hash": "851f77055f07497ac0536912fefc7760156a3b5bc97a55f4e6cacd729e7f0642",
+      "lineRange": [
+        1,
+        4
+      ],
+      "description": "Convert a docPath (e.g. \"src/checker/index/StaleChecker.md\") to a URL path",
+      "structuredParams": [
+        {
+          "name": "docPath",
+          "type": "string",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "returnType": "string",
+      "isExported": true
+    },
+    {
+      "id": "src/server/viewer/docs-utils.ts:urlToDocPath",
+      "name": "urlToDocPath",
+      "kind": "function",
+      "filePath": "src/server/viewer/docs-utils.ts",
+      "isAsync": false,
+      "hash": "860aee449ec78b14697efd263ab0bec27bd992b737975daf2014b2baa11bcf28",
+      "lineRange": [
+        4,
+        11
+      ],
+      "description": "Convert a URL pathname back to a docPath for the API",
+      "structuredParams": [
+        {
+          "name": "pathname",
+          "type": "string",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "returnType": "string | null",
+      "isExported": true
+    },
+    {
+      "id": "src/server/viewer/docs-utils.ts:escapeHtml",
+      "name": "escapeHtml",
+      "kind": "function",
+      "filePath": "src/server/viewer/docs-utils.ts",
+      "isAsync": false,
+      "hash": "2bf0c9501f8785a8af4b0301202426c28164beeb03a0122d8e1a380b463b14f9",
+      "lineRange": [
+        11,
+        19
+      ],
+      "structuredParams": [
+        {
+          "name": "str",
+          "type": "string",
+          "isOptional": false,
+          "isRest": false
+        }
+      ],
+      "returnType": "string",
+      "isExported": true
+    },
+    {
       "id": "src/server/viewer/grid.ts:snapCeil",
       "name": "snapCeil",
       "kind": "function",
@@ -3403,7 +3795,7 @@
         {
           "condition": "else",
           "branch": "else",
-          "branchGroup": "branch:39"
+          "branchGroup": "branch:46"
         }
       ],
       "label": "else",
@@ -3419,7 +3811,7 @@
         {
           "condition": "else",
           "branch": "else",
-          "branchGroup": "branch:39"
+          "branchGroup": "branch:46"
         }
       ],
       "label": "else",
@@ -3483,7 +3875,7 @@
         {
           "condition": "if (scan.undocumented > 0)",
           "branch": "then",
-          "branchGroup": "branch:40"
+          "branchGroup": "branch:47"
         }
       ],
       "label": "if (scan.undocumented > 0)",
@@ -3499,12 +3891,12 @@
         {
           "condition": "if (scan.undocumented > 0)",
           "branch": "then",
-          "branchGroup": "branch:40"
+          "branchGroup": "branch:47"
         },
         {
           "condition": "if (candidate)",
           "branch": "then",
-          "branchGroup": "branch:44"
+          "branchGroup": "branch:51"
         }
       ],
       "label": "if (scan.undocumented > 0) → if (candidate)",
@@ -3520,7 +3912,7 @@
         {
           "condition": "if (scan.undocumented > 0 && (options.verbose || scan.undocument)",
           "branch": "then",
-          "branchGroup": "branch:48"
+          "branchGroup": "branch:55"
         }
       ],
       "label": "if (scan.undocumented > 0 && (options.verbose || scan.undocument)",
@@ -3560,7 +3952,7 @@
         {
           "condition": "if (dirMatch)",
           "branch": "then",
-          "branchGroup": "branch:18"
+          "branchGroup": "branch:26"
         }
       ],
       "label": "if (dirMatch)",
@@ -3584,7 +3976,7 @@
         {
           "condition": "if (listItemMatch)",
           "branch": "then",
-          "branchGroup": "branch:44"
+          "branchGroup": "branch:52"
         }
       ],
       "label": "if (listItemMatch)",
@@ -3664,7 +4056,7 @@
         {
           "condition": "if (existsSync(docsDir))",
           "branch": "then",
-          "branchGroup": "branch:172"
+          "branchGroup": "branch:173"
         }
       ],
       "label": "if (existsSync(docsDir))",
@@ -3696,7 +4088,7 @@
         {
           "condition": "if (s.isDirectory())",
           "branch": "then",
-          "branchGroup": "branch:221"
+          "branchGroup": "branch:226"
         }
       ],
       "label": "if (s.isDirectory())",
@@ -3728,7 +4120,7 @@
         {
           "condition": "if (scan.undocumented > 0)",
           "branch": "then",
-          "branchGroup": "branch:275"
+          "branchGroup": "branch:280"
         }
       ],
       "label": "if (scan.undocumented > 0)",
@@ -3744,12 +4136,12 @@
         {
           "condition": "if (scan.undocumented > 0)",
           "branch": "then",
-          "branchGroup": "branch:275"
+          "branchGroup": "branch:280"
         },
         {
           "condition": "if (candidate)",
           "branch": "then",
-          "branchGroup": "branch:278"
+          "branchGroup": "branch:283"
         }
       ],
       "label": "if (scan.undocumented > 0) → if (candidate)",
@@ -3773,7 +4165,7 @@
         {
           "condition": "if (stat.isDirectory())",
           "branch": "then",
-          "branchGroup": "branch:327"
+          "branchGroup": "branch:348"
         }
       ],
       "label": "if (stat.isDirectory())",
@@ -3797,7 +4189,7 @@
         {
           "condition": "if (resolved)",
           "branch": "then",
-          "branchGroup": "branch:358"
+          "branchGroup": "branch:389"
         }
       ],
       "label": "if (resolved)",
@@ -4245,7 +4637,7 @@
         {
           "condition": "if (edge.label)",
           "branch": "then",
-          "branchGroup": "branch:103"
+          "branchGroup": "branch:109"
         }
       ],
       "label": "if (edge.label)",
@@ -4317,7 +4709,7 @@
         {
           "condition": "if (entry)",
           "branch": "then",
-          "branchGroup": "branch:168"
+          "branchGroup": "branch:221"
         }
       ],
       "label": "if (entry)",
@@ -4333,14 +4725,6 @@
       "order": 0
     },
     {
-      "id": "src/server/index.ts:startServer->src/server/template.ts:getTemplate",
-      "source": "src/server/index.ts:startServer",
-      "target": "src/server/template.ts:getTemplate",
-      "type": "direct-call",
-      "isAsync": true,
-      "order": 1
-    },
-    {
       "id": "src/server/index.ts:startServer->src/server/index.ts:buildIndexResponse",
       "source": "src/server/index.ts:startServer",
       "target": "src/server/index.ts:buildIndexResponse",
@@ -4349,12 +4733,12 @@
         {
           "condition": "if (url.pathname === '/api/index')",
           "branch": "then",
-          "branchGroup": "branch:271"
+          "branchGroup": "branch:337"
         }
       ],
       "label": "if (url.pathname === '/api/index')",
       "isAsync": false,
-      "order": 2
+      "order": 1
     },
     {
       "id": "src/server/index.ts:startServer->src/server/index.ts:buildDocResponse",
@@ -4365,12 +4749,12 @@
         {
           "condition": "if (url.pathname === '/api/doc')",
           "branch": "then",
-          "branchGroup": "branch:280"
+          "branchGroup": "branch:346"
         }
       ],
       "label": "if (url.pathname === '/api/doc')",
       "isAsync": false,
-      "order": 3
+      "order": 2
     },
     {
       "id": "src/server/viewer/components/DocPanel.tsx:DocPanel->src/server/viewer/components/DocPanel.tsx:nodeToDocPath",
@@ -4389,12 +4773,108 @@
         {
           "condition": "doc &&",
           "branch": "&&",
-          "branchGroup": "branch:97"
+          "branchGroup": "branch:99"
         }
       ],
       "label": "doc &&",
       "isAsync": false,
       "order": 1
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:TreeDir->src/server/viewer/docs-utils.ts:docPathToUrl",
+      "source": "src/server/viewer/components/DocsTree.tsx:TreeDir",
+      "target": "src/server/viewer/docs-utils.ts:docPathToUrl",
+      "type": "conditional-call",
+      "conditions": [
+        {
+          "condition": "!isCollapsed &&",
+          "branch": "&&",
+          "branchGroup": "branch:98"
+        }
+      ],
+      "label": "!isCollapsed &&",
+      "isAsync": false,
+      "order": 0
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:DocsTree->src/server/viewer/docs-utils.ts:urlToDocPath",
+      "source": "src/server/viewer/components/DocsTree.tsx:DocsTree",
+      "target": "src/server/viewer/docs-utils.ts:urlToDocPath",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 0
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:DocsTree->src/server/viewer/components/DocsTree.tsx:buildTree",
+      "source": "src/server/viewer/components/DocsTree.tsx:DocsTree",
+      "target": "src/server/viewer/components/DocsTree.tsx:buildTree",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 1
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:DocsTree->src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "source": "src/server/viewer/components/DocsTree.tsx:DocsTree",
+      "target": "src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 2
+    },
+    {
+      "id": "src/server/viewer/components/DocsTree.tsx:collectPaths->src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "source": "src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "target": "src/server/viewer/components/DocsTree.tsx:collectPaths",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 0
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:makeRelatedLinksClickable->src/server/viewer/docs-utils.ts:docPathToUrl",
+      "source": "src/server/viewer/components/DocsViewer.tsx:makeRelatedLinksClickable",
+      "target": "src/server/viewer/docs-utils.ts:docPathToUrl",
+      "type": "conditional-call",
+      "conditions": [
+        {
+          "condition": "if (docPath)",
+          "branch": "then",
+          "branchGroup": "branch:63"
+        }
+      ],
+      "label": "if (docPath)",
+      "isAsync": false,
+      "order": 0
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:DocsViewer->src/server/viewer/docs-utils.ts:urlToDocPath",
+      "source": "src/server/viewer/components/DocsViewer.tsx:DocsViewer",
+      "target": "src/server/viewer/docs-utils.ts:urlToDocPath",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 0
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:DocsViewer->src/server/viewer/components/DocsViewer.tsx:renderMermaidDiagrams",
+      "source": "src/server/viewer/components/DocsViewer.tsx:DocsViewer",
+      "target": "src/server/viewer/components/DocsViewer.tsx:renderMermaidDiagrams",
+      "type": "direct-call",
+      "isAsync": true,
+      "order": 1
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:DocsViewer->src/server/viewer/components/DocsViewer.tsx:makeRelatedLinksClickable",
+      "source": "src/server/viewer/components/DocsViewer.tsx:DocsViewer",
+      "target": "src/server/viewer/components/DocsViewer.tsx:makeRelatedLinksClickable",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 2
+    },
+    {
+      "id": "src/server/viewer/components/DocsViewer.tsx:DocsViewer->src/server/viewer/docs-utils.ts:escapeHtml",
+      "source": "src/server/viewer/components/DocsViewer.tsx:DocsViewer",
+      "target": "src/server/viewer/docs-utils.ts:escapeHtml",
+      "type": "direct-call",
+      "isAsync": false,
+      "order": 3
     },
     {
       "id": "src/server/viewer/components/FlowControls.tsx:FlowControls->src/server/viewer/components/FlowGraph.tsx:getCategoryLabel",
@@ -4405,7 +4885,7 @@
         {
           "condition": "availableTypes.size > 0 &&",
           "branch": "&&",
-          "branchGroup": "branch:64"
+          "branchGroup": "branch:62"
         }
       ],
       "label": "availableTypes.size > 0 &&",
@@ -4469,7 +4949,7 @@
         {
           "condition": "if (node.measured?.width && node.measured?.height)",
           "branch": "then",
-          "branchGroup": "branch:365"
+          "branchGroup": "branch:367"
         }
       ],
       "label": "if (node.measured?.width && node.measured?.height)",

@@ -1,6 +1,6 @@
 ---
 title: walk
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:walk
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # walk
 
-`const` in `src/cli/utils/next-suggestion.ts:298-315`
+`const` in `src/cli/utils/next-suggestion.ts:313-330`
 
 **Parameters:**
 

@@ -1,18 +1,18 @@
 ---
 title: TypeScriptExtractor
-generated: 2026-02-21T13:51:58.716Z
+generated: 2026-02-21T14:13:44.225Z
 graphNode: src/extractor/typescript-extractor.ts:TypeScriptExtractor
 dependencies:
   - path: src/extractor/typescript-extractor.ts
     symbol: TypeScriptExtractor
-    hash: 952e13636f996fd37f2923dcf563b3d0db3b9a0e2220020b72b57aaa22b2f554
+    hash: b10a069224789fd0a715bc50512a37abb183f4b87c04fe0f7628b126717dd997
 ---
 
 # TypeScriptExtractor
 
 `exported`
 
-`class` in `src/extractor/typescript-extractor.ts:18-684`
+`class` in `src/extractor/typescript-extractor.ts:18-685`
 
 **Calls:**
 

@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerFooter
-generated: 2026-02-21T13:51:58.723Z
+generated: 2026-02-21T14:13:44.234Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerFooter
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx

@@ -1,6 +1,6 @@
 ---
 title: DocParser
-generated: 2026-02-21T13:51:58.711Z
+generated: 2026-02-21T14:13:44.219Z
 graphNode: src/checker/doc-parser.ts:DocParser
 dependencies:
   - path: src/checker/doc-parser.ts

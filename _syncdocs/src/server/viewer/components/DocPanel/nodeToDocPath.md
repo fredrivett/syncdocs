@@ -1,6 +1,6 @@
 ---
 title: nodeToDocPath
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.230Z
 graphNode: src/server/viewer/components/DocPanel.tsx:nodeToDocPath
 dependencies:
   - path: src/server/viewer/components/DocPanel.tsx
@@ -10,7 +10,7 @@ dependencies:
 
 # nodeToDocPath
 
-`function` in `src/server/viewer/components/DocPanel.tsx:26-31`
+`function` in `src/server/viewer/components/DocPanel.tsx:27-32`
 
 **Parameters:**
 

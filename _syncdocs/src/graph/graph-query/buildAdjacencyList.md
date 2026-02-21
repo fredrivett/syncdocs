@@ -1,6 +1,6 @@
 ---
 title: buildAdjacencyList
-generated: 2026-02-21T13:51:58.717Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-query.ts:buildAdjacencyList
 dependencies:
   - path: src/graph/graph-query.ts

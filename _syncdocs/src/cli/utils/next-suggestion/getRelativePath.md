@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:getRelativePath
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,7 +12,9 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:284-291`
+`function` in `src/cli/utils/next-suggestion.ts:289-297`
+
+Convert an absolute path to a path relative to the current working directory.
 
 **Parameters:**
 

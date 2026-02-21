@@ -1,6 +1,6 @@
 ---
 title: buildMermaid
-generated: 2026-02-21T13:51:58.718Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-to-mermaid.ts:buildMermaid
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -10,7 +10,12 @@ dependencies:
 
 # buildMermaid
 
-`function` in `src/graph/graph-to-mermaid.ts:60-124`
+`function` in `src/graph/graph-to-mermaid.ts:60-130`
+
+Build a mermaid flowchart string from a set of nodes and edges.
+
+Groups nodes into subgraphs by file path, applies styling to the
+highlighted node and entry points, and renders edge arrows based on type.
 
 **Parameters:**
 

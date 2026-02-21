@@ -1,6 +1,6 @@
 ---
 title: registerStatusCommand
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.220Z
 graphNode: src/cli/commands/status.ts:registerStatusCommand
 dependencies:
   - path: src/cli/commands/status.ts
@@ -12,7 +12,13 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/commands/status.ts:14-100`
+`function` in `src/cli/commands/status.ts:14-107`
+
+Register the `syncdocs status` CLI command.
+
+Scans the project for documentation coverage and displays statistics
+including a coverage bar, undocumented symbols, and a suggestion for
+the next file to document.
 
 **Parameters:**
 

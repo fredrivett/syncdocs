@@ -1,6 +1,6 @@
 ---
 title: sanitizeLabel
-generated: 2026-02-21T13:51:58.718Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-to-mermaid.ts:sanitizeLabel
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # sanitizeLabel
 
-`function` in `src/graph/graph-to-mermaid.ts:147-154`
+`function` in `src/graph/graph-to-mermaid.ts:155-162`
 
 Sanitize a label for mermaid (escape characters that break parsing)
 

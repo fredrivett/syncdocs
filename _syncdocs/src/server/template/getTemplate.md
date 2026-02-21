@@ -1,6 +1,6 @@
 ---
 title: getTemplate
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.229Z
 graphNode: src/server/template.ts:getTemplate
 dependencies:
   - path: src/server/template.ts
@@ -12,14 +12,13 @@ dependencies:
 
 `exported`
 
-`function` in `src/server/template.ts:1-822`
+`function` in `src/server/template.ts:1-828`
+
+Return the HTML template for the legacy documentation viewer SPA.
+
+This is a self-contained single-page app with inline CSS and JavaScript
+that renders a sidebar tree, search, and markdown doc content.
 
 **Returns:** `string`
-
-**Called by:**
-
-| Symbol | File | Type |
-|---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
 
 *This symbol is async.*

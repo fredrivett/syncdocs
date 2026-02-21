@@ -1,6 +1,6 @@
 ---
 title: buildSymbolIndex
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.228Z
 graphNode: src/server/index.ts:buildSymbolIndex
 dependencies:
   - path: src/server/index.ts
@@ -10,13 +10,18 @@ dependencies:
 
 # buildSymbolIndex
 
-`function` in `src/server/index.ts:23-64`
+`function` in `src/server/index.ts:22-71`
+
+Build a lookup index of all documented symbols from the output directory.
+
+Parses every markdown doc file, extracts frontmatter metadata, and builds
+two maps: one keyed by doc path, one keyed by symbol name (for cross-referencing).
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| outputDir | `string` | Yes |  |
+| outputDir | `string` | Yes | Path to the syncdocs output directory |
 
 **Returns:** `SymbolIndex`
 

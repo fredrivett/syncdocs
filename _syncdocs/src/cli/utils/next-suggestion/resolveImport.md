@@ -1,6 +1,6 @@
 ---
 title: resolveImport
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:resolveImport
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,12 @@ dependencies:
 
 # resolveImport
 
-`function` in `src/cli/utils/next-suggestion.ts:371-395`
+`function` in `src/cli/utils/next-suggestion.ts:402-432`
+
+Resolve a relative import specifier to an absolute file path.
+
+Tries the exact path, then common extensions (`.ts`, `.tsx`, `.js`, `.jsx`),
+then `index.*` variants. Only resolves to files in the `sourceFiles` list.
 
 **Parameters:**
 

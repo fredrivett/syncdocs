@@ -1,6 +1,6 @@
 ---
 title: findMarkdownFiles
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:findMarkdownFiles
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,7 +12,12 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:319-344`
+`function` in `src/cli/utils/next-suggestion.ts:334-365`
+
+Recursively find all `.md` files in a directory.
+
+Skips `node_modules` and `.git` directories. Returns an empty array
+if the directory doesn't exist or can't be read.
 
 **Parameters:**
 

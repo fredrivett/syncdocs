@@ -1,6 +1,6 @@
 ---
 title: extractAllTagTexts
-generated: 2026-02-21T13:51:58.715Z
+generated: 2026-02-21T14:13:44.224Z
 graphNode: src/extractor/jsdoc-extractor.ts:extractAllTagTexts
 dependencies:
   - path: src/extractor/jsdoc-extractor.ts

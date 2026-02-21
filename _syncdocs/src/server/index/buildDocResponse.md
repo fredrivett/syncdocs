@@ -1,6 +1,6 @@
 ---
 title: buildDocResponse
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.229Z
 graphNode: src/server/index.ts:buildDocResponse
 dependencies:
   - path: src/server/index.ts
@@ -10,15 +10,21 @@ dependencies:
 
 # buildDocResponse
 
-`function` in `src/server/index.ts:155-198`
+`function` in `src/server/index.ts:196-251`
+
+Build the JSON response for the `/api/doc` endpoint.
+
+Reads the markdown file, strips frontmatter, and enriches the response
+with metadata from the symbol index (dependency graph, related symbols).
+Falls back to a basic response if the index is stale.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| docPath | `string` | Yes |  |
-| index | `SymbolIndex` | Yes |  |
-| outputDir | `string` | Yes |  |
+| docPath | `string` | Yes | Relative path to the doc file within the output directory |
+| index | `SymbolIndex` | Yes | The symbol index for metadata enrichment |
+| outputDir | `string` | Yes | Path to the syncdocs output directory |
 
 **Calls:**
 

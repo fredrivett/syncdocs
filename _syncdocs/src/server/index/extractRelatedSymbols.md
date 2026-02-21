@@ -1,6 +1,6 @@
 ---
 title: extractRelatedSymbols
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.228Z
 graphNode: src/server/index.ts:extractRelatedSymbols
 dependencies:
   - path: src/server/index.ts
@@ -12,14 +12,20 @@ dependencies:
 
 `exported`
 
-`function` in `src/server/index.ts:73-104`
+`function` in `src/server/index.ts:89-130`
+
+Extract related symbol names from a doc file's Related section.
+
+Looks for backtick-wrapped (`SymbolName`) and bold (**SymbolName**) references
+inside `<details><summary>Related</summary>` blocks, deduplicating and
+excluding the symbol's own name.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| content | `string` | Yes |  |
-| selfName | `string` | Yes |  |
+| content | `string` | Yes | Raw markdown content of the doc file |
+| selfName | `string` | Yes | Name of the current symbol (excluded from results) |
 
 **Returns:** `string[]`
 

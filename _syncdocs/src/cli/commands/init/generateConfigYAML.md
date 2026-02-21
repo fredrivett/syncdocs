@@ -1,6 +1,6 @@
 ---
 title: generateConfigYAML
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.220Z
 graphNode: src/cli/commands/init.ts:generateConfigYAML
 dependencies:
   - path: src/cli/commands/init.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # generateConfigYAML
 
-`function` in `src/cli/commands/init.ts:112-131`
+`function` in `src/cli/commands/init.ts:118-138`
+
+Serialize an init config object to a YAML config file string.
 
 **Parameters:**
 

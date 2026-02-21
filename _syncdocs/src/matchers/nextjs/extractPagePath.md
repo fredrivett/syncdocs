@@ -1,6 +1,6 @@
 ---
 title: extractPagePath
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.228Z
 graphNode: src/matchers/nextjs.ts:extractPagePath
 dependencies:
   - path: src/matchers/nextjs.ts

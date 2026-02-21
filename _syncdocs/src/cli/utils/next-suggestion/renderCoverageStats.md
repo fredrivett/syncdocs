@@ -1,6 +1,6 @@
 ---
 title: renderCoverageStats
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:renderCoverageStats
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,7 +12,7 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:237-266`
+`function` in `src/cli/utils/next-suggestion.ts:242-271`
 
 Render coverage stats (source files, symbols, coverage bar).
 

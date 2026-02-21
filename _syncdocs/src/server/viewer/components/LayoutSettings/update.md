@@ -1,6 +1,6 @@
 ---
 title: update
-generated: 2026-02-21T13:51:58.721Z
+generated: 2026-02-21T14:13:44.232Z
 graphNode: src/server/viewer/components/LayoutSettings.tsx:update
 dependencies:
   - path: src/server/viewer/components/LayoutSettings.tsx

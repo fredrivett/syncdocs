@@ -1,6 +1,6 @@
 ---
 title: loadConfig
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.221Z
 graphNode: src/cli/utils/config.ts:loadConfig
 dependencies:
   - path: src/cli/utils/config.ts
@@ -12,13 +12,18 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/config.ts:10-28`
+`function` in `src/cli/utils/config.ts:10-36`
+
+Load the syncdocs configuration from `_syncdocs/config.yaml`.
+
+Parses the YAML config file to extract the output directory and
+include/exclude scope patterns. Returns null if no config file exists.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| cwd | `unknown` | No |  (default: `process.cwd()`) |
+| cwd | `unknown` | No | Working directory to resolve the config path from (default: `process.cwd()`) |
 
 **Returns:** `SyncdocsConfig | null`
 

@@ -1,6 +1,6 @@
 ---
 title: parseYamlList
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.221Z
 graphNode: src/cli/utils/config.ts:parseYamlList
 dependencies:
   - path: src/cli/utils/config.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # parseYamlList
 
-`function` in `src/cli/utils/config.ts:28-54`
+`function` in `src/cli/utils/config.ts:36-62`
 
 Parse a YAML list under a given key.
 Finds `key:` on its own line, then collects subsequent `- value` lines.

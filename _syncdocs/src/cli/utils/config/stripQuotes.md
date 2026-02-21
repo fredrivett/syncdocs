@@ -1,6 +1,6 @@
 ---
 title: stripQuotes
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.221Z
 graphNode: src/cli/utils/config.ts:stripQuotes
 dependencies:
   - path: src/cli/utils/config.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # stripQuotes
 
-`function` in `src/cli/utils/config.ts:54-64`
+`function` in `src/cli/utils/config.ts:62-73`
+
+Remove surrounding single or double quotes from a string value.
 
 **Parameters:**
 

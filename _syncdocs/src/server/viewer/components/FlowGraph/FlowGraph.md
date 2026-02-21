@@ -1,6 +1,6 @@
 ---
 title: FlowGraph
-generated: 2026-02-21T13:51:58.721Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:FlowGraph
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
@@ -12,7 +12,7 @@ dependencies:
 
 `exported`
 
-`component` in `src/server/viewer/components/FlowGraph.tsx:449-457`
+`component` in `src/server/viewer/components/FlowGraph.tsx:455-463`
 
 **Parameters:**
 

@@ -1,6 +1,6 @@
 ---
 title: flowToMermaid
-generated: 2026-02-21T13:51:58.718Z
+generated: 2026-02-21T14:13:44.227Z
 graphNode: src/graph/graph-to-mermaid.ts:flowToMermaid
 dependencies:
   - path: src/graph/graph-to-mermaid.ts

@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-21T13:51:58.711Z
+generated: 2026-02-21T14:13:44.220Z
 graphNode: src/cli/commands/check.ts:getRelativePath
 dependencies:
   - path: src/cli/commands/check.ts
@@ -10,7 +10,9 @@ dependencies:
 
 # getRelativePath
 
-`function` in `src/cli/commands/check.ts:95-100`
+`function` in `src/cli/commands/check.ts:103-109`
+
+Convert an absolute path to a path relative to the current working directory.
 
 **Parameters:**
 

@@ -1,6 +1,6 @@
 ---
 title: generateDependencyGraph
-generated: 2026-02-21T13:51:58.719Z
+generated: 2026-02-21T14:13:44.228Z
 graphNode: src/server/index.ts:generateDependencyGraph
 dependencies:
   - path: src/server/index.ts
@@ -12,14 +12,19 @@ dependencies:
 
 `exported`
 
-`function` in `src/server/index.ts:104-132`
+`function` in `src/server/index.ts:130-167`
+
+Generate a mermaid flowchart showing a symbol's related dependencies.
+
+Creates a left-to-right flowchart with clickable nodes linking to each
+related symbol's doc page. Returns null if no related symbols exist in the index.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| entry | `SymbolEntry` | Yes |  |
-| index | `SymbolIndex` | Yes |  |
+| entry | `SymbolEntry` | Yes | The symbol entry to generate the graph for |
+| index | `SymbolIndex` | Yes | The full symbol index for resolving related names |
 
 **Returns:** `string | null`
 

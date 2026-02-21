@@ -1,18 +1,18 @@
 ---
 title: FlowControls
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowControls.tsx:FlowControls
 dependencies:
   - path: src/server/viewer/components/FlowControls.tsx
     symbol: FlowControls
-    hash: 9ee8c1c852a15c9b9028e139440ee2daac53c03344ebb25e03584ad5276ea037
+    hash: a42d09822e7ac6706a077f36b81ddfe92901af962db30c7ca85cd8ae76c7430f
 ---
 
 # FlowControls
 
 `exported`
 
-`component` in `src/server/viewer/components/FlowControls.tsx:21-171`
+`component` in `src/server/viewer/components/FlowControls.tsx:21-169`
 
 **Parameters:**
 

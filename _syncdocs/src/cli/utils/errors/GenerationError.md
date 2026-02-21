@@ -1,6 +1,6 @@
 ---
 title: GenerationError
-generated: 2026-02-21T13:51:58.713Z
+generated: 2026-02-21T14:13:44.222Z
 graphNode: src/cli/utils/errors.ts:GenerationError
 dependencies:
   - path: src/cli/utils/errors.ts
@@ -12,4 +12,6 @@ dependencies:
 
 `exported`
 
-`class` in `src/cli/utils/errors.ts:31-38`
+`class` in `src/cli/utils/errors.ts:35-43`
+
+Thrown when documentation generation fails for a symbol.

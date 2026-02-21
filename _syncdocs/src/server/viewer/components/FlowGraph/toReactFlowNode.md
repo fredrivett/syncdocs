@@ -1,6 +1,6 @@
 ---
 title: toReactFlowNode
-generated: 2026-02-21T13:51:58.720Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:toReactFlowNode
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
@@ -10,7 +10,7 @@ dependencies:
 
 # toReactFlowNode
 
-`function` in `src/server/viewer/components/FlowGraph.tsx:72-89`
+`function` in `src/server/viewer/components/FlowGraph.tsx:74-91`
 
 **Parameters:**
 

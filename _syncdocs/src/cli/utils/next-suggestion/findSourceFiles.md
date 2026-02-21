@@ -1,6 +1,6 @@
 ---
 title: findSourceFiles
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:findSourceFiles
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,14 +12,19 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:291-319`
+`function` in `src/cli/utils/next-suggestion.ts:297-334`
+
+Find all source files matching the scope's include/exclude patterns.
+
+Recursively walks the directory tree, applying picomatch patterns to filter
+files. Skips `.git` and `node_modules` directories.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |---|---|---|---|
-| rootDir | `string` | Yes |  |
-| scope | `SyncdocsConfig['scope']` | Yes |  |
+| rootDir | `string` | Yes | Root directory to search from |
+| scope | `SyncdocsConfig['scope']` | Yes | Include and exclude glob patterns |
 
 **Returns:** `string[]`
 

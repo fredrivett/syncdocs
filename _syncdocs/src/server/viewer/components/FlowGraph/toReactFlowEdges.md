@@ -1,6 +1,6 @@
 ---
 title: toReactFlowEdges
-generated: 2026-02-21T13:51:58.721Z
+generated: 2026-02-21T14:13:44.231Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:toReactFlowEdges
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
@@ -10,7 +10,7 @@ dependencies:
 
 # toReactFlowEdges
 
-`function` in `src/server/viewer/components/FlowGraph.tsx:89-115`
+`function` in `src/server/viewer/components/FlowGraph.tsx:91-117`
 
 **Parameters:**
 

@@ -1,6 +1,6 @@
 ---
 title: registerServeCommand
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.220Z
 graphNode: src/cli/commands/serve.ts:registerServeCommand
 dependencies:
   - path: src/cli/commands/serve.ts
@@ -12,7 +12,12 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/commands/serve.ts:10-58`
+`function` in `src/cli/commands/serve.ts:10-64`
+
+Register the `syncdocs serve` CLI command.
+
+Starts the documentation viewer HTTP server and optionally opens it
+in the default browser.
 
 **Parameters:**
 

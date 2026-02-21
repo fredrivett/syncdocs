@@ -1,6 +1,6 @@
 ---
 title: registerSyncCommand
-generated: 2026-02-21T13:51:58.712Z
+generated: 2026-02-21T14:13:44.221Z
 graphNode: src/cli/commands/sync.ts:registerSyncCommand
 dependencies:
   - path: src/cli/commands/sync.ts
@@ -12,7 +12,12 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/commands/sync.ts:9-121`
+`function` in `src/cli/commands/sync.ts:9-127`
+
+Register the `syncdocs sync` CLI command.
+
+Finds source files, builds the dependency graph, and generates static
+markdown documentation for every node. Optionally filters to a target path.
 
 **Parameters:**
 

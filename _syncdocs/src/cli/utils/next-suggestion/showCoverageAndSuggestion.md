@@ -1,6 +1,6 @@
 ---
 title: showCoverageAndSuggestion
-generated: 2026-02-21T13:51:58.714Z
+generated: 2026-02-21T14:13:44.223Z
 graphNode: src/cli/utils/next-suggestion.ts:showCoverageAndSuggestion
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -12,7 +12,7 @@ dependencies:
 
 `exported`
 
-`function` in `src/cli/utils/next-suggestion.ts:266-284`
+`function` in `src/cli/utils/next-suggestion.ts:271-289`
 
 Self-contained: scan the project, show coverage stats and next suggestion.
 Use this from commands that don't already have scanning data (e.g. generate).

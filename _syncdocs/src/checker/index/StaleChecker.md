@@ -1,18 +1,18 @@
 ---
 title: StaleChecker
-generated: 2026-02-21T13:51:58.711Z
+generated: 2026-02-21T14:13:44.219Z
 graphNode: src/checker/index.ts:StaleChecker
 dependencies:
   - path: src/checker/index.ts
     symbol: StaleChecker
-    hash: d258520407ab8a8d7aaaf37fac35f6dba1c34bcc8a5de5ef0dd029eb0d94195d
+    hash: 8c337ed31c358621be95b184b893fef41e414805ec9f1659bbd8286b698ce946
 ---
 
 # StaleChecker
 
 `exported`
 
-`class` in `src/checker/index.ts:11-170`
+`class` in `src/checker/index.ts:11-171`
 
 **Calls:**
 
