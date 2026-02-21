@@ -15,9 +15,11 @@ import {
 import ELK, { type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import '@xyflow/react/dist/style.css';
 
 import type { FlowGraph as FlowGraphData, GraphNode } from '../../../graph/types.js';
+import { GRAPH_SIDEBAR_SLOT_ID } from '../constants';
 import { GRID_SIZE, snapCeil } from '../grid';
 import { DocPanel } from './DocPanel';
 import { FlowControls } from './FlowControls';
@@ -397,53 +399,57 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     [graph.nodes],
   );
 
+  const sidebarSlot = document.getElementById(GRAPH_SIDEBAR_SLOT_ID);
+
   return (
-    <div className="w-full h-full flex">
-      <FlowControls
-        entryPoints={entryPoints}
-        selectedEntry={selectedEntry}
-        onSelectEntry={setSelectedEntry}
-        searchQuery={searchQuery}
-        onSearch={setSearchQuery}
-        nodeCount={visibleGraph.nodes.length}
-        edgeCount={visibleGraph.edges.length}
-        availableTypes={availableTypes}
-        enabledTypes={enabledTypes}
-        onToggleType={onToggleType}
-        onSoloType={(category) => setEnabledTypes(new Set([category]))}
-        onResetTypes={() => setEnabledTypes(null)}
-        showConditionals={showConditionals}
-        onToggleConditionals={() => setShowConditionals((prev) => !prev)}
-        hasConditionalEdges={hasConditionalEdges}
-      />
-      <div className="flex-1 relative">
-        <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeClick={onNodeClick}
-          nodeTypes={nodeTypes}
-          fitView
-          minZoom={0.1}
-          maxZoom={2}
-          snapToGrid
-          snapGrid={[GRID_SIZE, GRID_SIZE]}
-          defaultEdgeOptions={{
-            type: 'smoothstep',
-          }}
-        >
-          <Background variant={BackgroundVariant.Dots} color="#d1d5db" gap={GRID_SIZE} size={1} />
-          <Controls position="bottom-right" />
-          <MiniMap
-            position="bottom-right"
-            style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
-            maskColor="rgba(0,0,0,0.05)"
-          />
-        </ReactFlow>
-        <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
-      </div>
+    <div className="w-full h-full relative">
+      {sidebarSlot &&
+        createPortal(
+          <FlowControls
+            entryPoints={entryPoints}
+            selectedEntry={selectedEntry}
+            onSelectEntry={setSelectedEntry}
+            searchQuery={searchQuery}
+            onSearch={setSearchQuery}
+            nodeCount={visibleGraph.nodes.length}
+            edgeCount={visibleGraph.edges.length}
+            availableTypes={availableTypes}
+            enabledTypes={enabledTypes}
+            onToggleType={onToggleType}
+            onSoloType={(category) => setEnabledTypes(new Set([category]))}
+            onResetTypes={() => setEnabledTypes(null)}
+            showConditionals={showConditionals}
+            onToggleConditionals={() => setShowConditionals((prev) => !prev)}
+            hasConditionalEdges={hasConditionalEdges}
+          />,
+          sidebarSlot,
+        )}
+      <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeClick={onNodeClick}
+        nodeTypes={nodeTypes}
+        fitView
+        minZoom={0.1}
+        maxZoom={2}
+        snapToGrid
+        snapGrid={[GRID_SIZE, GRID_SIZE]}
+        defaultEdgeOptions={{
+          type: 'smoothstep',
+        }}
+      >
+        <Background variant={BackgroundVariant.Dots} color="#d1d5db" gap={GRID_SIZE} size={1} />
+        <Controls position="bottom-right" />
+        <MiniMap
+          position="bottom-right"
+          style={{ border: '1px solid #e5e7eb', borderRadius: 8 }}
+          maskColor="rgba(0,0,0,0.05)"
+        />
+      </ReactFlow>
+      <DocPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
     </div>
   );
 }

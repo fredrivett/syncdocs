@@ -47,9 +47,7 @@ export function FlowControls({
   };
 
   return (
-    <div className="bg-white border-r border-gray-200 p-4 w-[280px] min-w-[280px] h-full overflow-auto">
-      <div className="font-bold text-sm mb-3 text-gray-900">Syncdocs Flow Graph</div>
-
+    <div className="p-4 flex-1 overflow-auto">
       <input
         type="text"
         placeholder="Search nodes..."
