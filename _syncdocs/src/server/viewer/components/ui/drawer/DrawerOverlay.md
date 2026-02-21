@@ -1,13 +1,28 @@
 ---
 title: DrawerOverlay
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T13:51:58.722Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerOverlay
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerOverlay
-    hash: 60699b4d8557d3936d653104830150ada54ff7639feb7eb730f73dde9ee329c3
+    hash: 33e41f51a68c6a6d5fbf4899c40ffb305979a17162fa10a7c216e5317d69bf94
 ---
 
 # DrawerOverlay
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:28-44`
+`component` in `src/server/viewer/components/ui/drawer.tsx:20-36`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  ...props
+} | `React.ComponentProps<typeof DrawerPrimitive.Overlay>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

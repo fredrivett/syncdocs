@@ -1,6 +1,6 @@
 ---
 title: formatNodeLabel
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T13:51:58.718Z
 graphNode: src/graph/graph-to-mermaid.ts:formatNodeLabel
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -11,6 +11,14 @@ dependencies:
 # formatNodeLabel
 
 `function` in `src/graph/graph-to-mermaid.ts:124-139`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| node | `GraphNode` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 

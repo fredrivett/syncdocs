@@ -1,16 +1,25 @@
 ---
 title: startServer
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.720Z
 graphNode: src/server/index.ts:startServer
 dependencies:
   - path: src/server/index.ts
     symbol: startServer
-    hash: 7bf4d738ca5a0c41662d804b4b7c141fa3b80f42b91dd49e13cc68d751c65040
+    hash: 2745450d26f12744e33ea05982a2d38d04f320cb674556e80a1b44b4b87685ed
 ---
 
 # startServer
 
-`function` in `src/server/index.ts:217-325`
+`exported`
+
+`function` in `src/server/index.ts:217-342`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| outputDir | `string` | Yes |  |
+| port | `number` | Yes |  |
 
 **Calls:**
 
@@ -18,9 +27,8 @@ dependencies:
 |---|---|---|
 | `buildSymbolIndex` | `src/server/index.ts` | direct-call |
 | `getTemplate` | `src/server/template.ts` | direct-call |
-| `buildIndexResponse` | `src/server/index.ts` | direct-call |
-| `buildDocResponse` | `src/server/index.ts` | direct-call |
-| `serveStaticFile` | `src/server/index.ts` | direct-call |
+| `buildIndexResponse` | `src/server/index.ts` | conditional-call |
+| `buildDocResponse` | `src/server/index.ts` | conditional-call |
 
 **Called by:**
 

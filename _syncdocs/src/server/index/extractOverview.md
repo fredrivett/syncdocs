@@ -1,6 +1,6 @@
 ---
 title: extractOverview
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:extractOverview
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,17 @@ dependencies:
 
 # extractOverview
 
+`exported`
+
 `function` in `src/server/index.ts:64-73`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| content | `string` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 

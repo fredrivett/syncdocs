@@ -1,13 +1,25 @@
 ---
 title: SheetBody
-generated: 2026-02-18T21:53:33.391Z
+generated: 2026-02-21T13:51:58.724Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetBody
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetBody
-    hash: cc5a3800d5c3cf7cb1b8e0abb2c162319e6cbc37053674a4ff03f3b3a63a908d
+    hash: bcbf0501264dde6db269aeb18c53828cd5bae6bb51501c16de6986ffbe8c7cae
 ---
 
 # SheetBody
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:96-106`
+`component` in `src/server/viewer/components/ui/sheet.tsx:94-104`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<'div'>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

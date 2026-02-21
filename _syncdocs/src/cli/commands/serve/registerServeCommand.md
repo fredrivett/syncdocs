@@ -1,6 +1,6 @@
 ---
 title: registerServeCommand
-generated: 2026-02-18T21:53:33.380Z
+generated: 2026-02-21T13:51:58.712Z
 graphNode: src/cli/commands/serve.ts:registerServeCommand
 dependencies:
   - path: src/cli/commands/serve.ts
@@ -10,11 +10,19 @@ dependencies:
 
 # registerServeCommand
 
-`function` in `src/cli/commands/serve.ts:11-59`
+`exported`
+
+`function` in `src/cli/commands/serve.ts:10-58`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| cli | `CAC` | Yes |  |
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `loadConfig` | `src/cli/commands/serve.ts` | direct-call |
+| `loadConfig` | `src/cli/utils/config.ts` | direct-call |
 | `startServer` | `src/server/index.ts` | direct-call |

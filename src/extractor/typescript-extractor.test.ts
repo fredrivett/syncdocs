@@ -1404,4 +1404,631 @@ const processUser = (user: { id: string; name: string }): string => {
       expect(result.symbols[0].params).toContain('user');
     });
   });
+
+  describe('JSDoc extraction', () => {
+    it('should extract JSDoc description from function declaration', () => {
+      const code = `
+/** Adds two numbers together. */
+function add(a: number, b: number): number {
+  return a + b
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toBe('Adds two numbers together.');
+    });
+
+    it('should extract multi-line JSDoc description', () => {
+      const code = `
+/**
+ * Processes data from the input stream.
+ * Handles both binary and text formats.
+ */
+function process(data: string) { return data }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toContain('Processes data');
+      expect(result.symbols[0].jsDoc?.description).toContain('binary and text');
+    });
+
+    it('should extract JSDoc from arrow function', () => {
+      const code = `
+/** Multiplies two numbers. */
+const multiply = (a: number, b: number) => a * b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toBe('Multiplies two numbers.');
+    });
+
+    it('should extract JSDoc from function expression', () => {
+      const code = `
+/** Divides two numbers. */
+const divide = function(a: number, b: number) { return a / b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toBe('Divides two numbers.');
+    });
+
+    it('should extract JSDoc from class declaration', () => {
+      const code = `
+/** A utility calculator. */
+class Calculator {
+  add(a: number, b: number) { return a + b }
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toBe('A utility calculator.');
+    });
+
+    it('should extract JSDoc from call expression initializer', () => {
+      const code = `
+/** The main processing task. */
+const analyzeTask = task({
+  id: "analyze",
+  run: async () => { return 'done' }
+})
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.description).toBe('The main processing task.');
+    });
+
+    it('should return undefined jsDoc when no comment present', () => {
+      const code = `function noDoc() { return 1 }`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc).toBeUndefined();
+    });
+
+    it('should return undefined jsDoc for regular // comment', () => {
+      const code = `
+// This is not JSDoc
+function f() { return 1 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc).toBeUndefined();
+    });
+
+    it('should merge @param descriptions into jsDoc.params and structuredParams', () => {
+      const code = `
+/**
+ * Greets a user.
+ * @param name - The user name
+ * @param greeting - Custom greeting text
+ */
+function greet(name: string, greeting: string): string {
+  return greeting + ', ' + name
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      // jsDoc.params
+      expect(result.symbols[0].jsDoc?.params).toEqual([
+        { name: 'name', description: 'The user name' },
+        { name: 'greeting', description: 'Custom greeting text' },
+      ]);
+      // structuredParams should also have descriptions
+      expect(result.symbols[0].structuredParams?.[0].description).toBe('The user name');
+      expect(result.symbols[0].structuredParams?.[1].description).toBe('Custom greeting text');
+    });
+
+    it('should ignore JSDoc type annotation in @param', () => {
+      const code = `
+/**
+ * @param {string} name - The name
+ */
+function greet(name: string) { return name }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.params[0].description).toBe('The name');
+      expect(result.symbols[0].jsDoc?.params[0].description).not.toContain('{string}');
+    });
+
+    it('should include @param in jsDoc even without matching actual param', () => {
+      const code = `
+/**
+ * @param ghost - Not a real param
+ */
+function f(x: number) { return x }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.params).toEqual([
+        { name: 'ghost', description: 'Not a real param' },
+      ]);
+      // But structuredParams won't have the ghost description since it doesn't match
+      expect(result.symbols[0].structuredParams?.[0].name).toBe('x');
+      expect(result.symbols[0].structuredParams?.[0].description).toBeUndefined();
+    });
+
+    it('should extract @returns description', () => {
+      const code = `
+/**
+ * @returns The computed sum
+ */
+function add(a: number, b: number) { return a + b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.returns).toBe('The computed sum');
+    });
+
+    it('should extract @example content', () => {
+      const code = `
+/**
+ * @example
+ * add(1, 2) // returns 3
+ */
+function add(a: number, b: number) { return a + b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.examples).toHaveLength(1);
+      expect(result.symbols[0].jsDoc?.examples[0]).toContain('add(1, 2)');
+    });
+
+    it('should extract multiple @example blocks', () => {
+      const code = `
+/**
+ * @example
+ * add(1, 2)
+ * @example
+ * add(3, 4)
+ */
+function add(a: number, b: number) { return a + b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.examples).toHaveLength(2);
+    });
+
+    it('should extract @deprecated without reason', () => {
+      const code = `
+/**
+ * @deprecated
+ */
+function old() { return 1 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.deprecated).toBe(true);
+    });
+
+    it('should extract @deprecated with reason', () => {
+      const code = `
+/**
+ * @deprecated Use newFunction instead.
+ */
+function old() { return 1 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.deprecated).toBe('Use newFunction instead.');
+    });
+
+    it('should extract @throws', () => {
+      const code = `
+/**
+ * @throws {Error} When input is invalid
+ */
+function validate(input: string) { if (!input) throw new Error('bad') }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.throws).toHaveLength(1);
+      expect(result.symbols[0].jsDoc?.throws[0]).toContain('When input is invalid');
+    });
+
+    it('should extract @see', () => {
+      const code = `
+/**
+ * @see otherFunction
+ */
+function f() { return 1 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].jsDoc?.see).toHaveLength(1);
+      expect(result.symbols[0].jsDoc?.see[0]).toBe('otherFunction');
+    });
+
+    it('should extract all tags combined correctly', () => {
+      const code = `
+/**
+ * Validates and transforms user input.
+ * @param input - Raw input string
+ * @param strict - Enable strict mode
+ * @returns The validated result
+ * @throws {Error} When validation fails
+ * @see validateInput
+ * @deprecated Use processV2 instead
+ * @example
+ * process("hello", true)
+ */
+function process(input: string, strict: boolean): string { return input }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      const jsDoc = result.symbols[0].jsDoc;
+      expect(jsDoc?.description).toBe('Validates and transforms user input.');
+      expect(jsDoc?.params).toHaveLength(2);
+      expect(jsDoc?.returns).toBe('The validated result');
+      expect(jsDoc?.throws).toHaveLength(1);
+      expect(jsDoc?.see).toHaveLength(1);
+      expect(jsDoc?.deprecated).toBe('Use processV2 instead');
+      expect(jsDoc?.examples).toHaveLength(1);
+    });
+
+    it('should extract both isExported and jsDoc on exported arrow function', () => {
+      const code = `
+/** Exported and documented. */
+export const greet = (name: string) => name
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+      expect(result.symbols[0].jsDoc?.description).toBe('Exported and documented.');
+    });
+  });
+
+  describe('Structured parameters', () => {
+    it('should extract structured params with types', () => {
+      const code = `
+function process(name: string, count: number) { return name }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams).toEqual([
+        { name: 'name', type: 'string', isOptional: false, isRest: false },
+        { name: 'count', type: 'number', isOptional: false, isRest: false },
+      ]);
+    });
+
+    it('should detect optional parameter with ?', () => {
+      const code = `
+function greet(name: string, title?: string) { return name }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].isOptional).toBe(false);
+      expect(result.symbols[0].structuredParams?.[1].isOptional).toBe(true);
+    });
+
+    it('should detect default value and mark as optional', () => {
+      const code = `
+function format(amount: number, currency: string = 'USD') { return '' }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      const currencyParam = result.symbols[0].structuredParams?.[1];
+      expect(currencyParam?.isOptional).toBe(true);
+      expect(currencyParam?.defaultValue).toBe("'USD'");
+    });
+
+    it('should detect object default value', () => {
+      const code = `
+function init(opts: { a: number } = { a: 1 }) { return opts }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      const param = result.symbols[0].structuredParams?.[0];
+      expect(param?.isOptional).toBe(true);
+      expect(param?.defaultValue).toBe('{ a: 1 }');
+    });
+
+    it('should detect rest parameter', () => {
+      const code = `
+function sum(...numbers: number[]) { return 0 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].isRest).toBe(true);
+      expect(result.symbols[0].structuredParams?.[0].name).toBe('numbers');
+    });
+
+    it('should return empty array for no params', () => {
+      const code = `function noParams() { return 1 }`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams).toEqual([]);
+    });
+
+    it('should handle destructured object param', () => {
+      const code = `
+function f({ name, age }: { name: string; age: number }) { return name }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      const param = result.symbols[0].structuredParams?.[0];
+      expect(param?.name).toBe('{ name, age }');
+      expect(param?.type).toBe('{ name: string; age: number }');
+    });
+
+    it('should preserve complex generic type', () => {
+      const code = `
+function process(items: Map<string, number[]>) { return items }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].type).toBe('Map<string, number[]>');
+    });
+
+    it('should preserve union type param', () => {
+      const code = `
+function handle(value: string | number) { return value }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].type).toBe('string | number');
+    });
+
+    it('should use "unknown" for param with no type annotation', () => {
+      const code = `
+function f(x) { return x }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].type).toBe('unknown');
+    });
+
+    it('should handle mixed optional/required/rest params', () => {
+      const code = `
+function f(required: string, optional?: number, ...rest: boolean[]) { return required }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams).toEqual([
+        { name: 'required', type: 'string', isOptional: false, isRest: false },
+        { name: 'optional', type: 'number', isOptional: true, isRest: false },
+        { name: 'rest', type: 'boolean[]', isOptional: false, isRest: true },
+      ]);
+    });
+
+    it('should extract structured params from arrow function', () => {
+      const code = `
+const add = (a: number, b: number) => a + b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams).toEqual([
+        { name: 'a', type: 'number', isOptional: false, isRest: false },
+        { name: 'b', type: 'number', isOptional: false, isRest: false },
+      ]);
+    });
+
+    it('should extract structured params from function expression', () => {
+      const code = `
+const divide = function(a: number, b: number) { return a / b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams).toEqual([
+        { name: 'a', type: 'number', isOptional: false, isRest: false },
+        { name: 'b', type: 'number', isOptional: false, isRest: false },
+      ]);
+    });
+
+    it('should merge JSDoc @param descriptions into structuredParams by name', () => {
+      const code = `
+/**
+ * @param name - The user name
+ * @param age - The user age
+ */
+function createUser(name: string, age: number) { return { name, age } }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].description).toBe('The user name');
+      expect(result.symbols[0].structuredParams?.[1].description).toBe('The user age');
+    });
+
+    it('should not attach JSDoc description when param name mismatches', () => {
+      const code = `
+/**
+ * @param wrong - Wrong name
+ */
+function f(actual: string) { return actual }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].structuredParams?.[0].name).toBe('actual');
+      expect(result.symbols[0].structuredParams?.[0].description).toBeUndefined();
+    });
+  });
+
+  describe('Return type extraction', () => {
+    it('should extract explicit return type', () => {
+      const code = `
+function add(a: number, b: number): number { return a + b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('number');
+    });
+
+    it('should extract Promise return type', () => {
+      const code = `
+async function fetchData(url: string): Promise<Response> {
+  return fetch(url)
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('Promise<Response>');
+    });
+
+    it('should extract void return type', () => {
+      const code = `
+function log(msg: string): void { console.log(msg) }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('void');
+    });
+
+    it('should extract complex object return type', () => {
+      const code = `
+function getUser(): { id: string; name: string } { return { id: '1', name: 'test' } }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('{ id: string; name: string }');
+    });
+
+    it('should extract union return type', () => {
+      const code = `
+function find(id: string): string | null { return null }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('string | null');
+    });
+
+    it('should return undefined when no explicit return type', () => {
+      const code = `
+function add(a: number, b: number) { return a + b }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBeUndefined();
+    });
+
+    it('should extract return type from arrow function', () => {
+      const code = `
+const add = (a: number, b: number): number => a + b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('number');
+    });
+
+    it('should return undefined for arrow function without return type', () => {
+      const code = `
+const add = (a: number, b: number) => a + b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBeUndefined();
+    });
+
+    it('should extract generic return type', () => {
+      const code = `
+function identity<T>(x: T): T { return x }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].returnType).toBe('T');
+    });
+  });
+
+  describe('Export detection', () => {
+    it('should detect exported function declaration', () => {
+      const code = `
+export function greet(name: string) { return name }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+
+    it('should detect non-exported function', () => {
+      const code = `
+function internal() { return 1 }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(false);
+    });
+
+    it('should detect exported arrow function', () => {
+      const code = `
+export const multiply = (a: number, b: number) => a * b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+
+    it('should detect non-exported arrow function', () => {
+      const code = `
+const multiply = (a: number, b: number) => a * b
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(false);
+    });
+
+    it('should detect exported class', () => {
+      const code = `
+export class UserService {
+  getUser() { return null }
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+
+    it('should detect non-exported class', () => {
+      const code = `
+class Internal {
+  run() { return null }
+}
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(false);
+    });
+
+    it('should detect export default function', () => {
+      const code = `
+export default function handler() { return 'ok' }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+
+    it('should detect exported call expression', () => {
+      const code = `
+export const myTask = task({
+  id: "my-task",
+  run: async () => { return 'done' }
+})
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+
+    it('should correctly identify export status for multiple symbols', () => {
+      const code = `
+export function exported() { return 1 }
+function internal() { return 2 }
+export const exportedArrow = () => 3
+const internalArrow = () => 4
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true); // exported
+      expect(result.symbols[1].isExported).toBe(false); // internal
+      expect(result.symbols[2].isExported).toBe(true); // exportedArrow
+      expect(result.symbols[3].isExported).toBe(false); // internalArrow
+    });
+
+    it('should detect export async function', () => {
+      const code = `
+export async function fetchData() { return fetch('/api') }
+`;
+      writeFileSync(TEST_FILE, code);
+      const result = extractor.extractSymbols(TEST_FILE);
+      expect(result.symbols[0].isExported).toBe(true);
+    });
+  });
 });

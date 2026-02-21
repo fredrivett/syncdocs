@@ -1,15 +1,25 @@
 ---
 title: FunctionNode
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T13:51:58.722Z
 graphNode: src/server/viewer/components/NodeTypes.tsx:FunctionNode
 dependencies:
   - path: src/server/viewer/components/NodeTypes.tsx
     symbol: FunctionNode
-    hash: 82285230b7804803bd4efd696bc9c7a879765d6a5c882e0b8453b1bb423c8288
+    hash: 2226a5ebcd98189c38dc05b524aadd3393376d5864ee788965eab4d0d0a13b5e
 ---
 
 # FunctionNode
 
-`function` in `src/server/viewer/components/NodeTypes.tsx:121-162`
+`component` in `src/server/viewer/components/NodeTypes.tsx:185-210`
 
-*This symbol is async.*
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { data } | `NodeProps` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `nodeClass` | `src/server/viewer/components/NodeTypes.tsx` | direct-call |

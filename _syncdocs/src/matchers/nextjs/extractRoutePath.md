@@ -1,6 +1,6 @@
 ---
 title: extractRoutePath
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/matchers/nextjs.ts:extractRoutePath
 dependencies:
   - path: src/matchers/nextjs.ts
@@ -11,3 +11,14 @@ dependencies:
 # extractRoutePath
 
 `function` in `src/matchers/nextjs.ts:24-34`
+
+Extract route path from file path.
+e.g. "src/app/api/analyze/route.ts" -> "/api/analyze"
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| filePath | `string` | Yes |  |
+
+**Returns:** `string`

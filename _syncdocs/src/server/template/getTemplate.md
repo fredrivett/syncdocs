@@ -1,16 +1,20 @@
 ---
 title: getTemplate
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.720Z
 graphNode: src/server/template.ts:getTemplate
 dependencies:
   - path: src/server/template.ts
     symbol: getTemplate
-    hash: 7440413c6ecee967d1fb6d423c3791e29aee0cc67e1ab38751dea0a2cf2dba91
+    hash: 6ac38e4bf0a242d583ba4287778d10dfd88a06244eb673057214c3fe95045c04
 ---
 
 # getTemplate
 
+`exported`
+
 `function` in `src/server/template.ts:1-822`
+
+**Returns:** `string`
 
 **Called by:**
 

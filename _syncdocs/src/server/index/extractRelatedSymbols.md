@@ -1,6 +1,6 @@
 ---
 title: extractRelatedSymbols
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:extractRelatedSymbols
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,18 @@ dependencies:
 
 # extractRelatedSymbols
 
+`exported`
+
 `function` in `src/server/index.ts:73-104`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| content | `string` | Yes |  |
+| selfName | `string` | Yes |  |
+
+**Returns:** `string[]`
 
 **Calls:**
 

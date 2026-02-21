@@ -1,13 +1,28 @@
 ---
 title: SheetDescription
-generated: 2026-02-18T21:53:33.391Z
+generated: 2026-02-21T13:51:58.724Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetDescription
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetDescription
-    hash: e0a492ab1dd97e81307a46f89053b7efbeb6fd856de8f9fece683ac34722b71e
+    hash: 344420d9a536da79a611ca02eb5a66ee41fb4a45e013e0d5933257ff67e1df47
 ---
 
 # SheetDescription
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:129-142`
+`component` in `src/server/viewer/components/ui/sheet.tsx:120-133`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  ...props
+} | `React.ComponentProps<typeof SheetPrimitive.Description>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

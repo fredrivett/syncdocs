@@ -1,13 +1,28 @@
 ---
 title: SheetOverlay
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetOverlay
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetOverlay
-    hash: f1cd26ebf3de4f6d7853b675b03ed031600af86a84f7e832c3130ced4a2f2a05
+    hash: b7e540cf000862efffaea1a04bf8a0738234363b780d8ed4a9fd46935d1f4e1b
 ---
 
 # SheetOverlay
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:26-42`
+`component` in `src/server/viewer/components/ui/sheet.tsx:20-36`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  ...props
+} | `React.ComponentProps<typeof SheetPrimitive.Overlay>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

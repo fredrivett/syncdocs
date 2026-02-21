@@ -4,6 +4,30 @@
 
 import type { ConditionInfo } from '../graph/types.js';
 
+export interface ParamInfo {
+  name: string;
+  type: string;
+  isOptional: boolean;
+  isRest: boolean;
+  defaultValue?: string;
+  description?: string;
+}
+
+export interface JsDocParamTag {
+  name: string;
+  description: string;
+}
+
+export interface JsDocInfo {
+  description?: string;
+  params: JsDocParamTag[];
+  returns?: string;
+  examples: string[];
+  deprecated?: string | true;
+  throws: string[];
+  see: string[];
+}
+
 export interface SymbolInfo {
   name: string;
   kind: 'function' | 'class' | 'const' | 'method' | 'component';
@@ -13,6 +37,10 @@ export interface SymbolInfo {
   fullText: string;
   startLine: number;
   endLine: number;
+  structuredParams?: ParamInfo[];
+  returnType?: string;
+  isExported?: boolean;
+  jsDoc?: JsDocInfo;
 }
 
 export interface CallSite {

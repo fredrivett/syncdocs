@@ -1,6 +1,6 @@
 ---
 title: ContentHasher
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T13:51:58.718Z
 graphNode: src/hasher/index.ts:ContentHasher
 dependencies:
   - path: src/hasher/index.ts
@@ -9,6 +9,8 @@ dependencies:
 ---
 
 # ContentHasher
+
+`exported`
 
 `class` in `src/hasher/index.ts:8-66`
 

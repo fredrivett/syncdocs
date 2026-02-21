@@ -1,23 +1,36 @@
 ---
 title: scanProject
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T13:51:58.713Z
 graphNode: src/cli/utils/next-suggestion.ts:scanProject
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
     symbol: scanProject
-    hash: db09b1df91088c6a24a1d44e444e258341d9d707eae5efb7b44e2ee49e4fdbfc
+    hash: bf327d3a04fa4426af782651ebac21f0325583f58447c24059cfedb240ddc864
 ---
 
 # scanProject
 
-`function` in `src/cli/utils/next-suggestion.ts:70-128`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:72-130`
+
+Scan the project and return coverage data.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| outputDir | `string` | Yes |  |
+| scope | `SyncdocsConfig['scope']` | Yes |  |
+
+**Returns:** `ProjectScan`
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
 | `findSourceFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 | `getRelativePath` | `src/cli/utils/next-suggestion.ts` | direct-call |
 
 **Called by:**

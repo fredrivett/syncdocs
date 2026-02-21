@@ -1,16 +1,18 @@
 ---
 title: GraphBuilder
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T13:51:58.717Z
 graphNode: src/graph/graph-builder.ts:GraphBuilder
 dependencies:
   - path: src/graph/graph-builder.ts
     symbol: GraphBuilder
-    hash: 37cb7c7611ea04aa8c43c25856fcba7433be30a511466500d2c5dcf72c655851
+    hash: fe22d951761c621c1745a57b7f120b4b3e8d4d449917431e967583d01b1ae541
 ---
 
 # GraphBuilder
 
-`class` in `src/graph/graph-builder.ts:56-281`
+`exported`
+
+`class` in `src/graph/graph-builder.ts:56-348`
 
 **Calls:**
 
@@ -19,4 +21,4 @@ dependencies:
 | `getRelativePath` | `src/graph/graph-builder.ts` | direct-call |
 | `isAsyncSymbol` | `src/graph/graph-builder.ts` | direct-call |
 | `resolveImportPath` | `src/extractor/resolve-import.ts` | direct-call |
-| `connectionTypeToEdgeType` | `src/graph/graph-builder.ts` | direct-call |
+| `connectionTypeToEdgeType` | `src/graph/graph-builder.ts` | conditional-call |

@@ -6,7 +6,16 @@ import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import { ExtractionError } from '../cli/utils/errors.js';
 import type { ConditionInfo } from '../graph/types.js';
-import type { CallSite, ExtractionResult, ImportInfo, ReExportInfo, SymbolInfo } from './types.js';
+import { extractJsDoc } from './jsdoc-extractor.js';
+import type {
+  CallSite,
+  ExtractionResult,
+  ImportInfo,
+  JsDocInfo,
+  ParamInfo,
+  ReExportInfo,
+  SymbolInfo,
+} from './types.js';
 
 export class TypeScriptExtractor {
   /**
@@ -452,6 +461,59 @@ export class TypeScriptExtractor {
   }
 
   /**
+   * Extract structured parameter info from a function's parameter declarations.
+   * Gets types from the AST, descriptions from JSDoc @param tags.
+   */
+  private extractStructuredParams(
+    parameters: ts.NodeArray<ts.ParameterDeclaration>,
+    jsDoc: JsDocInfo | undefined,
+    sourceFile: ts.SourceFile,
+  ): ParamInfo[] {
+    const paramDescriptions = new Map<string, string>();
+    if (jsDoc) {
+      for (const p of jsDoc.params) {
+        paramDescriptions.set(p.name, p.description);
+      }
+    }
+
+    return parameters.map((param) => {
+      const name = param.name.getText(sourceFile);
+      const type = param.type ? param.type.getText(sourceFile) : 'unknown';
+      const isOptional = !!param.questionToken || !!param.initializer;
+      const isRest = !!param.dotDotDotToken;
+      const defaultValue = param.initializer ? param.initializer.getText(sourceFile) : undefined;
+      const description = paramDescriptions.get(name);
+
+      return {
+        name,
+        type,
+        isOptional,
+        isRest,
+        ...(defaultValue !== undefined && { defaultValue }),
+        ...(description !== undefined && { description }),
+      };
+    });
+  }
+
+  /**
+   * Extract the return type annotation from a function-like node.
+   */
+  private extractReturnType(
+    node: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression,
+    sourceFile: ts.SourceFile,
+  ): string | undefined {
+    return node.type ? node.type.getText(sourceFile) : undefined;
+  }
+
+  /**
+   * Check if a node has the export keyword modifier.
+   */
+  private isNodeExported(node: ts.Node): boolean {
+    const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
+    return modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
+  }
+
+  /**
    * Extract function declaration
    */
   private extractFunction(node: ts.FunctionDeclaration, sourceFile: ts.SourceFile): SymbolInfo {
@@ -467,6 +529,11 @@ export class TypeScriptExtractor {
     const { line: startLine } = sourceFile.getLineAndCharacterOfPosition(node.pos);
     const { line: endLine } = sourceFile.getLineAndCharacterOfPosition(node.end);
 
+    const jsDoc = extractJsDoc(node, sourceFile);
+    const structuredParams = this.extractStructuredParams(node.parameters, jsDoc, sourceFile);
+    const returnType = this.extractReturnType(node, sourceFile);
+    const isExported = this.isNodeExported(node);
+
     return {
       name,
       kind: this.isReactComponent(name, node.body ?? null, sourceFile.fileName)
@@ -478,6 +545,10 @@ export class TypeScriptExtractor {
       fullText,
       startLine: startLine + 1,
       endLine: endLine + 1,
+      structuredParams,
+      returnType,
+      isExported,
+      jsDoc,
     };
   }
 
@@ -494,20 +565,32 @@ export class TypeScriptExtractor {
 
     let params = '';
     let body = '';
+    let structuredParams: ParamInfo[] | undefined;
+    let returnType: string | undefined;
+
+    // JSDoc is on the VariableDeclaration — extractJsDoc handles parent traversal
+    const jsDoc = extractJsDoc(decl, sourceFile);
 
     if (ts.isArrowFunction(func)) {
       params = func.parameters.map((p) => p.getText(sourceFile)).join(', ');
       body = ts.isBlock(func.body)
         ? func.body.getText(sourceFile)
         : `{ return ${func.body.getText(sourceFile)} }`;
+      structuredParams = this.extractStructuredParams(func.parameters, jsDoc, sourceFile);
+      returnType = this.extractReturnType(func, sourceFile);
     } else if (ts.isFunctionExpression(func)) {
       params = func.parameters.map((p) => p.getText(sourceFile)).join(', ');
       body = func.body ? func.body.getText(sourceFile) : '';
+      structuredParams = this.extractStructuredParams(func.parameters, jsDoc, sourceFile);
+      returnType = this.extractReturnType(func, sourceFile);
     }
 
     const fullText = decl.getText(sourceFile);
     const { line: startLine } = sourceFile.getLineAndCharacterOfPosition(decl.pos);
     const { line: endLine } = sourceFile.getLineAndCharacterOfPosition(decl.end);
+
+    // Export is on the VariableStatement (grandparent)
+    const isExported = this.isNodeExported(decl.parent.parent);
 
     const funcBody = ts.isArrowFunction(func) ? func.body : (func as ts.FunctionExpression).body;
     return {
@@ -521,6 +604,10 @@ export class TypeScriptExtractor {
       fullText,
       startLine: startLine + 1,
       endLine: endLine + 1,
+      structuredParams,
+      returnType,
+      isExported,
+      jsDoc,
     };
   }
 
@@ -547,6 +634,9 @@ export class TypeScriptExtractor {
     const { line: startLine } = sourceFile.getLineAndCharacterOfPosition(decl.pos);
     const { line: endLine } = sourceFile.getLineAndCharacterOfPosition(decl.end);
 
+    const jsDoc = extractJsDoc(decl, sourceFile);
+    const isExported = this.isNodeExported(decl.parent.parent);
+
     return {
       name,
       kind: 'const',
@@ -556,6 +646,8 @@ export class TypeScriptExtractor {
       fullText,
       startLine: startLine + 1,
       endLine: endLine + 1,
+      isExported,
+      jsDoc,
     };
   }
 
@@ -573,15 +665,20 @@ export class TypeScriptExtractor {
     const { line: startLine } = sourceFile.getLineAndCharacterOfPosition(node.pos);
     const { line: endLine } = sourceFile.getLineAndCharacterOfPosition(node.end);
 
+    const jsDoc = extractJsDoc(node, sourceFile);
+    const isExported = this.isNodeExported(node);
+
     return {
       name,
       kind: 'class',
       filePath: sourceFile.fileName,
-      params: '', // Classes don't have params at the class level
+      params: '',
       body,
       fullText,
       startLine: startLine + 1,
       endLine: endLine + 1,
+      isExported,
+      jsDoc,
     };
   }
 }

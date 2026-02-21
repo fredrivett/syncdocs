@@ -1,6 +1,6 @@
 ---
 title: buildAdjacencyList
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T13:51:58.717Z
 graphNode: src/graph/graph-query.ts:buildAdjacencyList
 dependencies:
   - path: src/graph/graph-query.ts
@@ -11,6 +11,16 @@ dependencies:
 # buildAdjacencyList
 
 `function` in `src/graph/graph-query.ts:90-103`
+
+Build an adjacency list from graph edges (source → [targets])
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| graph | `FlowGraph` | Yes |  |
+
+**Returns:** `Map<string, string[]>`
 
 **Called by:**
 

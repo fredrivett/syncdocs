@@ -1,16 +1,27 @@
 ---
 title: generateDependencyGraph
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:generateDependencyGraph
 dependencies:
   - path: src/server/index.ts
     symbol: generateDependencyGraph
-    hash: bb45ba927c7535d002c24f46061b6731d9d2ddffc8f1e7008cb9093aa5fcc05e
+    hash: 1dd94ebbfcda22c827d87693ff30aea9a9b544d735f5605fe2057e9fd6d6cab3
 ---
 
 # generateDependencyGraph
 
+`exported`
+
 `function` in `src/server/index.ts:104-132`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| entry | `SymbolEntry` | Yes |  |
+| index | `SymbolIndex` | Yes |  |
+
+**Returns:** `string | null`
 
 **Calls:**
 
@@ -22,4 +33,4 @@ dependencies:
 
 | Symbol | File | Type |
 |---|---|---|
-| `buildDocResponse` | `src/server/index.ts` | direct-call |
+| `buildDocResponse` | `src/server/index.ts` | conditional-call |

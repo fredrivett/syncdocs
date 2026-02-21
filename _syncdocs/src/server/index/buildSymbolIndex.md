@@ -1,6 +1,6 @@
 ---
 title: buildSymbolIndex
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:buildSymbolIndex
 dependencies:
   - path: src/server/index.ts
@@ -11,6 +11,14 @@ dependencies:
 # buildSymbolIndex
 
 `function` in `src/server/index.ts:23-64`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| outputDir | `string` | Yes |  |
+
+**Returns:** `SymbolIndex`
 
 **Calls:**
 

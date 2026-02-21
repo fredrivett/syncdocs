@@ -1,6 +1,6 @@
 ---
 title: findMarkdownFiles
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T13:51:58.714Z
 graphNode: src/cli/utils/next-suggestion.ts:findMarkdownFiles
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,19 +10,29 @@ dependencies:
 
 # findMarkdownFiles
 
-`function` in `src/cli/utils/next-suggestion.ts:340-365`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:319-344`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| dir | `string` | Yes |  |
+
+**Returns:** `string[]`
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `scanProject` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `scanProjectAsync` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `scanProject` | `src/cli/utils/next-suggestion.ts` | conditional-call |
+| `scanProjectAsync` | `src/cli/utils/next-suggestion.ts` | conditional-call |
+| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 | `buildSymbolIndex` | `src/server/index.ts` | direct-call |

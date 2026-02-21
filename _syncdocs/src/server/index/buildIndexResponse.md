@@ -1,6 +1,6 @@
 ---
 title: buildIndexResponse
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:buildIndexResponse
 dependencies:
   - path: src/server/index.ts
@@ -12,8 +12,14 @@ dependencies:
 
 `function` in `src/server/index.ts:132-155`
 
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| index | `SymbolIndex` | Yes |  |
+
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
+| `startServer` | `src/server/index.ts` | conditional-call |

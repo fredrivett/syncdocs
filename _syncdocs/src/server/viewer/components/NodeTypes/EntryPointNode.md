@@ -1,15 +1,25 @@
 ---
 title: EntryPointNode
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T13:51:58.721Z
 graphNode: src/server/viewer/components/NodeTypes.tsx:EntryPointNode
 dependencies:
   - path: src/server/viewer/components/NodeTypes.tsx
     symbol: EntryPointNode
-    hash: b35fff776b12fe5822a2eda268ee3d29f8023faa6a3f17db4d2525beaf6f42cb
+    hash: 7466269f02fbd074047822092c11d21f69f37ae53f0074947eb83e130a4cd8ff
 ---
 
 # EntryPointNode
 
-`function` in `src/server/viewer/components/NodeTypes.tsx:42-121`
+`component` in `src/server/viewer/components/NodeTypes.tsx:96-135`
 
-*This symbol is async.*
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { data } | `NodeProps` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `nodeClass` | `src/server/viewer/components/NodeTypes.tsx` | direct-call |

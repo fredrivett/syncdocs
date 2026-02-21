@@ -1,6 +1,6 @@
 ---
 title: buildDocResponse
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:buildDocResponse
 dependencies:
   - path: src/server/index.ts
@@ -12,14 +12,22 @@ dependencies:
 
 `function` in `src/server/index.ts:155-198`
 
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| docPath | `string` | Yes |  |
+| index | `SymbolIndex` | Yes |  |
+| outputDir | `string` | Yes |  |
+
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `generateDependencyGraph` | `src/server/index.ts` | direct-call |
+| `generateDependencyGraph` | `src/server/index.ts` | conditional-call |
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
+| `startServer` | `src/server/index.ts` | conditional-call |

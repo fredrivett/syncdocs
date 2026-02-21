@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T13:51:58.714Z
 graphNode: src/cli/utils/next-suggestion.ts:getRelativePath
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,14 +10,24 @@ dependencies:
 
 # getRelativePath
 
-`function` in `src/cli/utils/next-suggestion.ts:282-289`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:284-291`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| absolutePath | `string` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `registerStatusCommand` | `src/cli/commands/status.ts` | direct-call |
+| `registerStatusCommand` | `src/cli/commands/status.ts` | conditional-call |
 | `computeNextCandidate` | `src/cli/utils/next-suggestion.ts` | direct-call |
 | `scanProject` | `src/cli/utils/next-suggestion.ts` | direct-call |
 | `scanProjectAsync` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `countImports` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `countImports` | `src/cli/utils/next-suggestion.ts` | conditional-call |

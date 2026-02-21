@@ -1,27 +1,33 @@
 ---
 title: walk
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T13:51:58.714Z
 graphNode: src/cli/utils/next-suggestion.ts:walk
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
     symbol: walk
-    hash: 0d3b79436862473566e18031e6031753e8305b0004bfeeaf16629037ff6c02e6
+    hash: 96a78e598db0d90a4cad03c8241b2c7ba869e8c566a04188eaa55d49a499f0dc
 ---
 
 # walk
 
-`const` in `src/cli/utils/next-suggestion.ts:294-336`
+`const` in `src/cli/utils/next-suggestion.ts:298-315`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| dir | `string` | Yes |  |
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `walk` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `walk` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
 | `findSourceFilesAsync` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `walk` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `walk` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 | `findSourceFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |

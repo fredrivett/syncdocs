@@ -1,6 +1,6 @@
 ---
 title: tick
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T13:51:58.713Z
 graphNode: src/cli/utils/next-suggestion.ts:tick
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,7 @@ dependencies:
 
 # tick
 
-`const` in `src/cli/utils/next-suggestion.ts:130-130`
+`const` in `src/cli/utils/next-suggestion.ts:132-132`
 
 **Called by:**
 

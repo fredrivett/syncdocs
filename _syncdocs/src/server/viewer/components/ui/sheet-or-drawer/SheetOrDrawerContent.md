@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerContent
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerContent
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,14 @@ dependencies:
 
 # SheetOrDrawerContent
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:41-66`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:41-66`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  children,
+  ...props
+} | `React.ComponentProps<typeof SheetContent>` | Yes |  |

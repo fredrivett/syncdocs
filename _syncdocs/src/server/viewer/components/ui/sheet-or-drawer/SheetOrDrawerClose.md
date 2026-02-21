@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerClose
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerClose
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,10 @@ dependencies:
 
 # SheetOrDrawerClose
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:134-147`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:134-147`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<typeof SheetClose>` | Yes |  |

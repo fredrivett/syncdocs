@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerBody
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerBody
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,10 @@ dependencies:
 
 # SheetOrDrawerBody
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:79-92`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:79-92`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<'div'>` | Yes |  |

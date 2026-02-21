@@ -1,13 +1,19 @@
 ---
 title: Drawer
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T13:51:58.722Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:Drawer
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: Drawer
-    hash: 5a88ac3f69972e8c5d7e2ac0e5dbed89cea1d33f1afd4946d1060fd964d61a28
+    hash: 55a4ff8d508c00b4e4d461f70e3ef5e57eb03408ce94ab20628ed5bbd3b7e2a6
 ---
 
 # Drawer
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:4-10`
+`component` in `src/server/viewer/components/ui/drawer.tsx:4-8`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof DrawerPrimitive.Root>` | Yes |  |

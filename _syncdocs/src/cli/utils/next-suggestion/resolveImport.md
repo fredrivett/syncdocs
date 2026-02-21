@@ -1,6 +1,6 @@
 ---
 title: resolveImport
-generated: 2026-02-18T21:53:33.383Z
+generated: 2026-02-21T13:51:58.714Z
 graphNode: src/cli/utils/next-suggestion.ts:resolveImport
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,17 @@ dependencies:
 
 # resolveImport
 
-`function` in `src/cli/utils/next-suggestion.ts:392-416`
+`function` in `src/cli/utils/next-suggestion.ts:371-395`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| fromDir | `string` | Yes |  |
+| specifier | `string` | Yes |  |
+| sourceFiles | `string[]` | Yes |  |
+
+**Returns:** `string | null`
 
 **Called by:**
 

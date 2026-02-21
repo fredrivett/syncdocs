@@ -1,6 +1,6 @@
 ---
 title: isAsyncSymbol
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T13:51:58.717Z
 graphNode: src/graph/graph-builder.ts:isAsyncSymbol
 dependencies:
   - path: src/graph/graph-builder.ts
@@ -11,6 +11,17 @@ dependencies:
 # isAsyncSymbol
 
 `function` in `src/graph/graph-builder.ts:45-56`
+
+Check whether a symbol's fullText indicates it is async.
+Matches `async function`, `async (`, `async =>`  etc.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| symbol | `SymbolInfo` | Yes |  |
+
+**Returns:** `boolean`
 
 **Called by:**
 

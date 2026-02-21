@@ -1,6 +1,6 @@
 ---
 title: registerCheckCommand
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T13:51:58.711Z
 graphNode: src/cli/commands/check.ts:registerCheckCommand
 dependencies:
   - path: src/cli/commands/check.ts
@@ -10,12 +10,20 @@ dependencies:
 
 # registerCheckCommand
 
-`function` in `src/cli/commands/check.ts:5-83`
+`exported`
+
+`function` in `src/cli/commands/check.ts:6-84`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| cli | `CAC` | Yes |  |
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `loadConfig` | `src/cli/commands/check.ts` | direct-call |
-| `getRelativePath` | `src/cli/commands/check.ts` | direct-call |
-| `formatStaleReason` | `src/cli/commands/check.ts` | direct-call |
+| `loadConfig` | `src/cli/utils/config.ts` | direct-call |
+| `getRelativePath` | `src/cli/commands/check.ts` | conditional-call |
+| `formatStaleReason` | `src/cli/commands/check.ts` | conditional-call |

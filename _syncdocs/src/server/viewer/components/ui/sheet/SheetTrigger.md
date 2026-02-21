@@ -1,13 +1,19 @@
 ---
 title: SheetTrigger
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetTrigger
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetTrigger
-    hash: 7a92adba9d773a9eb1255b452099e923903d1967380410990d431ef48af2cdd1
+    hash: 128e80c72393d26117a94948db8c6e5513c8941027545ace237ddb395e69dbc2
 ---
 
 # SheetTrigger
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:8-14`
+`component` in `src/server/viewer/components/ui/sheet.tsx:8-12`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof SheetPrimitive.Trigger>` | Yes |  |

@@ -1,6 +1,6 @@
 ---
 title: GraphStore
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T13:51:58.717Z
 graphNode: src/graph/graph-store.ts:GraphStore
 dependencies:
   - path: src/graph/graph-store.ts
@@ -9,5 +9,7 @@ dependencies:
 ---
 
 # GraphStore
+
+`exported`
 
 `class` in `src/graph/graph-store.ts:7-52`

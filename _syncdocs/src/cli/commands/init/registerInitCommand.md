@@ -1,6 +1,6 @@
 ---
 title: registerInitCommand
-generated: 2026-02-18T21:53:33.380Z
+generated: 2026-02-21T13:51:58.711Z
 graphNode: src/cli/commands/init.ts:registerInitCommand
 dependencies:
   - path: src/cli/commands/init.ts
@@ -10,7 +10,15 @@ dependencies:
 
 # registerInitCommand
 
+`exported`
+
 `function` in `src/cli/commands/init.ts:15-112`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| cli | `CAC` | Yes |  |
 
 **Calls:**
 

@@ -1,6 +1,6 @@
 ---
 title: extractFunctionId
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/matchers/inngest.ts:extractFunctionId
 dependencies:
   - path: src/matchers/inngest.ts
@@ -11,3 +11,14 @@ dependencies:
 # extractFunctionId
 
 `function` in `src/matchers/inngest.ts:25-34`
+
+Extract the function ID from an inngest.createFunction call.
+Looks for patterns like: { id: "analyze-image" }
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| body | `string` | Yes |  |
+
+**Returns:** `string | null`

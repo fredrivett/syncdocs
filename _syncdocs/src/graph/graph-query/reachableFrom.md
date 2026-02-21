@@ -1,6 +1,6 @@
 ---
 title: reachableFrom
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T13:51:58.717Z
 graphNode: src/graph/graph-query.ts:reachableFrom
 dependencies:
   - path: src/graph/graph-query.ts
@@ -10,7 +10,21 @@ dependencies:
 
 # reachableFrom
 
+`exported`
+
 `function` in `src/graph/graph-query.ts:17-51`
+
+Find all nodes reachable from a starting node via BFS.
+Returns the subgraph (nodes + edges) reachable from the start.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| graph | `FlowGraph` | Yes |  |
+| startNodeId | `string` | Yes |  |
+
+**Returns:** `{ nodes: GraphNode[]; edges: GraphEdge[] }`
 
 **Calls:**
 

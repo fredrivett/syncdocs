@@ -1,6 +1,6 @@
 ---
 title: hashSymbol
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T13:51:58.718Z
 graphNode: src/hasher/index.ts:hashSymbol
 dependencies:
   - path: src/hasher/index.ts
@@ -10,7 +10,19 @@ dependencies:
 
 # hashSymbol
 
+`exported`
+
 `function` in `src/hasher/index.ts:66-74`
+
+Convenience function to hash symbol content
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| symbol | `SymbolInfo` | Yes |  |
+
+**Returns:** `string`
 
 **Calls:**
 

@@ -1,6 +1,6 @@
 ---
 title: serveStaticFile
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T13:51:58.719Z
 graphNode: src/server/index.ts:serveStaticFile
 dependencies:
   - path: src/server/index.ts
@@ -12,8 +12,11 @@ dependencies:
 
 `function` in `src/server/index.ts:207-217`
 
-**Called by:**
+**Parameters:**
 
-| Symbol | File | Type |
-|---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
+| Name | Type | Required | Description |
+|---|---|---|---|
+| filePath | `string` | Yes |  |
+| res | `import('node:http').ServerResponse` | Yes |  |
+
+**Returns:** `boolean`

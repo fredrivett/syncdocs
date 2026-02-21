@@ -1,6 +1,6 @@
 ---
 title: DocContent
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T13:51:58.720Z
 graphNode: src/server/viewer/components/DocContent.tsx:DocContent
 dependencies:
   - path: src/server/viewer/components/DocContent.tsx
@@ -10,4 +10,12 @@ dependencies:
 
 # DocContent
 
-`function` in `src/server/viewer/components/DocContent.tsx:9-29`
+`exported`
+
+`component` in `src/server/viewer/components/DocContent.tsx:9-29`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { markdown, sourcePath, generated } | `DocContentProps` | Yes |  |

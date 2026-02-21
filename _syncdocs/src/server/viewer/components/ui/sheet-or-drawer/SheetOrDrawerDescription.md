@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerDescription
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T13:51:58.723Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerDescription
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,13 @@ dependencies:
 
 # SheetOrDrawerDescription
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:118-134`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:118-134`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  ...props
+} | `React.ComponentProps<typeof SheetDescription>` | Yes |  |
