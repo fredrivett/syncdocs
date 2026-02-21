@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 import { DocParser } from '../checker/doc-parser.js';
 import { findMarkdownFiles } from '../cli/utils/next-suggestion.js';
 import { GraphStore } from '../graph/graph-store.js';
-import { getTemplate } from './template.js';
 
 export interface SymbolEntry {
   name: string;
@@ -218,7 +217,6 @@ function serveStaticFile(filePath: string, res: import('node:http').ServerRespon
 
 export async function startServer(outputDir: string, port: number) {
   let index = buildSymbolIndex(outputDir);
-  const template = getTemplate();
   const graphStore = new GraphStore(outputDir);
 
   // Watch output directory for changes and rebuild index
@@ -244,13 +242,6 @@ export async function startServer(outputDir: string, port: number) {
 
   const server = createServer((req, res) => {
     const url = new URL(req.url ?? '/', `http://localhost:${port}`);
-
-    // Serve docs template at /docs and /docs/*
-    if (url.pathname === '/docs' || url.pathname.startsWith('/docs/')) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(template);
-      return;
-    }
 
     // Serve graph API
     if (url.pathname === '/api/graph') {

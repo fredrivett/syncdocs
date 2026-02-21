@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import type { GraphNode } from '../../../graph/types.js';
 import { DocContent } from './DocContent';
 import { Badge, type BadgeVariant } from './ui/badge';
@@ -38,6 +39,7 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
   const [doc, setDoc] = useState<DocResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!node) {
@@ -96,10 +98,12 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
             </div>
             <div className="flex items-center gap-1">
               {doc && (
-                <a
-                  href={docPathToUrl(docPath)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate(docPathToUrl(docPath));
+                    onClose();
+                  }}
                   className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                   title="Open full doc"
                 >
@@ -118,7 +122,7 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
                     <path d="M7 17L17 7" />
                     <path d="M7 7h10v10" />
                   </svg>
-                </a>
+                </button>
               )}
               <SheetOrDrawerClose className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
                 <svg
@@ -168,11 +172,13 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
 
         {doc && (
           <SheetOrDrawerFooter>
-            <a
-              href={docPathToUrl(docPath)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+            <button
+              type="button"
+              onClick={() => {
+                navigate(docPathToUrl(docPath));
+                onClose();
+              }}
+              className="flex items-center justify-center gap-2 rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 w-full"
             >
               <svg
                 width="14"
@@ -189,7 +195,7 @@ export function DocPanel({ node, onClose }: DocPanelProps) {
                 <path d="M7 7h10v10" />
               </svg>
               Open full documentation
-            </a>
+            </button>
           </SheetOrDrawerFooter>
         )}
       </SheetOrDrawerContent>

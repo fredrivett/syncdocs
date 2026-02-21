@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import type { FlowGraph as FlowGraphData } from '../../graph/types.js';
+import { DocsTree } from './components/DocsTree';
+import { DocsViewer } from './components/DocsViewer';
 import { FlowGraph } from './components/FlowGraph';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import { Sidebar } from './components/Sidebar';
+import { ViewNav } from './components/ViewNav';
+import { GRAPH_SIDEBAR_SLOT_ID } from './constants';
 
-export default function App() {
+function GraphView() {
   const [graph, setGraph] = useState<FlowGraphData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,5 +69,42 @@ export default function App() {
       )}
       {graph && <FlowGraph graph={graph} onLayoutReady={onLayoutReady} />}
     </div>
+  );
+}
+
+function SidebarContent() {
+  const location = useLocation();
+  const isDocs = location.pathname.startsWith('/docs');
+
+  if (isDocs) {
+    return <DocsTree />;
+  }
+
+  return <div id={GRAPH_SIDEBAR_SLOT_ID} className="flex-1 overflow-auto" />;
+}
+
+function Layout() {
+  return (
+    <div className="flex h-full">
+      <Sidebar>
+        <ViewNav />
+        <SidebarContent />
+      </Sidebar>
+      <main className="flex-1 relative overflow-hidden">
+        <Routes>
+          <Route path="/" element={<GraphView />} />
+          <Route path="/docs" element={<DocsViewer />} />
+          <Route path="/docs/*" element={<DocsViewer />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }

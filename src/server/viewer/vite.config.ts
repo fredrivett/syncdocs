@@ -24,10 +24,6 @@ export default defineConfig({
         target: `http://localhost:${apiPort}`,
         changeOrigin: true,
       },
-      '/docs': {
-        target: `http://localhost:${apiPort}`,
-        changeOrigin: true,
-      },
     },
   },
 });
