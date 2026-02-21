@@ -1,6 +1,6 @@
 ---
 title: StaleChecker
-generated: 2026-02-21T14:13:44.219Z
+generated: 2026-02-21T14:15:29.893Z
 graphNode: src/checker/index.ts:StaleChecker
 dependencies:
   - path: src/checker/index.ts

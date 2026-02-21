@@ -1,6 +1,6 @@
 ---
 title: formatStaleReason
-generated: 2026-02-21T14:13:44.220Z
+generated: 2026-02-21T14:15:29.893Z
 graphNode: src/cli/commands/check.ts:formatStaleReason
 dependencies:
   - path: src/cli/commands/check.ts

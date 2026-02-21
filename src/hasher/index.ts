@@ -7,6 +7,7 @@
 import { createHash } from 'node:crypto';
 import type { SymbolInfo } from '../extractor/types.js';
 
+/** SHA256 content hasher for detecting symbol changes. Hashes params + body (not name) so renames don't trigger staleness. */
 export class ContentHasher {
   /**
    * Hash symbol content (params + body, excluding name)

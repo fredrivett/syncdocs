@@ -1,6 +1,6 @@
 ---
 title: connectionTypeToEdgeType
-generated: 2026-02-21T14:13:44.226Z
+generated: 2026-02-21T14:15:29.899Z
 graphNode: src/graph/graph-builder.ts:connectionTypeToEdgeType
 dependencies:
   - path: src/graph/graph-builder.ts

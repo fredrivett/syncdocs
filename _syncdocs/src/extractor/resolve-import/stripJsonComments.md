@@ -1,6 +1,6 @@
 ---
 title: stripJsonComments
-generated: 2026-02-21T14:13:44.224Z
+generated: 2026-02-21T14:15:29.898Z
 graphNode: src/extractor/resolve-import.ts:stripJsonComments
 dependencies:
   - path: src/extractor/resolve-import.ts

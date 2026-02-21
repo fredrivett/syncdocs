@@ -1,6 +1,6 @@
 ---
 title: countImports
-generated: 2026-02-21T14:13:44.223Z
+generated: 2026-02-21T14:15:29.896Z
 graphNode: src/cli/utils/next-suggestion.ts:countImports
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

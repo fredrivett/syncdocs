@@ -1,6 +1,6 @@
 ---
 title: Guides
-generated: 2026-02-21T14:13:44.230Z
+generated: 2026-02-21T14:15:29.903Z
 graphNode: src/server/viewer/components/DocsTree.tsx:Guides
 dependencies:
   - path: src/server/viewer/components/DocsTree.tsx

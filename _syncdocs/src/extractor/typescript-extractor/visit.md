@@ -1,6 +1,6 @@
 ---
 title: visit
-generated: 2026-02-21T14:13:44.225Z
+generated: 2026-02-21T14:15:29.899Z
 graphNode: src/extractor/typescript-extractor.ts:visit
 dependencies:
   - path: src/extractor/typescript-extractor.ts

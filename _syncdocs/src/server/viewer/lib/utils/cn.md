@@ -1,6 +1,6 @@
 ---
 title: cn
-generated: 2026-02-21T14:13:44.235Z
+generated: 2026-02-21T14:15:29.907Z
 graphNode: src/server/viewer/lib/utils.ts:cn
 dependencies:
   - path: src/server/viewer/lib/utils.ts
@@ -12,7 +12,9 @@ dependencies:
 
 `exported`
 
-`function` in `src/server/viewer/lib/utils.ts:2-6`
+`function` in `src/server/viewer/lib/utils.ts:2-7`
+
+Merge Tailwind CSS class names, resolving conflicts via `tailwind-merge`.
 
 **Parameters:**
 

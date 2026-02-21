@@ -1,6 +1,6 @@
 ---
 title: GraphBuilder
-generated: 2026-02-21T14:13:44.226Z
+generated: 2026-02-21T14:15:29.899Z
 graphNode: src/graph/graph-builder.ts:GraphBuilder
 dependencies:
   - path: src/graph/graph-builder.ts
@@ -12,7 +12,9 @@ dependencies:
 
 `exported`
 
-`class` in `src/graph/graph-builder.ts:56-348`
+`class` in `src/graph/graph-builder.ts:56-349`
+
+/** Builds a {@link FlowGraph}from TypeScript source files by extracting symbols, detecting entry points, and resolving call edges. 
 
 **Calls:**
 

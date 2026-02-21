@@ -1,6 +1,6 @@
 ---
 title: FlowControls
-generated: 2026-02-21T14:13:44.231Z
+generated: 2026-02-21T14:15:29.903Z
 graphNode: src/server/viewer/components/FlowControls.tsx:FlowControls
 dependencies:
   - path: src/server/viewer/components/FlowControls.tsx

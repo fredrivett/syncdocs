@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs';
 import type { DocDependency, DocMetadata } from './types.js';
 
+/** Parses documentation markdown files and extracts frontmatter metadata (title, hashes, dependencies). */
 export class DocParser {
   /**
    * Parse a doc file and extract metadata from frontmatter

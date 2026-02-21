@@ -1,6 +1,6 @@
 ---
 title: buildDocResponse
-generated: 2026-02-21T14:13:44.229Z
+generated: 2026-02-21T14:15:29.902Z
 graphNode: src/server/index.ts:buildDocResponse
 dependencies:
   - path: src/server/index.ts

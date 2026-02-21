@@ -1,6 +1,6 @@
 ---
 title: findSourceFiles
-generated: 2026-02-21T14:13:44.223Z
+generated: 2026-02-21T14:15:29.896Z
 graphNode: src/cli/utils/next-suggestion.ts:findSourceFiles
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

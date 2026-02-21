@@ -1,6 +1,6 @@
 ---
 title: GenerationError
-generated: 2026-02-21T14:13:44.222Z
+generated: 2026-02-21T14:15:29.895Z
 graphNode: src/cli/utils/errors.ts:GenerationError
 dependencies:
   - path: src/cli/utils/errors.ts

@@ -1,6 +1,6 @@
 ---
 title: extractFunctionId
-generated: 2026-02-21T14:13:44.228Z
+generated: 2026-02-21T14:15:29.901Z
 graphNode: src/matchers/inngest.ts:extractFunctionId
 dependencies:
   - path: src/matchers/inngest.ts

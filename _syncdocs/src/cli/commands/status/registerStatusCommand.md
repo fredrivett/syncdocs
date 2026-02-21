@@ -1,6 +1,6 @@
 ---
 title: registerStatusCommand
-generated: 2026-02-21T14:13:44.220Z
+generated: 2026-02-21T14:15:29.894Z
 graphNode: src/cli/commands/status.ts:registerStatusCommand
 dependencies:
   - path: src/cli/commands/status.ts

@@ -55,6 +55,7 @@ function isAsyncSymbol(symbol: SymbolInfo): boolean {
   return /(?:^|\s)async\s/.test(symbol.fullText);
 }
 
+/** Builds a {@link FlowGraph} from TypeScript source files by extracting symbols, detecting entry points, and resolving call edges. */
 export class GraphBuilder {
   private extractor = new TypeScriptExtractor();
   private hasher = new ContentHasher();
