@@ -205,6 +205,10 @@ export async function scanProjectAsync(
   };
 }
 
+/**
+ * Async version of {@link findSourceFiles} that yields to the event loop
+ * between I/O operations so spinner animations stay smooth.
+ */
 async function findSourceFilesAsync(
   rootDir: string,
   scope: SyncdocsConfig['scope'],
@@ -285,11 +289,21 @@ export function showCoverageAndSuggestion(outputDir: string, scope: SyncdocsConf
 
 // --- Shared helpers ---
 
+/** Convert an absolute path to a path relative to the current working directory. */
 export function getRelativePath(absolutePath: string): string {
   const cwd = process.cwd();
   return absolutePath.startsWith(cwd) ? absolutePath.substring(cwd.length + 1) : absolutePath;
 }
 
+/**
+ * Find all source files matching the scope's include/exclude patterns.
+ *
+ * Recursively walks the directory tree, applying picomatch patterns to filter
+ * files. Skips `.git` and `node_modules` directories.
+ *
+ * @param rootDir - Root directory to search from
+ * @param scope - Include and exclude glob patterns
+ */
 export function findSourceFiles(rootDir: string, scope: SyncdocsConfig['scope']): string[] {
   const isIncluded = picomatch(scope.include);
   const isExcluded = picomatch(scope.exclude);
@@ -318,6 +332,12 @@ export function findSourceFiles(rootDir: string, scope: SyncdocsConfig['scope'])
   return files;
 }
 
+/**
+ * Recursively find all `.md` files in a directory.
+ *
+ * Skips `node_modules` and `.git` directories. Returns an empty array
+ * if the directory doesn't exist or can't be read.
+ */
 export function findMarkdownFiles(dir: string): string[] {
   const files: string[] = [];
 
@@ -343,6 +363,16 @@ export function findMarkdownFiles(dir: string): string[] {
   return files;
 }
 
+/**
+ * Count how many times each source file is imported by other files.
+ *
+ * Parses import/export statements from all source files, resolves relative
+ * specifiers, and tallies import counts per file. Used to rank documentation
+ * priority (most-imported files first).
+ *
+ * @param sourceFiles - List of absolute source file paths
+ * @returns Map of relative file path to import count
+ */
 export function countImports(sourceFiles: string[]): Map<string, number> {
   const importCounts = new Map<string, number>();
   const importPattern = /(?:import|export)\s+.*?from\s+['"]([^'"]+)['"]/g;
@@ -370,6 +400,12 @@ export function countImports(sourceFiles: string[]): Map<string, number> {
   return importCounts;
 }
 
+/**
+ * Resolve a relative import specifier to an absolute file path.
+ *
+ * Tries the exact path, then common extensions (`.ts`, `.tsx`, `.js`, `.jsx`),
+ * then `index.*` variants. Only resolves to files in the `sourceFiles` list.
+ */
 function resolveImport(fromDir: string, specifier: string, sourceFiles: string[]): string | null {
   const base = resolve(fromDir, specifier);
 

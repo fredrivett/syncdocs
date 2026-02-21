@@ -9,6 +9,12 @@ interface ServeOptions {
   open?: boolean;
 }
 
+/**
+ * Register the `syncdocs serve` CLI command.
+ *
+ * Starts the documentation viewer HTTP server and optionally opens it
+ * in the default browser.
+ */
 export function registerServeCommand(cli: CAC) {
   cli
     .command('serve', 'Start interactive documentation viewer')

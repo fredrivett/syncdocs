@@ -1,3 +1,9 @@
+/**
+ * Return the HTML template for the legacy documentation viewer SPA.
+ *
+ * This is a self-contained single-page app with inline CSS and JavaScript
+ * that renders a sidebar tree, search, and markdown doc content.
+ */
 export function getTemplate(): string {
   return `<!DOCTYPE html>
 <html lang="en">
