@@ -1,6 +1,6 @@
 ---
 title: tick
-generated: 2026-02-21T14:17:38.722Z
+generated: 2026-02-21T14:29:22.446Z
 graphNode: src/cli/utils/next-suggestion.ts:tick
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

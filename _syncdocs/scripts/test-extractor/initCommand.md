@@ -1,6 +1,6 @@
 ---
 title: initCommand
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T14:29:22.441Z
 graphNode: scripts/test-extractor.ts:initCommand
 dependencies:
   - path: scripts/test-extractor.ts
@@ -10,4 +10,6 @@ dependencies:
 
 # initCommand
 
-`const` in `scripts/test-extractor.ts:38-38`
+`const` in `scripts/test-extractor.ts:41-41`
+
+Single-symbol extraction test targeting `registerInitCommand`.

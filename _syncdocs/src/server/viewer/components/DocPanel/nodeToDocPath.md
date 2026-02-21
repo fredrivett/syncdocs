@@ -1,6 +1,6 @@
 ---
 title: nodeToDocPath
-generated: 2026-02-21T14:17:38.729Z
+generated: 2026-02-21T14:29:22.458Z
 graphNode: src/server/viewer/components/DocPanel.tsx:nodeToDocPath
 dependencies:
   - path: src/server/viewer/components/DocPanel.tsx

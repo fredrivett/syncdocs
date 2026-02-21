@@ -1,7 +1,49 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-21T14:17:38.718Z",
+  "generatedAt": "2026-02-21T14:29:22.436Z",
   "nodes": [
+    {
+      "id": "scripts/test-extractor.ts:testFile",
+      "name": "testFile",
+      "kind": "const",
+      "filePath": "scripts/test-extractor.ts",
+      "isAsync": false,
+      "hash": "041812ab6c97e23ac6f4c03704d2f17451f6befa86fa2220093f1b1a5e51cf96",
+      "lineRange": [
+        14,
+        14
+      ],
+      "description": "Path to the init command file used as the extraction test target.",
+      "isExported": false
+    },
+    {
+      "id": "scripts/test-extractor.ts:result",
+      "name": "result",
+      "kind": "const",
+      "filePath": "scripts/test-extractor.ts",
+      "isAsync": false,
+      "hash": "63f545433b06f4c10038262a9946201ae59c8a2d8d87087ef6f8f532c72efda3",
+      "lineRange": [
+        20,
+        20
+      ],
+      "description": "Extraction result containing all symbols found in the test file.",
+      "isExported": false
+    },
+    {
+      "id": "scripts/test-extractor.ts:initCommand",
+      "name": "initCommand",
+      "kind": "const",
+      "filePath": "scripts/test-extractor.ts",
+      "isAsync": false,
+      "hash": "7de7de23bab776be13401123cd8fb6963d5c4a4ec500fc88893980f0d98fc71d",
+      "lineRange": [
+        41,
+        41
+      ],
+      "description": "Single-symbol extraction test targeting `registerInitCommand`.",
+      "isExported": false
+    },
     {
       "id": "src/checker/doc-parser.ts:DocParser",
       "name": "DocParser",

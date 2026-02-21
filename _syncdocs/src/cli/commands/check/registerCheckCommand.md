@@ -1,6 +1,6 @@
 ---
 title: registerCheckCommand
-generated: 2026-02-21T14:17:38.720Z
+generated: 2026-02-21T14:29:22.442Z
 graphNode: src/cli/commands/check.ts:registerCheckCommand
 dependencies:
   - path: src/cli/commands/check.ts

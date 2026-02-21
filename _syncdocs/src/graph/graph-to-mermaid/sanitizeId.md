@@ -1,6 +1,6 @@
 ---
 title: sanitizeId
-generated: 2026-02-21T14:17:38.727Z
+generated: 2026-02-21T14:29:22.455Z
 graphNode: src/graph/graph-to-mermaid.ts:sanitizeId
 dependencies:
   - path: src/graph/graph-to-mermaid.ts

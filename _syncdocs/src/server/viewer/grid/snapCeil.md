@@ -1,6 +1,6 @@
 ---
 title: snapCeil
-generated: 2026-02-21T14:17:38.734Z
+generated: 2026-02-21T14:29:22.473Z
 graphNode: src/server/viewer/grid.ts:snapCeil
 dependencies:
   - path: src/server/viewer/grid.ts

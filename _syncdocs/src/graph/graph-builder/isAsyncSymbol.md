@@ -1,6 +1,6 @@
 ---
 title: isAsyncSymbol
-generated: 2026-02-21T14:17:38.726Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-builder.ts:isAsyncSymbol
 dependencies:
   - path: src/graph/graph-builder.ts

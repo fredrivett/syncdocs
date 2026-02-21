@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerBody
-generated: 2026-02-21T14:17:38.732Z
+generated: 2026-02-21T14:29:22.469Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerBody
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx

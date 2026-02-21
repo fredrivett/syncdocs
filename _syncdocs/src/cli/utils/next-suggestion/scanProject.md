@@ -1,6 +1,6 @@
 ---
 title: scanProject
-generated: 2026-02-21T14:17:38.722Z
+generated: 2026-02-21T14:29:22.444Z
 graphNode: src/cli/utils/next-suggestion.ts:scanProject
 dependencies:
   - path: src/cli/utils/next-suggestion.ts

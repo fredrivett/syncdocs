@@ -1,6 +1,6 @@
 ---
 title: SheetTrigger
-generated: 2026-02-21T14:17:38.733Z
+generated: 2026-02-21T14:29:22.470Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetTrigger
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx

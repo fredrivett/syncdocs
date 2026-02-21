@@ -1,6 +1,6 @@
 ---
 title: registerSyncCommand
-generated: 2026-02-21T14:17:38.721Z
+generated: 2026-02-21T14:29:22.443Z
 graphNode: src/cli/commands/sync.ts:registerSyncCommand
 dependencies:
   - path: src/cli/commands/sync.ts

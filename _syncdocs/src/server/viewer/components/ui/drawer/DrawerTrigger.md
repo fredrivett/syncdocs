@@ -1,6 +1,6 @@
 ---
 title: DrawerTrigger
-generated: 2026-02-21T14:17:38.732Z
+generated: 2026-02-21T14:29:22.465Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerTrigger
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx

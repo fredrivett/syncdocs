@@ -1,6 +1,6 @@
 ---
 title: testFile
-generated: 2026-02-18T21:53:33.378Z
+generated: 2026-02-21T14:29:22.441Z
 graphNode: scripts/test-extractor.ts:testFile
 dependencies:
   - path: scripts/test-extractor.ts
@@ -10,4 +10,6 @@ dependencies:
 
 # testFile
 
-`const` in `scripts/test-extractor.ts:13-13`
+`const` in `scripts/test-extractor.ts:14-14`
+
+Path to the init command file used as the extraction test target.
