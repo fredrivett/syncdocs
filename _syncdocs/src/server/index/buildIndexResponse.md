@@ -1,6 +1,6 @@
 ---
 title: buildIndexResponse
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T14:29:22.456Z
 graphNode: src/server/index.ts:buildIndexResponse
 dependencies:
   - path: src/server/index.ts
@@ -10,10 +10,21 @@ dependencies:
 
 # buildIndexResponse
 
-`function` in `src/server/index.ts:132-155`
+`function` in `src/server/index.ts:167-196`
+
+Build the JSON response for the `/api/index` endpoint.
+
+Groups symbol entries by source directory and sorts both directories
+and entries alphabetically for the sidebar tree.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| index | `SymbolIndex` | Yes |  |
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
+| `startServer` | `src/server/index.ts` | conditional-call |

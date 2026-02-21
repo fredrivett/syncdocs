@@ -1,16 +1,32 @@
 ---
 title: generateDependencyGraph
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T14:29:22.456Z
 graphNode: src/server/index.ts:generateDependencyGraph
 dependencies:
   - path: src/server/index.ts
     symbol: generateDependencyGraph
-    hash: bb45ba927c7535d002c24f46061b6731d9d2ddffc8f1e7008cb9093aa5fcc05e
+    hash: 1dd94ebbfcda22c827d87693ff30aea9a9b544d735f5605fe2057e9fd6d6cab3
 ---
 
 # generateDependencyGraph
 
-`function` in `src/server/index.ts:104-132`
+`exported`
+
+`function` in `src/server/index.ts:130-167`
+
+Generate a mermaid flowchart showing a symbol's related dependencies.
+
+Creates a left-to-right flowchart with clickable nodes linking to each
+related symbol's doc page. Returns null if no related symbols exist in the index.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| entry | `SymbolEntry` | Yes | The symbol entry to generate the graph for |
+| index | `SymbolIndex` | Yes | The full symbol index for resolving related names |
+
+**Returns:** `string | null`
 
 **Calls:**
 
@@ -22,4 +38,4 @@ dependencies:
 
 | Symbol | File | Type |
 |---|---|---|
-| `buildDocResponse` | `src/server/index.ts` | direct-call |
+| `buildDocResponse` | `src/server/index.ts` | conditional-call |

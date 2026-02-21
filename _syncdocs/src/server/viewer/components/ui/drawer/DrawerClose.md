@@ -1,13 +1,19 @@
 ---
 title: DrawerClose
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T14:29:22.466Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerClose
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerClose
-    hash: 5b00bb50a6d36f1efb97c3368421efefb9acd2398b32c9cb2be5cfc6ac70eb02
+    hash: be07ec98d52f7625aaa0df8b850529190211df7636a62e9dcc24fc00cd28fda2
 ---
 
 # DrawerClose
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:22-28`
+`component` in `src/server/viewer/components/ui/drawer.tsx:16-20`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof DrawerPrimitive.Close>` | Yes |  |

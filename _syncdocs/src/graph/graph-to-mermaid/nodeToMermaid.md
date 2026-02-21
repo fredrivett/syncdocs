@@ -1,6 +1,6 @@
 ---
 title: nodeToMermaid
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-to-mermaid.ts:nodeToMermaid
 dependencies:
   - path: src/graph/graph-to-mermaid.ts
@@ -10,7 +10,22 @@ dependencies:
 
 # nodeToMermaid
 
+`exported`
+
 `function` in `src/graph/graph-to-mermaid.ts:7-46`
+
+Generate a mermaid flowchart for a specific node and its immediate connections.
+Used in per-symbol documentation.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| graph | `FlowGraph` | Yes |  |
+| nodeId | `string` | Yes |  |
+| depth | `unknown` | No |  (default: `1`) |
+
+**Returns:** `string`
 
 **Calls:**
 

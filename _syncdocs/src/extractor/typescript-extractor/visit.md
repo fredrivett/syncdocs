@@ -1,16 +1,24 @@
 ---
 title: visit
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T14:29:22.453Z
 graphNode: src/extractor/typescript-extractor.ts:visit
 dependencies:
   - path: src/extractor/typescript-extractor.ts
     symbol: visit
-    hash: 7458b829a02aa9cd0d87129c7d6870f852a516e1c9f47bddf397ba5eb99341ae
+    hash: 43e83465c836469e04dbc8b094837932a3b2fe40471f1f48cd9956c1c08adfc4
 ---
 
 # visit
 
-`const` in `src/extractor/typescript-extractor.ts:165-189`
+`const` in `src/extractor/typescript-extractor.ts:393-422`
+
+**Entry point:** `inngest-function`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| node | `ts.Node` | Yes |  |
 
 **Called by:**
 

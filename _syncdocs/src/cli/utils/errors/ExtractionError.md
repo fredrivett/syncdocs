@@ -1,6 +1,6 @@
 ---
 title: ExtractionError
-generated: 2026-02-18T21:53:33.381Z
+generated: 2026-02-21T14:29:22.444Z
 graphNode: src/cli/utils/errors.ts:ExtractionError
 dependencies:
   - path: src/cli/utils/errors.ts
@@ -10,4 +10,8 @@ dependencies:
 
 # ExtractionError
 
-`class` in `src/cli/utils/errors.ts:24-31`
+`exported`
+
+`class` in `src/cli/utils/errors.ts:27-35`
+
+Thrown when symbol extraction from a source file fails.

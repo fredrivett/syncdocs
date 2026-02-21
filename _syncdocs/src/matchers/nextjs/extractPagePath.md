@@ -1,6 +1,6 @@
 ---
 title: extractPagePath
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T14:29:22.455Z
 graphNode: src/matchers/nextjs.ts:extractPagePath
 dependencies:
   - path: src/matchers/nextjs.ts
@@ -11,3 +11,14 @@ dependencies:
 # extractPagePath
 
 `function` in `src/matchers/nextjs.ts:34-44`
+
+Extract page path from file path.
+e.g. "src/app/dashboard/page.tsx" -> "/dashboard"
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| filePath | `string` | Yes |  |
+
+**Returns:** `string`

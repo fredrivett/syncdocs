@@ -1,6 +1,6 @@
 ---
 title: extractEventTrigger
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T14:29:22.455Z
 graphNode: src/matchers/inngest.ts:extractEventTrigger
 dependencies:
   - path: src/matchers/inngest.ts
@@ -11,3 +11,14 @@ dependencies:
 # extractEventTrigger
 
 `function` in `src/matchers/inngest.ts:15-25`
+
+Extract the event name from an inngest.createFunction call.
+Looks for patterns like: { event: "user/created" } or { event: "app/image.analyzed" }
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| body | `string` | Yes |  |
+
+**Returns:** `string | null`

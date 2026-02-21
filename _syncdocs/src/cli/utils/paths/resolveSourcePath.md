@@ -1,6 +1,6 @@
 ---
 title: resolveSourcePath
-generated: 2026-02-18T21:53:33.383Z
+generated: 2026-02-21T14:29:22.449Z
 graphNode: src/cli/utils/paths.ts:resolveSourcePath
 dependencies:
   - path: src/cli/utils/paths.ts
@@ -10,7 +10,21 @@ dependencies:
 
 # resolveSourcePath
 
+`exported`
+
 `function` in `src/cli/utils/paths.ts:36-67`
+
+Resolve a source file path from doc frontmatter to an absolute path
+in the current working directory. Used when reading source files.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| filePath | `string` | Yes |  |
+| cwd | `unknown` | No |  (default: `process.cwd()`) |
+
+**Returns:** `string`
 
 **Called by:**
 

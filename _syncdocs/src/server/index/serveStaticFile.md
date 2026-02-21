@@ -1,6 +1,6 @@
 ---
 title: serveStaticFile
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T14:29:22.456Z
 graphNode: src/server/index.ts:serveStaticFile
 dependencies:
   - path: src/server/index.ts
@@ -10,10 +10,15 @@ dependencies:
 
 # serveStaticFile
 
-`function` in `src/server/index.ts:207-217`
+`function` in `src/server/index.ts:260-277`
 
-**Called by:**
+Serve a static file with the appropriate Content-Type header.
 
-| Symbol | File | Type |
-|---|---|---|
-| `startServer` | `src/server/index.ts` | direct-call |
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| filePath | `string` | Yes | Absolute path to the file |
+| res | `import('node:http').ServerResponse` | Yes | HTTP response object |
+
+**Returns:** `boolean`

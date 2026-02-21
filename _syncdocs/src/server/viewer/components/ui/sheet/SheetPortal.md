@@ -1,13 +1,19 @@
 ---
 title: SheetPortal
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T14:29:22.471Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetPortal
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetPortal
-    hash: bf97239a566100aec260af5423390348b658e61eeacd3118a4ac00a90546bcd4
+    hash: fff4b812be7d61ef6a3fed5bfb34b89065cf8d499b032bbcfa6738734ff14e60
 ---
 
 # SheetPortal
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:20-26`
+`component` in `src/server/viewer/components/ui/sheet.tsx:16-20`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof SheetPrimitive.Portal>` | Yes |  |

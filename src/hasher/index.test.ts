@@ -414,4 +414,84 @@ return filtered.map(item=>({...item,processed:true}))}`,
       expect(hasher.hashSymbol(symbol)).toHaveLength(64);
     });
   });
+
+  describe('Hash stability with new metadata fields', () => {
+    const baseSymbol: SymbolInfo = {
+      name: 'func',
+      kind: 'function',
+      filePath: 'test.ts',
+      params: 'a: number',
+      body: '{ return a }',
+      fullText: 'function func(a: number) { return a }',
+      startLine: 1,
+      endLine: 3,
+    };
+
+    it('should produce same hash when jsDoc is added', () => {
+      const withJsDoc: SymbolInfo = {
+        ...baseSymbol,
+        jsDoc: {
+          description: 'A function that returns a number',
+          params: [{ name: 'a', description: 'The number' }],
+          examples: ['func(42)'],
+          throws: [],
+          see: [],
+        },
+      };
+
+      expect(hasher.hashSymbol(baseSymbol)).toBe(hasher.hashSymbol(withJsDoc));
+    });
+
+    it('should produce same hash when jsDoc description changes', () => {
+      const version1: SymbolInfo = {
+        ...baseSymbol,
+        jsDoc: {
+          description: 'Original description',
+          params: [],
+          examples: [],
+          throws: [],
+          see: [],
+        },
+      };
+
+      const version2: SymbolInfo = {
+        ...baseSymbol,
+        jsDoc: {
+          description: 'Updated description',
+          params: [],
+          examples: [],
+          throws: [],
+          see: [],
+        },
+      };
+
+      expect(hasher.hashSymbol(version1)).toBe(hasher.hashSymbol(version2));
+    });
+
+    it('should produce same hash when structuredParams is added', () => {
+      const withParams: SymbolInfo = {
+        ...baseSymbol,
+        structuredParams: [{ name: 'a', type: 'number', isOptional: false, isRest: false }],
+      };
+
+      expect(hasher.hashSymbol(baseSymbol)).toBe(hasher.hashSymbol(withParams));
+    });
+
+    it('should produce same hash when returnType is added', () => {
+      const withReturn: SymbolInfo = {
+        ...baseSymbol,
+        returnType: 'number',
+      };
+
+      expect(hasher.hashSymbol(baseSymbol)).toBe(hasher.hashSymbol(withReturn));
+    });
+
+    it('should produce same hash when isExported changes', () => {
+      const exported: SymbolInfo = { ...baseSymbol, isExported: true };
+      const notExported: SymbolInfo = { ...baseSymbol, isExported: false };
+
+      expect(hasher.hashSymbol(exported)).toBe(hasher.hashSymbol(notExported));
+      expect(hasher.hashSymbol(exported)).toBe(hasher.hashSymbol(baseSymbol));
+    });
+  });
 });

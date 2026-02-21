@@ -1,6 +1,6 @@
 ---
 title: clearTsconfigCache
-generated: 2026-02-18T21:53:33.383Z
+generated: 2026-02-21T14:29:22.452Z
 graphNode: src/extractor/resolve-import.ts:clearTsconfigCache
 dependencies:
   - path: src/extractor/resolve-import.ts
@@ -10,4 +10,10 @@ dependencies:
 
 # clearTsconfigCache
 
-`function` in `src/extractor/resolve-import.ts:151-158`
+`exported`
+
+`function` in `src/extractor/resolve-import.ts:190-197`
+
+Clear the tsconfig cache (useful for testing)
+
+**Returns:** `void`

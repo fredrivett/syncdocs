@@ -1,13 +1,15 @@
 ---
 title: App
-generated: 2026-02-18T21:53:33.387Z
+generated: 2026-02-21T14:29:22.458Z
 graphNode: src/server/viewer/App.tsx:App
 dependencies:
   - path: src/server/viewer/App.tsx
     symbol: App
-    hash: fcc790d033826509a81c50a6bfc879835f6fa9ecb30807c8811c08fa186d2fc3
+    hash: 28f3f1a2be94adec0ef31d8818dd95121a3bb28b3649c12bf17230c156ec60b8
 ---
 
 # App
 
-`function` in `src/server/viewer/App.tsx:4-102`
+`exported`
+
+`component` in `src/server/viewer/App.tsx:102-110`

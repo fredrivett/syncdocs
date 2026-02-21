@@ -1,6 +1,6 @@
 ---
 title: registerInitCommand
-generated: 2026-02-18T21:53:33.380Z
+generated: 2026-02-21T14:29:22.443Z
 graphNode: src/cli/commands/init.ts:registerInitCommand
 dependencies:
   - path: src/cli/commands/init.ts
@@ -10,7 +10,20 @@ dependencies:
 
 # registerInitCommand
 
-`function` in `src/cli/commands/init.ts:15-112`
+`exported`
+
+`function` in `src/cli/commands/init.ts:15-118`
+
+Register the `syncdocs init` CLI command.
+
+Runs an interactive setup wizard that prompts for output directory,
+include/exclude patterns, and writes a `config.yaml` file.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| cli | `CAC` | Yes |  |
 
 **Calls:**
 

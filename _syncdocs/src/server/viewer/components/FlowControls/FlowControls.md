@@ -1,13 +1,43 @@
 ---
 title: FlowControls
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T14:29:22.459Z
 graphNode: src/server/viewer/components/FlowControls.tsx:FlowControls
 dependencies:
   - path: src/server/viewer/components/FlowControls.tsx
     symbol: FlowControls
-    hash: abb45a7072df590c26fb3f0e43a0b2dc392f992045cdaa785feecef28b30fb26
+    hash: a42d09822e7ac6706a077f36b81ddfe92901af962db30c7ca85cd8ae76c7430f
 ---
 
 # FlowControls
 
-`function` in `src/server/viewer/components/FlowControls.tsx:12-135`
+`exported`
+
+`component` in `src/server/viewer/components/FlowControls.tsx:21-169`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  entryPoints,
+  selectedEntry,
+  onSelectEntry,
+  searchQuery,
+  onSearch,
+  nodeCount,
+  edgeCount,
+  availableTypes,
+  enabledTypes,
+  onToggleType,
+  onSoloType,
+  onResetTypes,
+  showConditionals,
+  onToggleConditionals,
+  hasConditionalEdges,
+} | `FlowControlsProps` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `getCategoryLabel` | `src/server/viewer/components/FlowGraph.tsx` | conditional-call |

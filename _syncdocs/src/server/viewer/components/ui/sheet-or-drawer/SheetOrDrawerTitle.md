@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerTitle
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T14:29:22.469Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerTitle
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,10 @@ dependencies:
 
 # SheetOrDrawerTitle
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:105-118`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:105-118`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<typeof SheetTitle>` | Yes |  |

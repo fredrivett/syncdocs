@@ -1,6 +1,6 @@
 ---
 title: ContentHasher
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T14:29:22.455Z
 graphNode: src/hasher/index.ts:ContentHasher
 dependencies:
   - path: src/hasher/index.ts
@@ -10,7 +10,11 @@ dependencies:
 
 # ContentHasher
 
-`class` in `src/hasher/index.ts:8-66`
+`exported`
+
+`class` in `src/hasher/index.ts:8-67`
+
+SHA256 content hasher for detecting symbol changes. Hashes params + body (not name) so renames don't trigger staleness.
 
 **Calls:**
 

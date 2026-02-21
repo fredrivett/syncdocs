@@ -1,6 +1,6 @@
 ---
 title: connectionTypeToEdgeType
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-builder.ts:connectionTypeToEdgeType
 dependencies:
   - path: src/graph/graph-builder.ts
@@ -12,8 +12,19 @@ dependencies:
 
 `function` in `src/graph/graph-builder.ts:24-45`
 
+Map a RuntimeConnection type string to a GraphEdge EdgeType.
+Falls back to 'async-dispatch' for unknown connection types.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| type | `string` | Yes |  |
+
+**Returns:** `EdgeType`
+
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `GraphBuilder` | `src/graph/graph-builder.ts` | direct-call |
+| `GraphBuilder` | `src/graph/graph-builder.ts` | conditional-call |

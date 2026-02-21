@@ -14,6 +14,12 @@ interface InitConfig {
   };
 }
 
+/**
+ * Register the `syncdocs init` CLI command.
+ *
+ * Runs an interactive setup wizard that prompts for output directory,
+ * include/exclude patterns, and writes a `config.yaml` file.
+ */
 export function registerInitCommand(cli: CAC) {
   cli.command('init', 'Initialize syncdocs in your project').action(async () => {
     // biome-ignore lint/suspicious/noConsole: intentional clear before init wizard
@@ -111,6 +117,7 @@ export function registerInitCommand(cli: CAC) {
   });
 }
 
+/** Serialize an init config object to a YAML config file string. */
 function generateConfigYAML(config: InitConfig): string {
   return `# syncdocs configuration
 # Learn more: https://github.com/fredrivett/syncdocs

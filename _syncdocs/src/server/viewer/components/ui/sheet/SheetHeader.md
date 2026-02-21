@@ -1,13 +1,25 @@
 ---
 title: SheetHeader
-generated: 2026-02-18T21:53:33.391Z
+generated: 2026-02-21T14:29:22.472Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetHeader
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetHeader
-    hash: 9751339e7255a54510d5365ad6d934f548b6f81ca19d9ca1c25e49cb38c86136
+    hash: c1388058ba63b9d8ad81b6b55cf12270c787b604f07846b8eeabb4cd780d653e
 ---
 
 # SheetHeader
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:86-96`
+`component` in `src/server/viewer/components/ui/sheet.tsx:84-94`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<'div'>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

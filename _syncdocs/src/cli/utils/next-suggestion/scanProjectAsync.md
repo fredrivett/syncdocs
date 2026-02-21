@@ -1,16 +1,31 @@
 ---
 title: scanProjectAsync
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T14:29:22.446Z
 graphNode: src/cli/utils/next-suggestion.ts:scanProjectAsync
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
     symbol: scanProjectAsync
-    hash: 215fb912a4b1ce4186d9abe8f4cdc1d115968121b905a88a8c5bfddfcf69e8f6
+    hash: 2d4337759704458555fbb396a463ebd39abb07ee0fa25616d519f28ef7f310d4
 ---
 
 # scanProjectAsync
 
-`function` in `src/cli/utils/next-suggestion.ts:130-203`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:133-207`
+
+Async version of scanProject that yields throughout
+so spinner animations stay smooth.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| outputDir | `string` | Yes |  |
+| scope | `SyncdocsConfig['scope']` | Yes |  |
+| onProgress | `(message: string) => void` | No |  |
+
+**Returns:** `Promise<ProjectScan>`
 
 **Calls:**
 
@@ -18,7 +33,7 @@ dependencies:
 |---|---|---|
 | `findSourceFilesAsync` | `src/cli/utils/next-suggestion.ts` | direct-call |
 | `tick` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `findMarkdownFiles` | `src/cli/utils/next-suggestion.ts` | conditional-call |
 | `getRelativePath` | `src/cli/utils/next-suggestion.ts` | direct-call |
 
 **Called by:**

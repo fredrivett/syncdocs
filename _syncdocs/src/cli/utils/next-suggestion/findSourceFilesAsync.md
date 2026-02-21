@@ -1,16 +1,30 @@
 ---
 title: findSourceFilesAsync
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T14:29:22.446Z
 graphNode: src/cli/utils/next-suggestion.ts:findSourceFilesAsync
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
     symbol: findSourceFilesAsync
-    hash: 549af93274aafe845e91049e8397f88ca71d518ff903601174432ddc2e190c12
+    hash: 0c23590120c25211a006807f22139b6836cceb9951d09fbcab3e0b67c1ae5b0b
 ---
 
 # findSourceFilesAsync
 
-`function` in `src/cli/utils/next-suggestion.ts:203-235`
+`function` in `src/cli/utils/next-suggestion.ts:207-242`
+
+/**
+ * Async version of {@link findSourceFiles}that yields to the event loop
+ * between I/O operations so spinner animations stay smooth.
+ 
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| rootDir | `string` | Yes |  |
+| scope | `SyncdocsConfig['scope']` | Yes |  |
+
+**Returns:** `Promise<string[]>`
 
 **Calls:**
 

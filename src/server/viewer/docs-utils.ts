@@ -10,6 +10,7 @@ export function urlToDocPath(pathname: string): string | null {
   return `${rest}.md`;
 }
 
+/** Escape HTML special characters to prevent XSS in rendered content. */
 export function escapeHtml(str: string): string {
   return str
     .replace(/&/g, '&amp;')

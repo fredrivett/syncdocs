@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T14:29:22.447Z
 graphNode: src/cli/utils/next-suggestion.ts:getRelativePath
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,14 +10,26 @@ dependencies:
 
 # getRelativePath
 
-`function` in `src/cli/utils/next-suggestion.ts:282-289`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:289-297`
+
+Convert an absolute path to a path relative to the current working directory.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| absolutePath | `string` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `registerStatusCommand` | `src/cli/commands/status.ts` | direct-call |
+| `registerStatusCommand` | `src/cli/commands/status.ts` | conditional-call |
 | `computeNextCandidate` | `src/cli/utils/next-suggestion.ts` | direct-call |
 | `scanProject` | `src/cli/utils/next-suggestion.ts` | direct-call |
 | `scanProjectAsync` | `src/cli/utils/next-suggestion.ts` | direct-call |
-| `countImports` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `countImports` | `src/cli/utils/next-suggestion.ts` | conditional-call |

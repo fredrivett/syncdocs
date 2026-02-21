@@ -1,6 +1,6 @@
 ---
 title: DocParser
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T14:29:22.442Z
 graphNode: src/checker/doc-parser.ts:DocParser
 dependencies:
   - path: src/checker/doc-parser.ts
@@ -10,4 +10,8 @@ dependencies:
 
 # DocParser
 
-`class` in `src/checker/doc-parser.ts:6-88`
+`exported`
+
+`class` in `src/checker/doc-parser.ts:6-89`
+
+Parses documentation markdown files and extracts frontmatter metadata (title, hashes, dependencies).

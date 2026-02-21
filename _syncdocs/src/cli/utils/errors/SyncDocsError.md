@@ -1,6 +1,6 @@
 ---
 title: SyncDocsError
-generated: 2026-02-18T21:53:33.381Z
+generated: 2026-02-21T14:29:22.444Z
 graphNode: src/cli/utils/errors.ts:SyncDocsError
 dependencies:
   - path: src/cli/utils/errors.ts
@@ -10,4 +10,8 @@ dependencies:
 
 # SyncDocsError
 
-`class` in `src/cli/utils/errors.ts:1-10`
+`exported`
+
+`class` in `src/cli/utils/errors.ts:1-11`
+
+Base error class for all syncdocs errors.

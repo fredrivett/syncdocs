@@ -1,6 +1,6 @@
 ---
 title: formatStaleReason
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T14:29:22.442Z
 graphNode: src/cli/commands/check.ts:formatStaleReason
 dependencies:
   - path: src/cli/commands/check.ts
@@ -10,10 +10,20 @@ dependencies:
 
 # formatStaleReason
 
-`function` in `src/cli/commands/check.ts:83-94`
+`function` in `src/cli/commands/check.ts:91-103`
+
+Map a staleness reason code to a human-readable label.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| reason | `'changed' | 'not-found' | 'file-not-found'` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `registerCheckCommand` | `src/cli/commands/check.ts` | direct-call |
+| `registerCheckCommand` | `src/cli/commands/check.ts` | conditional-call |

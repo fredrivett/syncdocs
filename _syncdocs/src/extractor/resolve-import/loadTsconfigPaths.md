@@ -1,16 +1,36 @@
 ---
 title: loadTsconfigPaths
-generated: 2026-02-18T21:53:33.383Z
+generated: 2026-02-21T14:29:22.452Z
 graphNode: src/extractor/resolve-import.ts:loadTsconfigPaths
 dependencies:
   - path: src/extractor/resolve-import.ts
     symbol: loadTsconfigPaths
-    hash: 09a8cbcd74382b58532cf715f5d68ecd907cb2573dea5432b8ea519df13aeae2
+    hash: b87a1233c055f685e0d3b73265133406c54dd3f3b0272e5654e17c688ffeb707
 ---
 
 # loadTsconfigPaths
 
-`function` in `src/extractor/resolve-import.ts:14-73`
+`exported`
+
+`function` in `src/extractor/resolve-import.ts:53-112`
+
+Find and parse tsconfig.json paths from a source file's directory.
+Walks up the directory tree until it finds a tsconfig.json.
+Results are cached per tsconfig.json location.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| fromFile | `string` | Yes |  |
+
+**Returns:** `TsconfigPaths | null`
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `stripJsonComments` | `src/extractor/resolve-import.ts` | conditional-call |
 
 **Called by:**
 

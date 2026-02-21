@@ -1,13 +1,15 @@
 ---
 title: GraphStore
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-store.ts:GraphStore
 dependencies:
   - path: src/graph/graph-store.ts
     symbol: GraphStore
-    hash: 6356f0c2a1156f75e2df4060fd3b4e412127638351060cf8279885553b9425b5
+    hash: a6dd0d3c4f9f86e9f19b7c149b439abcffa58181f0e232bac5b769a23403f996
 ---
 
 # GraphStore
 
-`class` in `src/graph/graph-store.ts:7-52`
+`exported`
+
+`class` in `src/graph/graph-store.ts:7-54`

@@ -2,6 +2,8 @@
  * Types for the project-wide call graph
  */
 
+import type { ParamInfo } from '../extractor/types.js';
+
 export interface GraphNode {
   id: string; // "src/api/analyze/route.ts:POST"
   name: string;
@@ -12,6 +14,14 @@ export interface GraphNode {
   hash: string;
   lineRange: [number, number];
   metadata?: EntryPointMetadata;
+  description?: string;
+  structuredParams?: ParamInfo[];
+  returnType?: string;
+  isExported?: boolean;
+  examples?: string[];
+  deprecated?: string | boolean;
+  throws?: string[];
+  see?: string[];
 }
 
 export type EntryType =

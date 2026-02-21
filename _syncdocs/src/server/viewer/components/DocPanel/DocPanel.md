@@ -1,20 +1,28 @@
 ---
 title: DocPanel
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T14:29:22.458Z
 graphNode: src/server/viewer/components/DocPanel.tsx:DocPanel
 dependencies:
   - path: src/server/viewer/components/DocPanel.tsx
     symbol: DocPanel
-    hash: b2ef1461a991b538d0232c52ac79fe2b5d079a6979191d91598a95da44ef6ba1
+    hash: 8b8ecf5f2deeeb953fe6c3bb1ea2d44eb7406777910029407d22f933ac76d696
 ---
 
 # DocPanel
 
-`function` in `src/server/viewer/components/DocPanel.tsx:34-189`
+`exported`
+
+`component` in `src/server/viewer/components/DocPanel.tsx:36-204`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { node, onClose } | `DocPanelProps` | Yes |  |
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
 | `nodeToDocPath` | `src/server/viewer/components/DocPanel.tsx` | direct-call |
-| `docPathToUrl` | `src/server/viewer/components/DocPanel.tsx` | direct-call |
+| `docPathToUrl` | `src/server/viewer/components/DocPanel.tsx` | conditional-call |

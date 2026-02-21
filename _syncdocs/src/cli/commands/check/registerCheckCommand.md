@@ -1,6 +1,6 @@
 ---
 title: registerCheckCommand
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T14:29:22.442Z
 graphNode: src/cli/commands/check.ts:registerCheckCommand
 dependencies:
   - path: src/cli/commands/check.ts
@@ -10,12 +10,26 @@ dependencies:
 
 # registerCheckCommand
 
-`function` in `src/cli/commands/check.ts:5-83`
+`exported`
+
+`function` in `src/cli/commands/check.ts:6-91`
+
+Register the `syncdocs check` CLI command.
+
+Scans all generated docs for staleness by comparing source code hashes
+against the hashes stored in doc frontmatter. Exits with code 1 if any
+stale docs are found (useful for CI).
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| cli | `CAC` | Yes |  |
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `loadConfig` | `src/cli/commands/check.ts` | direct-call |
-| `getRelativePath` | `src/cli/commands/check.ts` | direct-call |
-| `formatStaleReason` | `src/cli/commands/check.ts` | direct-call |
+| `loadConfig` | `src/cli/utils/config.ts` | direct-call |
+| `getRelativePath` | `src/cli/commands/check.ts` | conditional-call |
+| `formatStaleReason` | `src/cli/commands/check.ts` | conditional-call |

@@ -1,6 +1,6 @@
 ---
 title: getRelativePath
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T14:29:22.453Z
 graphNode: src/graph/graph-builder.ts:getRelativePath
 dependencies:
   - path: src/graph/graph-builder.ts
@@ -11,6 +11,17 @@ dependencies:
 # getRelativePath
 
 `function` in `src/graph/graph-builder.ts:16-24`
+
+Compute a path relative to `process.cwd()`.
+Keeps node IDs deterministic and human-readable.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| absolutePath | `string` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 

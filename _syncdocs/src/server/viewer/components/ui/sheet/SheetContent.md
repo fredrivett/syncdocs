@@ -1,13 +1,36 @@
 ---
 title: SheetContent
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T14:29:22.471Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:SheetContent
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: SheetContent
-    hash: 421b3701dfcd6dc4b66370d0825f793751628e111c2960d62b03b52ccdedd6af
+    hash: e5773d15adbd72bfaf697a9fe1dd42710416d568b3a79a0dc98f34ac4b405a7d
 ---
 
 # SheetContent
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:42-86`
+`component` in `src/server/viewer/components/ui/sheet.tsx:36-84`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  children,
+  side = 'right',
+  overlay = false,
+  showCloseButton = false,
+  ...props
+} | `React.ComponentProps<typeof SheetPrimitive.Content> & {
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  overlay?: boolean;
+  showCloseButton?: boolean;
+}` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

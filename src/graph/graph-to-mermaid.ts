@@ -59,6 +59,12 @@ export function flowToMermaid(
   return buildMermaid(entryNodeId || '', included, edges, nodeMap);
 }
 
+/**
+ * Build a mermaid flowchart string from a set of nodes and edges.
+ *
+ * Groups nodes into subgraphs by file path, applies styling to the
+ * highlighted node and entry points, and renders edge arrows based on type.
+ */
 function buildMermaid(
   highlightId: string,
   includedIds: Set<string>,
@@ -123,6 +129,7 @@ function buildMermaid(
   return lines.join('\n');
 }
 
+/** Build a display label for a graph node, including async prefix and metadata. */
 function formatNodeLabel(node: GraphNode): string {
   let label = node.name;
   if (node.isAsync) label = `async ${label}`;
@@ -138,6 +145,7 @@ function formatNodeLabel(node: GraphNode): string {
   return label;
 }
 
+/** Return the mermaid arrow syntax for a given edge type. */
 function edgeArrow(edge: GraphEdge): string {
   if (edge.type === 'error-handler') return '-. error .->';
   if (edge.type === 'event-emit' || edge.type === 'async-dispatch') return '-.->';

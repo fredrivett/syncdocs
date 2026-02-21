@@ -1,13 +1,19 @@
 ---
 title: DrawerPortal
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T14:29:22.466Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerPortal
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerPortal
-    hash: 4b7e3b0939bddb2afbc9c7a9031649df363e62b3aaf29091d8edef114911fbaf
+    hash: 09f75150a2893fe6b65e805f5273c1cfe681d73ff98b6512787472787c48e6f3
 ---
 
 # DrawerPortal
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:16-22`
+`component` in `src/server/viewer/components/ui/drawer.tsx:12-16`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof DrawerPrimitive.Portal>` | Yes |  |

@@ -1,6 +1,6 @@
 ---
 title: extractOverview
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T14:29:22.456Z
 graphNode: src/server/index.ts:extractOverview
 dependencies:
   - path: src/server/index.ts
@@ -10,7 +10,22 @@ dependencies:
 
 # extractOverview
 
-`function` in `src/server/index.ts:64-73`
+`exported`
+
+`function` in `src/server/index.ts:71-89`
+
+Extract the overview text from a markdown doc file.
+
+Strips frontmatter and the title heading, then returns everything up to
+the first `<details>` block or `##` heading.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| content | `string` | Yes | Raw markdown content of the doc file |
+
+**Returns:** `string`
 
 **Called by:**
 

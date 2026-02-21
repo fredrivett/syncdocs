@@ -1,6 +1,6 @@
 ---
 title: renderCoverageStats
-generated: 2026-02-18T21:53:33.382Z
+generated: 2026-02-21T14:29:22.447Z
 graphNode: src/cli/utils/next-suggestion.ts:renderCoverageStats
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,19 @@ dependencies:
 
 # renderCoverageStats
 
-`function` in `src/cli/utils/next-suggestion.ts:235-264`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:242-271`
+
+Render coverage stats (source files, symbols, coverage bar).
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| scan | `ProjectScan` | Yes |  |
+
+**Returns:** `void`
 
 **Called by:**
 

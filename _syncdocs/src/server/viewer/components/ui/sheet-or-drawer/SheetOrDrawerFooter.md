@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawerFooter
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T14:29:22.469Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawerFooter
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,10 @@ dependencies:
 
 # SheetOrDrawerFooter
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:92-105`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:92-105`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { className, ...props } | `React.ComponentProps<'div'>` | Yes |  |

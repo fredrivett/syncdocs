@@ -1,6 +1,6 @@
 ---
 title: entryPoints
-generated: 2026-02-18T21:53:33.384Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-query.ts:entryPoints
 dependencies:
   - path: src/graph/graph-query.ts
@@ -10,7 +10,19 @@ dependencies:
 
 # entryPoints
 
+`exported`
+
 `function` in `src/graph/graph-query.ts:10-17`
+
+Find all entry point nodes in the graph
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| graph | `FlowGraph` | Yes |  |
+
+**Returns:** `GraphNode[]`
 
 **Called by:**
 

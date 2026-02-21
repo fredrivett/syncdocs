@@ -1,13 +1,28 @@
 ---
 title: DrawerDescription
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T14:29:22.469Z
 graphNode: src/server/viewer/components/ui/drawer.tsx:DrawerDescription
 dependencies:
   - path: src/server/viewer/components/ui/drawer.tsx
     symbol: DrawerDescription
-    hash: 25734528b5948986432b2baa0e7d56ca09b11f04b215892dc9381f29854ef8f7
+    hash: c1838ecca6ca47a0e2adf805933cbb66688b58a46c0102d03fb9f7abae9ace06
 ---
 
 # DrawerDescription
 
-`function` in `src/server/viewer/components/ui/drawer.tsx:117-130`
+`component` in `src/server/viewer/components/ui/drawer.tsx:106-119`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| {
+  className,
+  ...props
+} | `React.ComponentProps<typeof DrawerPrimitive.Description>` | Yes |  |
+
+**Calls:**
+
+| Symbol | File | Type |
+|---|---|---|
+| `cn` | `src/server/viewer/lib/utils.ts` | direct-call |

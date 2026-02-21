@@ -21,6 +21,14 @@ export interface SymbolIndex {
   byName: Map<string, SymbolEntry[]>; // symbol name -> entries (handles duplicates)
 }
 
+/**
+ * Build a lookup index of all documented symbols from the output directory.
+ *
+ * Parses every markdown doc file, extracts frontmatter metadata, and builds
+ * two maps: one keyed by doc path, one keyed by symbol name (for cross-referencing).
+ *
+ * @param outputDir - Path to the syncdocs output directory
+ */
 function buildSymbolIndex(outputDir: string): SymbolIndex {
   const absOutputDir = resolve(process.cwd(), outputDir);
   const mdFiles = findMarkdownFiles(absOutputDir);
@@ -62,6 +70,15 @@ function buildSymbolIndex(outputDir: string): SymbolIndex {
   return { entries, byName };
 }
 
+/**
+ * Extract the overview text from a markdown doc file.
+ *
+ * Strips frontmatter and the title heading, then returns everything up to
+ * the first `<details>` block or `##` heading.
+ *
+ * @param content - Raw markdown content of the doc file
+ * @returns Trimmed overview text, or empty string if none found
+ */
 export function extractOverview(content: string): string {
   // Get text between frontmatter end and first <details> or ## heading
   const afterFrontmatter = content.replace(/^---[\s\S]*?---\s*/, '');
@@ -71,6 +88,16 @@ export function extractOverview(content: string): string {
   return overview.trim();
 }
 
+/**
+ * Extract related symbol names from a doc file's Related section.
+ *
+ * Looks for backtick-wrapped (`SymbolName`) and bold (**SymbolName**) references
+ * inside `<details><summary>Related</summary>` blocks, deduplicating and
+ * excluding the symbol's own name.
+ *
+ * @param content - Raw markdown content of the doc file
+ * @param selfName - Name of the current symbol (excluded from results)
+ */
 export function extractRelatedSymbols(content: string, selfName: string): string[] {
   // Find the Related section
   const relatedMatch = content.match(
@@ -102,6 +129,15 @@ export function extractRelatedSymbols(content: string, selfName: string): string
   return symbols;
 }
 
+/**
+ * Generate a mermaid flowchart showing a symbol's related dependencies.
+ *
+ * Creates a left-to-right flowchart with clickable nodes linking to each
+ * related symbol's doc page. Returns null if no related symbols exist in the index.
+ *
+ * @param entry - The symbol entry to generate the graph for
+ * @param index - The full symbol index for resolving related names
+ */
 export function generateDependencyGraph(entry: SymbolEntry, index: SymbolIndex): string | null {
   const linkedRelated = entry.related.filter((name) => {
     const targets = index.byName.get(name);
@@ -130,6 +166,12 @@ export function generateDependencyGraph(entry: SymbolEntry, index: SymbolIndex):
   return lines.join('\n');
 }
 
+/**
+ * Build the JSON response for the `/api/index` endpoint.
+ *
+ * Groups symbol entries by source directory and sorts both directories
+ * and entries alphabetically for the sidebar tree.
+ */
 function buildIndexResponse(index: SymbolIndex) {
   // Group entries by source directory
   const tree: Record<string, { name: string; docPath: string; overview: string }[]> = {};
@@ -153,6 +195,18 @@ function buildIndexResponse(index: SymbolIndex) {
   return sorted;
 }
 
+/**
+ * Build the JSON response for the `/api/doc` endpoint.
+ *
+ * Reads the markdown file, strips frontmatter, and enriches the response
+ * with metadata from the symbol index (dependency graph, related symbols).
+ * Falls back to a basic response if the index is stale.
+ *
+ * @param docPath - Relative path to the doc file within the output directory
+ * @param index - The symbol index for metadata enrichment
+ * @param outputDir - Path to the syncdocs output directory
+ * @returns Enriched doc response, or null if the file doesn't exist
+ */
 function buildDocResponse(docPath: string, index: SymbolIndex, outputDir: string) {
   const absPath = resolve(process.cwd(), outputDir, docPath);
   let content: string;
@@ -205,6 +259,13 @@ const MIME_TYPES: Record<string, string> = {
   '.json': 'application/json',
 };
 
+/**
+ * Serve a static file with the appropriate Content-Type header.
+ *
+ * @param filePath - Absolute path to the file
+ * @param res - HTTP response object
+ * @returns `true` if the file was served, `false` if it doesn't exist
+ */
 function serveStaticFile(filePath: string, res: import('node:http').ServerResponse): boolean {
   if (!existsSync(filePath)) return false;
   const ext = extname(filePath);
@@ -215,6 +276,20 @@ function serveStaticFile(filePath: string, res: import('node:http').ServerRespon
   return true;
 }
 
+/**
+ * Start the syncdocs documentation viewer HTTP server.
+ *
+ * Serves the single-page viewer app, a JSON API for the symbol index and
+ * individual doc pages, and the graph data. Watches the output directory
+ * for changes and rebuilds the index automatically.
+ *
+ * If the requested port is taken, retries up to 10 consecutive ports.
+ *
+ * @param outputDir - Path to the syncdocs output directory (e.g. `_syncdocs`)
+ * @param port - Preferred port number to listen on
+ * @returns The running server instance and the URL it's listening on
+ * @throws If no available port is found after 10 attempts
+ */
 export async function startServer(outputDir: string, port: number) {
   let index = buildSymbolIndex(outputDir);
   const graphStore = new GraphStore(outputDir);

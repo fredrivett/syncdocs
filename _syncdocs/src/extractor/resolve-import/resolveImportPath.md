@@ -1,6 +1,6 @@
 ---
 title: resolveImportPath
-generated: 2026-02-18T21:53:33.383Z
+generated: 2026-02-21T14:29:22.452Z
 graphNode: src/extractor/resolve-import.ts:resolveImportPath
 dependencies:
   - path: src/extractor/resolve-import.ts
@@ -10,13 +10,30 @@ dependencies:
 
 # resolveImportPath
 
-`function` in `src/extractor/resolve-import.ts:117-151`
+`exported`
+
+`function` in `src/extractor/resolve-import.ts:156-190`
+
+Resolve an import specifier to an absolute file path.
+
+Handles:
+- Relative imports (./foo, ../bar)
+- tsconfig path aliases (@/lib/foo,
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| fromFile | `string` | Yes |  |
+| importSource | `string` | Yes |  |
+
+**Returns:** `string | null`
 
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `tryResolveFile` | `src/extractor/resolve-import.ts` | direct-call |
+| `tryResolveFile` | `src/extractor/resolve-import.ts` | conditional-call |
 | `loadTsconfigPaths` | `src/extractor/resolve-import.ts` | direct-call |
 
 **Called by:**

@@ -1,6 +1,6 @@
 ---
 title: computeNextCandidate
-generated: 2026-02-18T21:53:33.381Z
+generated: 2026-02-21T14:29:22.444Z
 graphNode: src/cli/utils/next-suggestion.ts:computeNextCandidate
 dependencies:
   - path: src/cli/utils/next-suggestion.ts
@@ -10,7 +10,24 @@ dependencies:
 
 # computeNextCandidate
 
-`function` in `src/cli/utils/next-suggestion.ts:12-46`
+`exported`
+
+`function` in `src/cli/utils/next-suggestion.ts:14-48`
+
+Compute the next file to document from pre-computed data.
+Ranks by import count (most-imported first), then by undocumented symbol count.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| params | `{
+  allSymbols: { file: string; symbol: { name: string } }[];
+  documentedSymbols: Set<string>;
+  sourceFiles: string[];
+}` | Yes |  |
+
+**Returns:** `NextCandidate | null`
 
 **Calls:**
 
@@ -23,5 +40,5 @@ dependencies:
 
 | Symbol | File | Type |
 |---|---|---|
-| `registerStatusCommand` | `src/cli/commands/status.ts` | direct-call |
-| `showCoverageAndSuggestion` | `src/cli/utils/next-suggestion.ts` | direct-call |
+| `registerStatusCommand` | `src/cli/commands/status.ts` | conditional-call |
+| `showCoverageAndSuggestion` | `src/cli/utils/next-suggestion.ts` | conditional-call |

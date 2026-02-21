@@ -1,6 +1,6 @@
 ---
 title: SheetOrDrawer
-generated: 2026-02-18T21:53:33.389Z
+generated: 2026-02-21T14:29:22.469Z
 graphNode: src/server/viewer/components/ui/sheet-or-drawer.tsx:SheetOrDrawer
 dependencies:
   - path: src/server/viewer/components/ui/sheet-or-drawer.tsx
@@ -10,4 +10,10 @@ dependencies:
 
 # SheetOrDrawer
 
-`function` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:28-41`
+`component` in `src/server/viewer/components/ui/sheet-or-drawer.tsx:28-41`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { children, ...props } | `SheetOrDrawerProps` | Yes |  |

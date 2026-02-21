@@ -1,6 +1,6 @@
 ---
 title: parsed
-generated: 2026-02-18T21:53:33.381Z
+generated: 2026-02-21T14:29:22.443Z
 graphNode: src/cli/index.ts:parsed
 dependencies:
   - path: src/cli/index.ts
@@ -10,4 +10,6 @@ dependencies:
 
 # parsed
 
-`const` in `src/cli/index.ts:25-25`
+`const` in `src/cli/index.ts:26-26`
+
+Parsed CLI arguments and options.

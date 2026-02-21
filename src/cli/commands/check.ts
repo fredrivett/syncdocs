@@ -5,6 +5,13 @@ import type { CAC } from 'cac';
 import { StaleChecker } from '../../checker/index.js';
 import { loadConfig } from '../utils/config.js';
 
+/**
+ * Register the `syncdocs check` CLI command.
+ *
+ * Scans all generated docs for staleness by comparing source code hashes
+ * against the hashes stored in doc frontmatter. Exits with code 1 if any
+ * stale docs are found (useful for CI).
+ */
 export function registerCheckCommand(cli: CAC) {
   cli.command('check', 'Check if docs are stale').action(async () => {
     p.intro('Check Documentation');
@@ -83,6 +90,7 @@ export function registerCheckCommand(cli: CAC) {
   });
 }
 
+/** Map a staleness reason code to a human-readable label. */
 function formatStaleReason(reason: 'changed' | 'not-found' | 'file-not-found'): string {
   switch (reason) {
     case 'changed':
@@ -94,6 +102,7 @@ function formatStaleReason(reason: 'changed' | 'not-found' | 'file-not-found'): 
   }
 }
 
+/** Convert an absolute path to a path relative to the current working directory. */
 function getRelativePath(absolutePath: string): string {
   const cwd = process.cwd();
   return absolutePath.startsWith(cwd) ? absolutePath.substring(cwd.length + 1) : absolutePath;

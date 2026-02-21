@@ -1,6 +1,6 @@
 ---
 title: docPathToUrl
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T14:29:22.458Z
 graphNode: src/server/viewer/components/DocPanel.tsx:docPathToUrl
 dependencies:
   - path: src/server/viewer/components/DocPanel.tsx
@@ -10,10 +10,18 @@ dependencies:
 
 # docPathToUrl
 
-`function` in `src/server/viewer/components/DocPanel.tsx:30-34`
+`function` in `src/server/viewer/components/DocPanel.tsx:32-36`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| docPath | `string` | Yes |  |
+
+**Returns:** `string`
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `DocPanel` | `src/server/viewer/components/DocPanel.tsx` | direct-call |
+| `DocPanel` | `src/server/viewer/components/DocPanel.tsx` | conditional-call |

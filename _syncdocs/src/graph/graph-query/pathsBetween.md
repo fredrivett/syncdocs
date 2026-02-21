@@ -1,6 +1,6 @@
 ---
 title: pathsBetween
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-query.ts:pathsBetween
 dependencies:
   - path: src/graph/graph-query.ts
@@ -10,7 +10,24 @@ dependencies:
 
 # pathsBetween
 
+`exported`
+
 `function` in `src/graph/graph-query.ts:51-90`
+
+Find all paths between two nodes using DFS.
+Returns an array of paths, where each path is an array of node IDs.
+Limits to maxPaths to avoid combinatorial explosion.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| graph | `FlowGraph` | Yes |  |
+| fromId | `string` | Yes |  |
+| toId | `string` | Yes |  |
+| maxPaths | `unknown` | No |  (default: `10`) |
+
+**Returns:** `string[][]`
 
 **Calls:**
 

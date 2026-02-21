@@ -1,6 +1,6 @@
 ---
 title: result
-generated: 2026-02-18T21:53:33.379Z
+generated: 2026-02-21T14:29:22.441Z
 graphNode: scripts/test-extractor.ts:result
 dependencies:
   - path: scripts/test-extractor.ts
@@ -10,4 +10,6 @@ dependencies:
 
 # result
 
-`const` in `scripts/test-extractor.ts:18-18`
+`const` in `scripts/test-extractor.ts:20-20`
+
+Extraction result containing all symbols found in the test file.

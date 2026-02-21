@@ -13,6 +13,13 @@ interface StatusOptions {
   verbose?: boolean;
 }
 
+/**
+ * Register the `syncdocs status` CLI command.
+ *
+ * Scans the project for documentation coverage and displays statistics
+ * including a coverage bar, undocumented symbols, and a suggestion for
+ * the next file to document.
+ */
 export function registerStatusCommand(cli: CAC) {
   cli
     .command('status', 'Show documentation coverage')

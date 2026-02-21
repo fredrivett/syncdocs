@@ -9,6 +9,14 @@ export interface SyncdocsConfig {
   };
 }
 
+/**
+ * Load the syncdocs configuration from `_syncdocs/config.yaml`.
+ *
+ * Parses the YAML config file to extract the output directory and
+ * include/exclude scope patterns. Returns null if no config file exists.
+ *
+ * @param cwd - Working directory to resolve the config path from
+ */
 export function loadConfig(cwd = process.cwd()): SyncdocsConfig | null {
   const configPath = resolve(cwd, '_syncdocs/config.yaml');
   if (!existsSync(configPath)) return null;
@@ -53,6 +61,7 @@ function parseYamlList(content: string, key: string): string[] {
   return items;
 }
 
+/** Remove surrounding single or double quotes from a string value. */
 function stripQuotes(value: string): string {
   if (
     (value.startsWith('"') && value.endsWith('"')) ||

@@ -1,19 +1,21 @@
 ---
 title: FlowGraph
-generated: 2026-02-18T21:53:33.388Z
+generated: 2026-02-21T14:29:22.461Z
 graphNode: src/server/viewer/components/FlowGraph.tsx:FlowGraph
 dependencies:
   - path: src/server/viewer/components/FlowGraph.tsx
     symbol: FlowGraph
-    hash: 9f7447808d8ba28aaa49e40eac3d27d5e90e027ef271ece38029e397c03970e3
+    hash: f497518f3c90002642509acd66a55fc07fa2ead49a6b15d8f91cfec4c8f2c7c9
 ---
 
 # FlowGraph
 
-`function` in `src/server/viewer/components/FlowGraph.tsx:104-215`
+`exported`
 
-**Calls:**
+`component` in `src/server/viewer/components/FlowGraph.tsx:455-463`
 
-| Symbol | File | Type |
-|---|---|---|
-| `layoutGraph` | `src/server/viewer/components/FlowGraph.tsx` | direct-call |
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { graph, onLayoutReady } | `FlowGraphProps` | Yes |  |

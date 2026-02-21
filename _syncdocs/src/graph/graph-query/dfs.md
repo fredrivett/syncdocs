@@ -1,6 +1,6 @@
 ---
 title: dfs
-generated: 2026-02-18T21:53:33.385Z
+generated: 2026-02-21T14:29:22.454Z
 graphNode: src/graph/graph-query.ts:dfs
 dependencies:
   - path: src/graph/graph-query.ts
@@ -12,15 +12,25 @@ dependencies:
 
 `function` in `src/graph/graph-query.ts:65-85`
 
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| current | `string` | Yes |  |
+| path | `string[]` | Yes |  |
+| visited | `Set<string>` | Yes |  |
+
+**Returns:** `void`
+
 **Calls:**
 
 | Symbol | File | Type |
 |---|---|---|
-| `dfs` | `src/graph/graph-query.ts` | direct-call |
+| `dfs` | `src/graph/graph-query.ts` | conditional-call |
 
 **Called by:**
 
 | Symbol | File | Type |
 |---|---|---|
 | `pathsBetween` | `src/graph/graph-query.ts` | direct-call |
-| `dfs` | `src/graph/graph-query.ts` | direct-call |
+| `dfs` | `src/graph/graph-query.ts` | conditional-call |

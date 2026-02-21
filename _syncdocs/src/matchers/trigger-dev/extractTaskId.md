@@ -1,6 +1,6 @@
 ---
 title: extractTaskId
-generated: 2026-02-18T21:53:33.386Z
+generated: 2026-02-21T14:29:22.455Z
 graphNode: src/matchers/trigger-dev.ts:extractTaskId
 dependencies:
   - path: src/matchers/trigger-dev.ts
@@ -11,3 +11,14 @@ dependencies:
 # extractTaskId
 
 `function` in `src/matchers/trigger-dev.ts:16-25`
+
+Extract the task ID from a task() definition.
+Looks for: task({ id: "process-image", ... })
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| body | `string` | Yes |  |
+
+**Returns:** `string | null`

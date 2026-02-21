@@ -8,6 +8,12 @@ import { GraphStore } from '../../graph/graph-store.js';
 import { loadConfig } from '../utils/config.js';
 import { findSourceFiles } from '../utils/next-suggestion.js';
 
+/**
+ * Register the `syncdocs sync` CLI command.
+ *
+ * Finds source files, builds the dependency graph, and generates static
+ * markdown documentation for every node. Optionally filters to a target path.
+ */
 export function registerSyncCommand(cli: CAC) {
   cli
     .command('sync [target]', 'Build graph and generate documentation')

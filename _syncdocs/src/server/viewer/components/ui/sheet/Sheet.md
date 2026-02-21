@@ -1,13 +1,19 @@
 ---
 title: Sheet
-generated: 2026-02-18T21:53:33.390Z
+generated: 2026-02-21T14:29:22.470Z
 graphNode: src/server/viewer/components/ui/sheet.tsx:Sheet
 dependencies:
   - path: src/server/viewer/components/ui/sheet.tsx
     symbol: Sheet
-    hash: 366a6a13016d555f0079f0b35a9a1a917a4f681d04acf23f30fa9e79bcf5bec0
+    hash: 4ef2343b7b75f8de902e8c6e186e195e97a542b4c0ddbf9d9c959c7984fe4d6c
 ---
 
 # Sheet
 
-`function` in `src/server/viewer/components/ui/sheet.tsx:4-8`
+`component` in `src/server/viewer/components/ui/sheet.tsx:4-8`
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|---|---|---|---|
+| { ...props } | `React.ComponentProps<typeof SheetPrimitive.Root>` | Yes |  |
