@@ -68,7 +68,7 @@ const variantLabels: Record<BadgeVariant, string> = {
   component: 'Component',
   hook: 'Hook',
   async: 'async',
-  'no-jsdoc': 'no docs',
+  'no-jsdoc': 'no jsdoc',
   default: '',
 };
 
