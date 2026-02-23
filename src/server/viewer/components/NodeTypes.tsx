@@ -115,7 +115,7 @@ function EntryPointNode({ data }: NodeProps) {
           </Badge>
         )}
         {d.isAsync && <Badge variant="async">async</Badge>}
-        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no docs</Badge>}
+        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no jsdoc</Badge>}
       </div>
       <div className="font-semibold text-[13px] text-gray-800">{d.label}</div>
       {(route || eventTrigger || taskId) && (
@@ -144,7 +144,7 @@ function ComponentNode({ data }: NodeProps) {
       <div className="flex items-center gap-1 mb-0.5">
         <Badge variant="component">Component</Badge>
         {d.isAsync && <Badge variant="async">async</Badge>}
-        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no docs</Badge>}
+        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no jsdoc</Badge>}
       </div>
       <div className="font-medium text-[13px] text-gray-700">{d.label}</div>
       <div className="text-[10px] text-gray-400 mt-0.5">{d.filePath}</div>
@@ -170,7 +170,7 @@ function HookNode({ data }: NodeProps) {
       <div className="flex items-center gap-1 mb-0.5">
         <Badge variant="hook">Hook</Badge>
         {d.isAsync && <Badge variant="async">async</Badge>}
-        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no docs</Badge>}
+        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no jsdoc</Badge>}
       </div>
       <div className="font-medium text-[13px] text-gray-700">{d.label}</div>
       <div className="text-[10px] text-gray-400 mt-0.5">{d.filePath}</div>
@@ -196,7 +196,7 @@ function FunctionNode({ data }: NodeProps) {
       <div className="flex items-center gap-1 mb-0.5">
         <span className="text-[10px] text-gray-400">{d.kind}</span>
         {d.isAsync && <Badge variant="async">async</Badge>}
-        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no docs</Badge>}
+        {d.hasJsDoc === false && <Badge variant="no-jsdoc">no jsdoc</Badge>}
       </div>
       <div className="font-medium text-[13px] text-gray-700">{d.label}</div>
       <div className="text-[10px] text-gray-400 mt-0.5">{d.filePath}</div>
