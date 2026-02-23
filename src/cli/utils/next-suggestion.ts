@@ -1,3 +1,4 @@
+import { execFile, execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -63,7 +64,10 @@ export function renderNextSuggestion(candidate: NextCandidate): void {
 
 export interface ProjectScan {
   sourceFiles: string[];
-  allSymbols: { file: string; symbol: { name: string; hasJsDoc: boolean; isExported: boolean } }[];
+  allSymbols: {
+    file: string;
+    symbol: { name: string; hasJsDoc: boolean; isExported: boolean; isTrivial: boolean };
+  }[];
   documentedSymbols: Set<string>;
   totalSymbols: number;
   documented: number;
@@ -82,7 +86,7 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
   const sourceFiles = findSourceFiles(process.cwd(), scope);
   const allSymbols: {
     file: string;
-    symbol: { name: string; hasJsDoc: boolean; isExported: boolean };
+    symbol: { name: string; hasJsDoc: boolean; isExported: boolean; isTrivial: boolean };
   }[] = [];
 
   if (sourceFiles.length > 0) {
@@ -97,6 +101,7 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
               name: symbol.name,
               hasJsDoc: symbol.jsDoc !== undefined,
               isExported: symbol.isExported ?? false,
+              isTrivial: isTrivialBody(symbol.body),
             },
           });
         }
@@ -129,8 +134,10 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
   ).length;
   const undocumented = totalSymbols - documented;
   const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
-  const exportedSymbols = allSymbols.filter((s) => s.symbol.isExported).length;
-  const withJsDoc = allSymbols.filter((s) => s.symbol.isExported && s.symbol.hasJsDoc).length;
+  const nonTrivialExported = (s: (typeof allSymbols)[number]) =>
+    s.symbol.isExported && !s.symbol.isTrivial;
+  const exportedSymbols = allSymbols.filter(nonTrivialExported).length;
+  const withJsDoc = allSymbols.filter((s) => nonTrivialExported(s) && s.symbol.hasJsDoc).length;
 
   return {
     sourceFiles,
@@ -164,7 +171,7 @@ export async function scanProjectAsync(
 
   const allSymbols: {
     file: string;
-    symbol: { name: string; hasJsDoc: boolean; isExported: boolean };
+    symbol: { name: string; hasJsDoc: boolean; isExported: boolean; isTrivial: boolean };
   }[] = [];
 
   if (sourceFiles.length > 0) {
@@ -183,6 +190,7 @@ export async function scanProjectAsync(
               name: symbol.name,
               hasJsDoc: symbol.jsDoc !== undefined,
               isExported: symbol.isExported ?? false,
+              isTrivial: isTrivialBody(symbol.body),
             },
           });
         }
@@ -220,8 +228,10 @@ export async function scanProjectAsync(
   ).length;
   const undocumented = totalSymbols - documented;
   const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
-  const exportedSymbols = allSymbols.filter((s) => s.symbol.isExported).length;
-  const withJsDoc = allSymbols.filter((s) => s.symbol.isExported && s.symbol.hasJsDoc).length;
+  const nonTrivialExported = (s: (typeof allSymbols)[number]) =>
+    s.symbol.isExported && !s.symbol.isTrivial;
+  const exportedSymbols = allSymbols.filter(nonTrivialExported).length;
+  const withJsDoc = allSymbols.filter((s) => nonTrivialExported(s) && s.symbol.hasJsDoc).length;
 
   return {
     sourceFiles,
@@ -239,6 +249,9 @@ export async function scanProjectAsync(
 /**
  * Async version of {@link findSourceFiles} that yields to the event loop
  * between I/O operations so spinner animations stay smooth.
+ *
+ * Prefers `git ls-files` so gitignored files are automatically excluded.
+ * Falls back to a manual directory walk when not inside a git repository.
  */
 async function findSourceFilesAsync(
   rootDir: string,
@@ -246,6 +259,15 @@ async function findSourceFilesAsync(
 ): Promise<string[]> {
   const isIncluded = picomatch(scope.include);
   const isExcluded = picomatch(scope.exclude);
+
+  const gitFiles = await gitTrackedFilesAsync(rootDir);
+  if (gitFiles) {
+    return gitFiles
+      .filter((rel) => isIncluded(rel) && !isExcluded(rel))
+      .map((rel) => join(rootDir, rel));
+  }
+
+  // Fallback: manual walk when not in a git repo
   const files: string[] = [];
 
   const walk = async (dir: string) => {
@@ -346,7 +368,9 @@ export function renderMissingJsDocList(scan: ProjectScan, verbose: boolean): voi
   if (withoutJsDoc === 0) return;
 
   if (verbose || withoutJsDoc <= 20) {
-    const missingJsDoc = scan.allSymbols.filter((s) => s.symbol.isExported && !s.symbol.hasJsDoc);
+    const missingJsDoc = scan.allSymbols.filter(
+      (s) => s.symbol.isExported && !s.symbol.isTrivial && !s.symbol.hasJsDoc,
+    );
 
     const byFile = new Map<string, string[]>();
     for (const { file, symbol } of missingJsDoc) {
@@ -394,6 +418,21 @@ export function showCoverageAndSuggestion(outputDir: string, scope: SyncdocsConf
 
 // --- Shared helpers ---
 
+/**
+ * Check whether a function body is trivial (just a return, no logic).
+ *
+ * A trivial body contains only a single return statement with no preceding
+ * declarations, hooks, control flow, or side effects. Examples: icon components
+ * that return JSX, or pass-through wrappers that forward props.
+ *
+ * @param body - The function body text as produced by the TypeScript extractor
+ */
+export function isTrivialBody(body: string): boolean {
+  const inner = body.replace(/^\{/, '').replace(/\}$/, '').trim();
+  if (!inner) return false;
+  return /^return\s/s.test(inner);
+}
+
 /** Convert an absolute path to a path relative to the current working directory. */
 export function getRelativePath(absolutePath: string): string {
   const cwd = process.cwd();
@@ -401,10 +440,49 @@ export function getRelativePath(absolutePath: string): string {
 }
 
 /**
+ * List files known to git (tracked + untracked-but-not-ignored).
+ *
+ * Returns relative paths. Returns `null` if not inside a git repository.
+ */
+function gitTrackedFilesSync(rootDir: string): string[] | null {
+  try {
+    const stdout = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], {
+      cwd: rootDir,
+      encoding: 'utf-8',
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    return stdout.split('\n').filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Async version of {@link gitTrackedFilesSync}.
+ */
+function gitTrackedFilesAsync(rootDir: string): Promise<string[] | null> {
+  return new Promise((resolve) => {
+    execFile(
+      'git',
+      ['ls-files', '--cached', '--others', '--exclude-standard'],
+      { cwd: rootDir, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
+      (error, stdout) => {
+        if (error) {
+          resolve(null);
+          return;
+        }
+        resolve(stdout.split('\n').filter(Boolean));
+      },
+    );
+  });
+}
+
+/**
  * Find all source files matching the scope's include/exclude patterns.
  *
- * Recursively walks the directory tree, applying picomatch patterns to filter
- * files. Skips `.git` and `node_modules` directories.
+ * Prefers `git ls-files` so gitignored files (e.g. generated code) are
+ * automatically excluded. Falls back to a manual directory walk when not
+ * inside a git repository.
  *
  * @param rootDir - Root directory to search from
  * @param scope - Include and exclude glob patterns
@@ -412,6 +490,15 @@ export function getRelativePath(absolutePath: string): string {
 export function findSourceFiles(rootDir: string, scope: SyncdocsConfig['scope']): string[] {
   const isIncluded = picomatch(scope.include);
   const isExcluded = picomatch(scope.exclude);
+
+  const gitFiles = gitTrackedFilesSync(rootDir);
+  if (gitFiles) {
+    return gitFiles
+      .filter((rel) => isIncluded(rel) && !isExcluded(rel))
+      .map((rel) => join(rootDir, rel));
+  }
+
+  // Fallback: manual walk when not in a git repo
   const files: string[] = [];
 
   const walk = (dir: string) => {
