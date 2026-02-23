@@ -44,6 +44,7 @@ export class DocParser {
     let kind: string | undefined;
     let exported: boolean | undefined;
     let isAsync: boolean | undefined;
+    let hasJsDoc: boolean | undefined;
     let deprecated: string | boolean | undefined;
     let filePath: string | undefined;
     let lineRange: string | undefined;
@@ -71,6 +72,8 @@ export class DocParser {
         exported = trimmed.substring(9).trim() === 'true';
       } else if (trimmed.startsWith('async:')) {
         isAsync = trimmed.substring(6).trim() === 'true';
+      } else if (trimmed.startsWith('hasJsDoc:')) {
+        hasJsDoc = trimmed.substring(9).trim() === 'true';
       } else if (trimmed.startsWith('deprecated:')) {
         const val = trimmed.substring(11).trim();
         deprecated = val === 'true' ? true : val;
@@ -126,6 +129,7 @@ export class DocParser {
       kind,
       exported,
       isAsync,
+      hasJsDoc,
       deprecated,
       filePath,
       lineRange,

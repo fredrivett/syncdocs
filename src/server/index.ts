@@ -18,6 +18,7 @@ export interface SymbolEntry {
   kind?: string;
   exported?: boolean;
   isAsync?: boolean;
+  hasJsDoc?: boolean;
   deprecated?: string | boolean;
   lineRange?: string;
   entryType?: string;
@@ -69,6 +70,7 @@ function buildSymbolIndex(outputDir: string): SymbolIndex {
         kind: metadata.kind,
         exported: metadata.exported,
         isAsync: metadata.isAsync,
+        hasJsDoc: metadata.hasJsDoc,
         deprecated: metadata.deprecated,
         lineRange: metadata.lineRange,
         entryType: metadata.entryType,
@@ -195,7 +197,10 @@ export function generateDependencyGraph(entry: SymbolEntry, index: SymbolIndex):
  */
 function buildIndexResponse(index: SymbolIndex) {
   // Group entries by source directory
-  const tree: Record<string, { name: string; docPath: string; overview: string }[]> = {};
+  const tree: Record<
+    string,
+    { name: string; docPath: string; overview: string; hasJsDoc?: boolean }[]
+  > = {};
 
   for (const [, entry] of index.entries) {
     const dir = dirname(entry.sourcePath) || '.';
@@ -204,6 +209,7 @@ function buildIndexResponse(index: SymbolIndex) {
       name: entry.name,
       docPath: entry.docPath,
       overview: entry.overview,
+      hasJsDoc: entry.hasJsDoc,
     });
   }
 
@@ -253,6 +259,7 @@ function buildDocResponse(docPath: string, index: SymbolIndex, outputDir: string
       kind: entry.kind,
       exported: entry.exported,
       isAsync: entry.isAsync,
+      hasJsDoc: entry.hasJsDoc,
       deprecated: entry.deprecated,
       lineRange: entry.lineRange,
       entryType: entry.entryType,

@@ -328,6 +328,45 @@ describe('StaticDocGenerator', () => {
     });
   });
 
+  describe('hasJsDoc frontmatter and warning', () => {
+    it('should include hasJsDoc: true in frontmatter when hasJsDoc is true', () => {
+      const node = makeNode({ hasJsDoc: true, description: 'Some description.' });
+      const content = generateAndRead(node);
+      expect(content).toMatch(/^---[\s\S]*hasJsDoc: true[\s\S]*---/);
+      expect(content).not.toContain('No JSDoc comment found');
+    });
+
+    it('should include hasJsDoc: false in frontmatter when hasJsDoc is false', () => {
+      const node = makeNode({ hasJsDoc: false });
+      const content = generateAndRead(node);
+      expect(content).toMatch(/^---[\s\S]*hasJsDoc: false[\s\S]*---/);
+    });
+
+    it('should render warning when hasJsDoc is false and no description', () => {
+      const node = makeNode({ hasJsDoc: false });
+      const content = generateAndRead(node);
+      expect(content).toContain('\u26A0\uFE0F **No JSDoc comment found**');
+    });
+
+    it('should not render warning when hasJsDoc is true', () => {
+      const node = makeNode({ hasJsDoc: true, description: 'Has docs.' });
+      const content = generateAndRead(node);
+      expect(content).not.toContain('No JSDoc comment found');
+    });
+
+    it('should not render warning when hasJsDoc is undefined (old graph)', () => {
+      const node = makeNode();
+      const content = generateAndRead(node);
+      expect(content).not.toContain('No JSDoc comment found');
+    });
+
+    it('should not include hasJsDoc in frontmatter when undefined', () => {
+      const node = makeNode();
+      const content = generateAndRead(node);
+      expect(content).not.toMatch(/^---[\s\S]*hasJsDoc:[\s\S]*---/);
+    });
+  });
+
   describe('Section ordering', () => {
     it('should render all body sections in correct order', () => {
       const node = makeNode({

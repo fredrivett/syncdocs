@@ -123,6 +123,46 @@ export function run() {
     });
   });
 
+  describe('hasJsDoc flag', () => {
+    it('should set hasJsDoc true for symbols with JSDoc', () => {
+      const file = join(TEST_DIR, 'jsdoc.ts');
+      writeFileSync(
+        file,
+        `/** Adds two numbers. */
+export function add(a: number, b: number) { return a + b }`,
+      );
+
+      const graph = builder.build([file]);
+      const node = graph.nodes.find((n) => n.name === 'add');
+      expect(node?.hasJsDoc).toBe(true);
+    });
+
+    it('should set hasJsDoc false for symbols without JSDoc', () => {
+      const file = join(TEST_DIR, 'no-jsdoc.ts');
+      writeFileSync(file, `export function add(a: number, b: number) { return a + b }`);
+
+      const graph = builder.build([file]);
+      const node = graph.nodes.find((n) => n.name === 'add');
+      expect(node?.hasJsDoc).toBe(false);
+    });
+
+    it('should handle mixed JSDoc presence in same file', () => {
+      const file = join(TEST_DIR, 'mixed.ts');
+      writeFileSync(
+        file,
+        `/** Documented function. */
+export function documented() { return 1 }
+export function undocumented() { return 2 }`,
+      );
+
+      const graph = builder.build([file]);
+      const docNode = graph.nodes.find((n) => n.name === 'documented');
+      const undocNode = graph.nodes.find((n) => n.name === 'undocumented');
+      expect(docNode?.hasJsDoc).toBe(true);
+      expect(undocNode?.hasJsDoc).toBe(false);
+    });
+  });
+
   describe('conditional call edges', () => {
     it('should create conditional-call edges for calls inside if/else', () => {
       const mainFile = join(TEST_DIR, 'main.ts');

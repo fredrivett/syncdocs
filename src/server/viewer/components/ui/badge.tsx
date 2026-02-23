@@ -20,6 +20,7 @@ type BadgeVariant =
   | 'component'
   | 'hook'
   | 'async'
+  | 'no-jsdoc'
   | 'default';
 
 /** Base Tailwind classes shared by all badge variants. */
@@ -46,6 +47,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   component: 'bg-orange-100 text-orange-700',
   hook: 'bg-lime-100 text-lime-700',
   async: 'bg-gray-100 text-gray-500',
+  'no-jsdoc': 'bg-amber-100 text-amber-600',
   default: 'bg-gray-100 text-gray-600',
 };
 
@@ -66,6 +68,7 @@ const variantLabels: Record<BadgeVariant, string> = {
   component: 'Component',
   hook: 'Hook',
   async: 'async',
+  'no-jsdoc': 'no docs',
   default: '',
 };
 

@@ -106,6 +106,7 @@ export class GraphBuilder {
           lineRange: [symbol.startLine, symbol.endLine],
           ...(entryType && { entryType }),
           ...(metadata && Object.keys(metadata).length > 0 && { metadata }),
+          hasJsDoc: symbol.jsDoc !== undefined,
           ...(symbol.jsDoc?.description && { description: symbol.jsDoc.description }),
           ...(symbol.structuredParams &&
             symbol.structuredParams.length > 0 && { structuredParams: symbol.structuredParams }),
