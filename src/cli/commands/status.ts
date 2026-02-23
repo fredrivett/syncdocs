@@ -6,6 +6,7 @@ import {
   getRelativePath,
   renderCoverageStats,
   renderJsDocCoverageStats,
+  renderMissingJsDocList,
   renderNextSuggestion,
   scanProjectAsync,
 } from '../utils/next-suggestion.js';
@@ -95,34 +96,7 @@ export function registerStatusCommand(cli: CAC) {
         }
 
         // Show symbols missing JSDoc
-        const withoutJsDoc = scan.totalSymbols - scan.withJsDoc;
-        if (withoutJsDoc > 0 && (options.verbose || withoutJsDoc <= 20)) {
-          const missingJsDoc = scan.allSymbols.filter((s) => !s.symbol.hasJsDoc);
-
-          const byFile = new Map<string, string[]>();
-          for (const { file, symbol } of missingJsDoc) {
-            const relativePath = getRelativePath(file);
-            if (!byFile.has(relativePath)) {
-              byFile.set(relativePath, []);
-            }
-            byFile.get(relativePath)?.push(symbol.name);
-          }
-
-          const lines: string[] = [];
-          for (const [file, symbols] of byFile) {
-            lines.push(`\u{1F4C4} ${file}`);
-            for (const sym of symbols) {
-              lines.push(`   \u2022 ${sym}`);
-            }
-          }
-
-          p.log.warn('Symbols missing JSDoc:');
-          p.log.message(lines.join('\n'));
-        } else if (withoutJsDoc > 20) {
-          p.log.message(
-            `\u{1F4A1} \x1b[3mUse --verbose to see all ${withoutJsDoc} symbols missing JSDoc\x1b[23m`,
-          );
-        }
+        renderMissingJsDocList(scan, options.verbose ?? false);
 
         p.outro(
           scan.coverage === 100

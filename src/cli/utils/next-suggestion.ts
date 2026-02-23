@@ -313,6 +313,49 @@ export function renderJsDocCoverageStats(scan: ProjectScan): void {
 }
 
 /**
+ * Render the list of symbols missing JSDoc comments, grouped by file.
+ *
+ * Shows all symbols when `verbose` is true or when the total count is 20 or fewer.
+ * Otherwise, prints a hint to use --verbose.
+ *
+ * @param scan - Project scan result containing symbol data
+ * @param verbose - Whether to force-show all symbols regardless of count
+ */
+export function renderMissingJsDocList(scan: ProjectScan, verbose: boolean): void {
+  const withoutJsDoc = scan.totalSymbols - scan.withJsDoc;
+
+  if (withoutJsDoc === 0) return;
+
+  if (verbose || withoutJsDoc <= 20) {
+    const missingJsDoc = scan.allSymbols.filter((s) => !s.symbol.hasJsDoc);
+
+    const byFile = new Map<string, string[]>();
+    for (const { file, symbol } of missingJsDoc) {
+      const relativePath = getRelativePath(file);
+      if (!byFile.has(relativePath)) {
+        byFile.set(relativePath, []);
+      }
+      byFile.get(relativePath)?.push(symbol.name);
+    }
+
+    const lines: string[] = [];
+    for (const [file, symbols] of byFile) {
+      lines.push(`\u{1F4C4} ${file}`);
+      for (const sym of symbols) {
+        lines.push(`   \u2022 ${sym}`);
+      }
+    }
+
+    p.log.warn('Symbols missing JSDoc:');
+    p.log.message(lines.join('\n'));
+  } else {
+    p.log.message(
+      `\u{1F4A1} \x1b[3mUse --verbose to see all ${withoutJsDoc} symbols missing JSDoc\x1b[23m`,
+    );
+  }
+}
+
+/**
  * Self-contained: scan the project, show coverage stats and next suggestion.
  * Use this from commands that don't already have scanning data (e.g. generate).
  */
