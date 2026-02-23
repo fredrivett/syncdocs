@@ -1,3 +1,4 @@
+import { execFile, execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -239,6 +240,9 @@ export async function scanProjectAsync(
 /**
  * Async version of {@link findSourceFiles} that yields to the event loop
  * between I/O operations so spinner animations stay smooth.
+ *
+ * Prefers `git ls-files` so gitignored files are automatically excluded.
+ * Falls back to a manual directory walk when not inside a git repository.
  */
 async function findSourceFilesAsync(
   rootDir: string,
@@ -246,6 +250,15 @@ async function findSourceFilesAsync(
 ): Promise<string[]> {
   const isIncluded = picomatch(scope.include);
   const isExcluded = picomatch(scope.exclude);
+
+  const gitFiles = await gitTrackedFilesAsync(rootDir);
+  if (gitFiles) {
+    return gitFiles
+      .filter((rel) => isIncluded(rel) && !isExcluded(rel))
+      .map((rel) => join(rootDir, rel));
+  }
+
+  // Fallback: manual walk when not in a git repo
   const files: string[] = [];
 
   const walk = async (dir: string) => {
@@ -401,10 +414,49 @@ export function getRelativePath(absolutePath: string): string {
 }
 
 /**
+ * List files known to git (tracked + untracked-but-not-ignored).
+ *
+ * Returns relative paths. Returns `null` if not inside a git repository.
+ */
+function gitTrackedFilesSync(rootDir: string): string[] | null {
+  try {
+    const stdout = execFileSync(
+      'git',
+      ['ls-files', '--cached', '--others', '--exclude-standard'],
+      { cwd: rootDir, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
+    );
+    return stdout.split('\n').filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Async version of {@link gitTrackedFilesSync}.
+ */
+function gitTrackedFilesAsync(rootDir: string): Promise<string[] | null> {
+  return new Promise((resolve) => {
+    execFile(
+      'git',
+      ['ls-files', '--cached', '--others', '--exclude-standard'],
+      { cwd: rootDir, encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 },
+      (error, stdout) => {
+        if (error) {
+          resolve(null);
+          return;
+        }
+        resolve(stdout.split('\n').filter(Boolean));
+      },
+    );
+  });
+}
+
+/**
  * Find all source files matching the scope's include/exclude patterns.
  *
- * Recursively walks the directory tree, applying picomatch patterns to filter
- * files. Skips `.git` and `node_modules` directories.
+ * Prefers `git ls-files` so gitignored files (e.g. generated code) are
+ * automatically excluded. Falls back to a manual directory walk when not
+ * inside a git repository.
  *
  * @param rootDir - Root directory to search from
  * @param scope - Include and exclude glob patterns
@@ -412,6 +464,15 @@ export function getRelativePath(absolutePath: string): string {
 export function findSourceFiles(rootDir: string, scope: SyncdocsConfig['scope']): string[] {
   const isIncluded = picomatch(scope.include);
   const isExcluded = picomatch(scope.exclude);
+
+  const gitFiles = gitTrackedFilesSync(rootDir);
+  if (gitFiles) {
+    return gitFiles
+      .filter((rel) => isIncluded(rel) && !isExcluded(rel))
+      .map((rel) => join(rootDir, rel));
+  }
+
+  // Fallback: manual walk when not in a git repo
   const files: string[] = [];
 
   const walk = (dir: string) => {
