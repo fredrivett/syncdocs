@@ -241,6 +241,34 @@ describe('generateDependencyGraph', () => {
     expect(generateDependencyGraph(extractorEntry, index)).toBeNull();
   });
 
+  it('preserves hasJsDoc on SymbolEntry through graph generation', () => {
+    const entryWithJsDoc: SymbolEntry = {
+      name: 'Documented',
+      docPath: 'src/doc.md',
+      sourcePath: 'src/doc.ts',
+      overview: 'Has docs',
+      related: ['Helper'],
+      hasJsDoc: true,
+    };
+    const helperEntry: SymbolEntry = {
+      name: 'Helper',
+      docPath: 'src/helper.md',
+      sourcePath: 'src/helper.ts',
+      overview: 'A helper',
+      related: [],
+      hasJsDoc: false,
+    };
+    const index = makeIndex([entryWithJsDoc, helperEntry]);
+    const graph = generateDependencyGraph(entryWithJsDoc, index);
+
+    expect(graph).not.toBeNull();
+    expect(graph).toContain('Documented[Documented]:::current');
+    expect(graph).toContain('Helper[Helper]');
+    // Verify hasJsDoc is preserved on the entries in the index
+    expect(index.byName.get('Documented')?.[0].hasJsDoc).toBe(true);
+    expect(index.byName.get('Helper')?.[0].hasJsDoc).toBe(false);
+  });
+
   it('uses clean URL paths in click directives', () => {
     const index = makeIndex([generatorEntry, extractorEntry]);
     const graph = generateDependencyGraph(generatorEntry, index);

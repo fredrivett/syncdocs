@@ -130,6 +130,13 @@ export function registerSyncCommand(cli: CAC) {
           }
         }
 
+        const withJsDoc = graph.nodes.filter((n) => n.hasJsDoc).length;
+        const withoutJsDoc = graph.nodes.length - withJsDoc;
+        stats.push('');
+        stats.push(
+          `\u2713 Synced ${graph.nodes.length} symbols (${withJsDoc} with JSDoc, ${withoutJsDoc} missing)`,
+        );
+
         p.log.message(stats.join('\n'));
 
         p.outro(`Synced to ${config.outputDir}/`);

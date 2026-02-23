@@ -18,7 +18,7 @@ export interface NextCandidate {
  * Ranks by import count (most-imported first), then by undocumented symbol count.
  */
 export function computeNextCandidate(params: {
-  allSymbols: { file: string; symbol: { name: string } }[];
+  allSymbols: { file: string; symbol: { name: string; hasJsDoc: boolean } }[];
   documentedSymbols: Set<string>;
   sourceFiles: string[];
 }): NextCandidate | null {
@@ -63,12 +63,13 @@ export function renderNextSuggestion(candidate: NextCandidate): void {
 
 export interface ProjectScan {
   sourceFiles: string[];
-  allSymbols: { file: string; symbol: { name: string } }[];
+  allSymbols: { file: string; symbol: { name: string; hasJsDoc: boolean } }[];
   documentedSymbols: Set<string>;
   totalSymbols: number;
   documented: number;
   undocumented: number;
   coverage: number;
+  withJsDoc: number;
 }
 
 /**
@@ -78,7 +79,7 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
   const docsDir = resolve(process.cwd(), outputDir);
 
   const sourceFiles = findSourceFiles(process.cwd(), scope);
-  const allSymbols: { file: string; symbol: { name: string } }[] = [];
+  const allSymbols: { file: string; symbol: { name: string; hasJsDoc: boolean } }[] = [];
 
   if (sourceFiles.length > 0) {
     const extractor = new TypeScriptExtractor();
@@ -86,7 +87,10 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
       try {
         const result = extractor.extractSymbols(file);
         for (const symbol of result.symbols) {
-          allSymbols.push({ file, symbol });
+          allSymbols.push({
+            file,
+            symbol: { name: symbol.name, hasJsDoc: symbol.jsDoc !== undefined },
+          });
         }
       } catch {
         // Skip files that can't be parsed
@@ -117,6 +121,7 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
   ).length;
   const undocumented = totalSymbols - documented;
   const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
+  const withJsDoc = allSymbols.filter((s) => s.symbol.hasJsDoc).length;
 
   return {
     sourceFiles,
@@ -126,6 +131,7 @@ export function scanProject(outputDir: string, scope: SyncdocsConfig['scope']): 
     documented,
     undocumented,
     coverage,
+    withJsDoc,
   };
 }
 
@@ -146,7 +152,7 @@ export async function scanProjectAsync(
   // Phase 1: find source files (async fs, yields naturally at each I/O)
   const sourceFiles = await findSourceFilesAsync(process.cwd(), scope);
 
-  const allSymbols: { file: string; symbol: { name: string } }[] = [];
+  const allSymbols: { file: string; symbol: { name: string; hasJsDoc: boolean } }[] = [];
 
   if (sourceFiles.length > 0) {
     onProgress?.(`Analyzing ${sourceFiles.length} source files`);
@@ -158,7 +164,10 @@ export async function scanProjectAsync(
       try {
         const result = extractor.extractSymbols(sourceFiles[i]);
         for (const symbol of result.symbols) {
-          allSymbols.push({ file: sourceFiles[i], symbol });
+          allSymbols.push({
+            file: sourceFiles[i],
+            symbol: { name: symbol.name, hasJsDoc: symbol.jsDoc !== undefined },
+          });
         }
       } catch {
         // Skip files that can't be parsed
@@ -194,6 +203,7 @@ export async function scanProjectAsync(
   ).length;
   const undocumented = totalSymbols - documented;
   const coverage = totalSymbols > 0 ? Math.round((documented / totalSymbols) * 100) : 0;
+  const withJsDoc = allSymbols.filter((s) => s.symbol.hasJsDoc).length;
 
   return {
     sourceFiles,
@@ -203,6 +213,7 @@ export async function scanProjectAsync(
     documented,
     undocumented,
     coverage,
+    withJsDoc,
   };
 }
 
@@ -266,6 +277,37 @@ export function renderCoverageStats(scan: ProjectScan): void {
       `Undocumented: ${scan.undocumented}`,
       '',
       `${coverageColor} Coverage: ${bar} ${scan.coverage}%`,
+    ].join('\n'),
+  );
+}
+
+/**
+ * Render JSDoc coverage stats (progress bar + percentage).
+ * Styled consistently with {@link renderCoverageStats}.
+ */
+export function renderJsDocCoverageStats(scan: ProjectScan): void {
+  const jsDocCoverage =
+    scan.totalSymbols > 0 ? Math.round((scan.withJsDoc / scan.totalSymbols) * 100) : 0;
+  const withoutJsDoc = scan.totalSymbols - scan.withJsDoc;
+  const barWidth = 30;
+  const filled = Math.round((jsDocCoverage / 100) * barWidth);
+  const empty = barWidth - filled;
+  const bar = '\u2588'.repeat(filled) + '\u2591'.repeat(empty);
+  const coverageColor =
+    jsDocCoverage >= 75
+      ? '\uD83D\uDFE2'
+      : jsDocCoverage >= 50
+        ? '\uD83D\uDFE1'
+        : jsDocCoverage >= 25
+          ? '\uD83D\uDFE0'
+          : '\uD83D\uDD34';
+
+  p.log.message(
+    [
+      `With JSDoc: ${scan.withJsDoc}`,
+      `Without JSDoc: ${withoutJsDoc}`,
+      '',
+      `${coverageColor} JSDoc Coverage: ${bar} ${jsDocCoverage}%`,
     ].join('\n'),
   );
 }

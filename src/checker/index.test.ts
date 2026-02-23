@@ -207,6 +207,65 @@ Content
     expect(metadata.deprecated).toBe(true);
   });
 
+  it('should parse hasJsDoc: true from frontmatter', () => {
+    const content = `---
+title: DocumentedFunc
+hasJsDoc: true
+generated: 2026-02-03T10:00:00Z
+dependencies:
+  - path: src/test.ts
+    symbol: DocumentedFunc
+    hash: abc
+---
+
+Content
+`;
+
+    writeFileSync(join(TEST_DIR, 'has-jsdoc.md'), content);
+    const metadata = parser.parseDocFile(join(TEST_DIR, 'has-jsdoc.md'));
+
+    expect(metadata.hasJsDoc).toBe(true);
+  });
+
+  it('should parse hasJsDoc: false from frontmatter', () => {
+    const content = `---
+title: UndocumentedFunc
+hasJsDoc: false
+generated: 2026-02-03T10:00:00Z
+dependencies:
+  - path: src/test.ts
+    symbol: UndocumentedFunc
+    hash: abc
+---
+
+Content
+`;
+
+    writeFileSync(join(TEST_DIR, 'no-jsdoc.md'), content);
+    const metadata = parser.parseDocFile(join(TEST_DIR, 'no-jsdoc.md'));
+
+    expect(metadata.hasJsDoc).toBe(false);
+  });
+
+  it('should leave hasJsDoc undefined when absent', () => {
+    const content = `---
+title: OldDoc
+generated: 2026-02-03T10:00:00Z
+dependencies:
+  - path: src/test.ts
+    symbol: OldDoc
+    hash: abc
+---
+
+Content
+`;
+
+    writeFileSync(join(TEST_DIR, 'old-doc.md'), content);
+    const metadata = parser.parseDocFile(join(TEST_DIR, 'old-doc.md'));
+
+    expect(metadata.hasJsDoc).toBeUndefined();
+  });
+
   it('should leave badge fields undefined when absent', () => {
     const content = `---
 title: SimpleFunc

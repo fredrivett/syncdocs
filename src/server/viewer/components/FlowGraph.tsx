@@ -86,6 +86,7 @@ function toReactFlowNode(node: GraphNode): Node {
       entryType: node.entryType,
       metadata: node.metadata,
       highlighted: true,
+      hasJsDoc: node.hasJsDoc,
     },
   };
 }
