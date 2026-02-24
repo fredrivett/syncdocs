@@ -9,7 +9,7 @@ import { type SyncdocsConfig, loadConfig } from '../utils/config.js';
 interface ServeOptions {
   port?: number;
   open?: boolean;
-  focus?: string;
+  focus?: string | string[];
 }
 
 /**
@@ -18,19 +18,21 @@ interface ServeOptions {
  * Matches each target as an exact node ID first, then as a file path
  * (all symbols in that file). Unresolved targets are returned separately.
  *
- * @param targets - Comma-separated focus targets (file:symbol or file)
+ * @param targets - Focus targets (file:symbol or file), may contain comma-separated values
  * @param graph - The loaded flow graph
  * @returns Resolved node IDs and any unresolved target strings
  */
 function resolveFocusTargets(
-  targets: string,
+  targets: string | string[],
   graph: FlowGraph,
 ): { nodeIds: string[]; unresolved: string[] } {
   const nodeIdSet = new Set(graph.nodes.map((n) => n.id));
   const nodeIds: string[] = [];
   const unresolved: string[] = [];
 
-  for (const target of targets.split(',').map((t) => t.trim()).filter(Boolean)) {
+  const raw = Array.isArray(targets) ? targets : [targets];
+  const allTargets = raw.flatMap((t) => t.split(',')).map((t) => t.trim()).filter(Boolean);
+  for (const target of allTargets) {
     if (nodeIdSet.has(target)) {
       nodeIds.push(target);
     } else {
@@ -82,10 +84,11 @@ export function registerServeCommand(cli: CAC) {
     .command('serve', 'Start interactive documentation viewer')
     .option('--port <number>', 'Port to run server on (default: 3456)')
     .option('--open', 'Auto-open browser (default: true)')
-    .option('--focus <targets>', 'Focus on file:symbol or file targets (comma-separated)')
+    .option('--focus <target>', 'Focus on file:symbol or file (repeatable, comma-separated)')
     .example('syncdocs serve')
     .example('syncdocs serve --port 8080')
-    .example('syncdocs serve --focus src/api/users/route.ts:getUserId')
+    .example('syncdocs serve --focus src/api/route.ts:GET --focus src/lib/db.ts:query')
+    .example('syncdocs serve --focus src/api/route.ts:GET,src/lib/db.ts:query')
     .action(async (options: ServeOptions) => {
       p.intro('syncdocs viewer');
 
@@ -106,7 +109,7 @@ export function registerServeCommand(cli: CAC) {
 
         // Resolve --focus targets to node IDs and build URL
         let openUrl = url;
-        if (options.focus) {
+        if (options.focus && options.focus.length > 0) {
           if (!graph) {
             p.cancel('No graph data available. Run: syncdocs sync');
             process.exit(1);
@@ -120,10 +123,7 @@ export function registerServeCommand(cli: CAC) {
               const reason = explainUnresolved(filePath, config);
               p.log.warn(`Could not resolve: ${target}${reason ? ` (${reason})` : ''}`);
             }
-          }
-
-          if (nodeIds.length === 0) {
-            p.cancel('No focus targets could be resolved');
+            p.cancel('All focus targets must resolve');
             process.exit(1);
           }
 
