@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { docPathToUrl, urlToDocPath } from '../docs-utils';
@@ -25,12 +24,12 @@ export interface TreeNode {
   }>;
 }
 
-export function buildTree(index: DocsIndex, filter: string): TreeNode {
-  const lowerFilter = filter.toLowerCase();
+/** Build a tree from the docs index, optionally filtering to only visible symbol names. */
+export function buildTree(index: DocsIndex, visibleNames: Set<string> | null): TreeNode {
   const root: TreeNode = { children: {}, symbols: [] };
 
   for (const [dir, symbols] of Object.entries(index)) {
-    const filtered = symbols.filter((s) => !filter || s.name.toLowerCase().includes(lowerFilter));
+    const filtered = visibleNames ? symbols.filter((s) => visibleNames.has(s.name)) : symbols;
     if (filtered.length === 0) continue;
 
     const parts = dir === '.' ? ['.'] : dir.split('/');
@@ -167,9 +166,13 @@ function TreeDir({
   );
 }
 
-export function DocsTree() {
+interface DocsTreeProps {
+  visibleNames: Set<string> | null;
+}
+
+/** File tree navigation for browsing documented symbols. */
+export function DocsTree({ visibleNames }: DocsTreeProps) {
   const [index, setIndex] = useState<DocsIndex | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [collapsedDirs, setCollapsedDirs] = useState<Set<string>>(new Set());
   const location = useLocation();
 
@@ -183,8 +186,8 @@ export function DocsTree() {
 
   const tree = useMemo(() => {
     if (!index) return null;
-    return buildTree(index, searchQuery);
-  }, [index, searchQuery]);
+    return buildTree(index, visibleNames);
+  }, [index, visibleNames]);
 
   const onToggleDir = useCallback((dirPath: string) => {
     setCollapsedDirs((prev) => {
@@ -226,15 +229,8 @@ export function DocsTree() {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="px-4 pt-4 pb-2">
-        <input
-          type="text"
-          placeholder="Search symbols..."
-          value={searchQuery}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-          className="w-full px-2.5 py-1.5 border border-gray-200 rounded-md text-[13px] outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15"
-        />
-        <div className="flex gap-1 mt-2">
+      <div className="px-4 pt-2 pb-2">
+        <div className="flex gap-1">
           <button
             type="button"
             onClick={collapseAll}
@@ -264,7 +260,7 @@ export function DocsTree() {
                 guides={[]}
                 isLast={false}
                 activeDocPath={activeDocPath}
-                forceExpand={searchQuery.length > 0}
+                forceExpand={visibleNames !== null}
                 collapsedDirs={collapsedDirs}
                 onToggleDir={onToggleDir}
                 dirPath={`/${name}`}

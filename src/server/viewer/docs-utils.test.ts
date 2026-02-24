@@ -82,7 +82,7 @@ describe('buildTree', () => {
   };
 
   it('builds a nested tree from flat index', () => {
-    const tree = buildTree(index, '');
+    const tree = buildTree(index, null);
     expect(Object.keys(tree.children)).toContain('src');
     expect(Object.keys(tree.children)).toContain('.');
 
@@ -95,20 +95,20 @@ describe('buildTree', () => {
   });
 
   it('places root-level entries under the . directory', () => {
-    const tree = buildTree(index, '');
+    const tree = buildTree(index, null);
     expect(tree.children['.'].symbols).toHaveLength(1);
     expect(tree.children['.'].symbols[0].name).toBe('index');
   });
 
-  it('filters symbols by name (case-insensitive)', () => {
-    const tree = buildTree(index, 'help');
+  it('filters symbols by visible names set', () => {
+    const tree = buildTree(index, new Set(['helpers']));
     const utils = tree.children.src?.children.utils;
     expect(utils.symbols).toHaveLength(1);
     expect(utils.symbols[0].name).toBe('helpers');
   });
 
   it('excludes directories with no matching symbols', () => {
-    const tree = buildTree(index, 'Server');
+    const tree = buildTree(index, new Set(['Server']));
     // src/server should exist but src/utils should not (no match)
     expect(tree.children.src.children.server).toBeDefined();
     expect(tree.children.src.children.utils).toBeUndefined();
@@ -117,13 +117,13 @@ describe('buildTree', () => {
   });
 
   it('returns empty tree when nothing matches', () => {
-    const tree = buildTree(index, 'zzzznotfound');
+    const tree = buildTree(index, new Set(['zzzznotfound']));
     expect(Object.keys(tree.children)).toHaveLength(0);
     expect(tree.symbols).toHaveLength(0);
   });
 
   it('returns all symbols when filter is empty', () => {
-    const tree = buildTree(index, '');
+    const tree = buildTree(index, null);
     const allSymbols: string[] = [];
     function collect(node: { children: Record<string, typeof node>; symbols: { name: string }[] }) {
       for (const sym of node.symbols) allSymbols.push(sym.name);
