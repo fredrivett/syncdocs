@@ -1,3 +1,4 @@
+import { ChevronsDownUp, ChevronsUpDown } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { docPathToUrl, urlToDocPath } from '../docs-utils';
@@ -238,15 +239,17 @@ export function DocsTree({ visibleNames }: DocsTreeProps) {
           <button
             type="button"
             onClick={collapseAll}
-            className="flex-1 px-2 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded cursor-pointer hover:bg-gray-50 hover:text-gray-700"
+            className="flex-1 px-2 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded cursor-pointer hover:bg-gray-50 hover:text-gray-700 flex items-center justify-center gap-1"
           >
+            <ChevronsDownUp size={12} />
             Collapse all
           </button>
           <button
             type="button"
             onClick={expandAll}
-            className="flex-1 px-2 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded cursor-pointer hover:bg-gray-50 hover:text-gray-700"
+            className="flex-1 px-2 py-1 text-[11px] font-medium text-gray-500 bg-white border border-gray-200 rounded cursor-pointer hover:bg-gray-50 hover:text-gray-700 flex items-center justify-center gap-1"
           >
+            <ChevronsUpDown size={12} />
             Expand all
           </button>
         </div>
