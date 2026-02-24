@@ -1,9 +1,10 @@
 import { exec } from 'node:child_process';
 import * as p from '@clack/prompts';
 import type { CAC } from 'cac';
+import picomatch from 'picomatch';
 import type { FlowGraph } from '../../graph/types.js';
 import { startServer } from '../../server/index.js';
-import { loadConfig } from '../utils/config.js';
+import { type SyncdocsConfig, loadConfig } from '../utils/config.js';
 
 interface ServeOptions {
   port?: number;
@@ -14,8 +15,8 @@ interface ServeOptions {
 /**
  * Resolve focus targets to graph node IDs.
  *
- * Each target is matched as an exact node ID first, then as a file path
- * (matching all nodes in that file). Unresolved targets are returned separately.
+ * Matches each target as an exact node ID first, then as a file path
+ * (all symbols in that file). Unresolved targets are returned separately.
  *
  * @param targets - Comma-separated focus targets (file:symbol or file)
  * @param graph - The loaded flow graph
@@ -43,6 +44,30 @@ function resolveFocusTargets(
   }
 
   return { nodeIds, unresolved };
+}
+
+/**
+ * Explain why a file path couldn't be resolved against the graph.
+ *
+ * Checks whether the file is outside the configured scope (not matched
+ * by include patterns, or matched by exclude patterns).
+ *
+ * @param filePath - The file path portion of the unresolved target
+ * @param config - The loaded syncdocs config with scope patterns
+ * @returns Human-readable reason, or null if the cause is unclear
+ */
+function explainUnresolved(filePath: string, config: SyncdocsConfig): string | null {
+  const isIncluded = config.scope.include.some((pattern) => picomatch(pattern)(filePath));
+  if (!isIncluded) {
+    return `not matched by scope.include: ${config.scope.include.join(', ')}`;
+  }
+
+  const isExcluded = config.scope.exclude.some((pattern) => picomatch(pattern)(filePath));
+  if (isExcluded) {
+    return 'matched by scope.exclude';
+  }
+
+  return null;
 }
 
 /**
@@ -85,7 +110,11 @@ export function registerServeCommand(cli: CAC) {
           const { nodeIds, unresolved } = resolveFocusTargets(options.focus, graph);
 
           if (unresolved.length > 0) {
-            p.log.warn(`Could not resolve: ${unresolved.join(', ')}`);
+            for (const target of unresolved) {
+              const filePath = target.includes(':') ? target.split(':')[0] : target;
+              const reason = explainUnresolved(filePath, config);
+              p.log.warn(`Could not resolve: ${target}${reason ? ` (${reason})` : ''}`);
+            }
           }
 
           if (nodeIds.length > 0) {
