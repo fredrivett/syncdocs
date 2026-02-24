@@ -15,14 +15,11 @@ import {
 import ELK, { type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import '@xyflow/react/dist/style.css';
 
 import type { FlowGraph as FlowGraphData, GraphNode } from '../../../graph/types.js';
-import { GRAPH_SIDEBAR_SLOT_ID } from '../constants';
 import { GRID_SIZE, snapCeil } from '../grid';
 import { DocPanel } from './DocPanel';
-import { FlowControls } from './FlowControls';
 import { defaultLayoutOptions, type LayoutOptions, LayoutSettings } from './LayoutSettings';
 import { nodeTypes } from './NodeTypes';
 
@@ -62,7 +59,8 @@ const nonEntryCategoryLabels: Record<string, string> = {
   function: 'Functions',
 };
 
-function getNodeCategory(node: GraphNode): NodeCategory {
+/** Returns the filter category for a graph node (entry type or kind-based). */
+export function getNodeCategory(node: GraphNode): NodeCategory {
   if (node.entryType) return node.entryType;
   if (node.kind === 'component') return 'component';
   if (node.kind === 'function' && /^use[A-Z]/.test(node.name)) return 'hook';
@@ -157,18 +155,24 @@ async function runElkLayout(
 interface FlowGraphProps {
   graph: FlowGraphData;
   onLayoutReady?: () => void;
+  searchQuery: string;
+  enabledTypes: Set<NodeCategory> | null;
+  showConditionals: boolean;
 }
 
-function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
+function FlowGraphInner({
+  graph,
+  onLayoutReady,
+  searchQuery,
+  enabledTypes,
+  showConditionals,
+}: FlowGraphProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
   const [needsLayout, setNeedsLayout] = useState(false);
-  const [showConditionals, setShowConditionals] = useState(false);
-  const [enabledTypes, setEnabledTypes] = useState<Set<NodeCategory> | null>(null);
   const { fitView } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
   const visibleGraphRef = useRef<FlowGraphData | null>(null);
@@ -200,46 +204,6 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
       });
     },
     [setNodes, fitView, onLayoutReady],
-  );
-
-  const entryPoints = useMemo(() => graph.nodes.filter((n) => n.entryType), [graph.nodes]);
-
-  const hasConditionalEdges = useMemo(
-    () => graph.edges.some((e) => e.type === 'conditional-call'),
-    [graph.edges],
-  );
-
-  // Compute available categories and their counts
-  const availableTypes = useMemo(() => {
-    const counts = new Map<NodeCategory, number>();
-    for (const node of graph.nodes) {
-      const cat = getNodeCategory(node);
-      counts.set(cat, (counts.get(cat) || 0) + 1);
-    }
-    return counts;
-  }, [graph.nodes]);
-
-  const onToggleType = useCallback(
-    (category: NodeCategory) => {
-      setEnabledTypes((prev) => {
-        // If null (all enabled), start with all enabled minus the toggled one
-        if (!prev) {
-          const all = new Set(availableTypes.keys());
-          all.delete(category);
-          return all;
-        }
-        const next = new Set(prev);
-        if (next.has(category)) {
-          next.delete(category);
-        } else {
-          next.add(category);
-        }
-        // If all are enabled, go back to null
-        if (next.size === availableTypes.size) return null;
-        return next;
-      });
-    },
-    [availableTypes],
   );
 
   // Compute connected nodes: trace callers upward and callees downward separately
@@ -400,31 +364,8 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
     [graph.nodes],
   );
 
-  const sidebarSlot = document.getElementById(GRAPH_SIDEBAR_SLOT_ID);
-
   return (
     <div className="w-full h-full relative">
-      {sidebarSlot &&
-        createPortal(
-          <FlowControls
-            entryPoints={entryPoints}
-            selectedEntry={selectedEntry}
-            onSelectEntry={setSelectedEntry}
-            searchQuery={searchQuery}
-            onSearch={setSearchQuery}
-            nodeCount={visibleGraph.nodes.length}
-            edgeCount={visibleGraph.edges.length}
-            availableTypes={availableTypes}
-            enabledTypes={enabledTypes}
-            onToggleType={onToggleType}
-            onSoloType={(category) => setEnabledTypes(new Set([category]))}
-            onResetTypes={() => setEnabledTypes(null)}
-            showConditionals={showConditionals}
-            onToggleConditionals={() => setShowConditionals((prev) => !prev)}
-            hasConditionalEdges={hasConditionalEdges}
-          />,
-          sidebarSlot,
-        )}
       <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
       <ReactFlow
         nodes={nodes}
@@ -455,10 +396,23 @@ function FlowGraphInner({ graph, onLayoutReady }: FlowGraphProps) {
   );
 }
 
-export function FlowGraph({ graph, onLayoutReady }: FlowGraphProps) {
+/** ReactFlow-based graph visualization with ELK layout. */
+export function FlowGraph({
+  graph,
+  onLayoutReady,
+  searchQuery,
+  enabledTypes,
+  showConditionals,
+}: FlowGraphProps) {
   return (
     <ReactFlowProvider>
-      <FlowGraphInner graph={graph} onLayoutReady={onLayoutReady} />
+      <FlowGraphInner
+        graph={graph}
+        onLayoutReady={onLayoutReady}
+        searchQuery={searchQuery}
+        enabledTypes={enabledTypes}
+        showConditionals={showConditionals}
+      />
     </ReactFlowProvider>
   );
 }

@@ -1,38 +1,35 @@
-import { useCallback, useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import type { FlowGraph as FlowGraphData } from '../../graph/types.js';
 import { DocsTree } from './components/DocsTree';
 import { DocsViewer } from './components/DocsViewer';
-import { FlowGraph } from './components/FlowGraph';
+import { FlowControls } from './components/FlowControls';
+import { FlowGraph, getNodeCategory, type NodeCategory } from './components/FlowGraph';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { Sidebar } from './components/Sidebar';
 import { ViewNav } from './components/ViewNav';
-import { GRAPH_SIDEBAR_SLOT_ID } from './constants';
 
-function GraphView() {
-  const [graph, setGraph] = useState<FlowGraphData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+interface GraphViewProps {
+  graph: FlowGraphData | null;
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+  enabledTypes: Set<NodeCategory> | null;
+  showConditionals: boolean;
+}
+
+function GraphView({
+  graph,
+  loading,
+  error,
+  searchQuery,
+  enabledTypes,
+  showConditionals,
+}: GraphViewProps) {
   const [layoutReady, setLayoutReady] = useState(false);
 
   const onLayoutReady = useCallback(() => {
     setLayoutReady(true);
-  }, []);
-
-  useEffect(() => {
-    fetch('/api/graph')
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load graph: ${res.status}`);
-        return res.json();
-      })
-      .then((data: FlowGraphData) => {
-        setGraph(data);
-        setLoading(false);
-      })
-      .catch((err: Error) => {
-        setError(err.message);
-        setLoading(false);
-      });
   }, []);
 
   if (error) {
@@ -67,32 +64,165 @@ function GraphView() {
           <LoadingSpinner />
         </div>
       )}
-      {graph && <FlowGraph graph={graph} onLayoutReady={onLayoutReady} />}
+      {graph && (
+        <FlowGraph
+          graph={graph}
+          onLayoutReady={onLayoutReady}
+          searchQuery={searchQuery}
+          enabledTypes={enabledTypes}
+          showConditionals={showConditionals}
+        />
+      )}
     </div>
   );
 }
 
-function SidebarContent() {
-  const location = useLocation();
-  const isDocs = location.pathname.startsWith('/docs');
-
-  if (isDocs) {
-    return <DocsTree />;
-  }
-
-  return <div id={GRAPH_SIDEBAR_SLOT_ID} className="flex-1 overflow-auto" />;
-}
-
 function Layout() {
+  const [graph, setGraph] = useState<FlowGraphData | null>(null);
+  const [graphError, setGraphError] = useState<string | null>(null);
+  const [graphLoading, setGraphLoading] = useState(true);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [enabledTypes, setEnabledTypes] = useState<Set<NodeCategory> | null>(null);
+  const [showConditionals, setShowConditionals] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/graph')
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to load graph: ${res.status}`);
+        return res.json();
+      })
+      .then((data: FlowGraphData) => {
+        setGraph(data);
+        setGraphLoading(false);
+      })
+      .catch((err: Error) => {
+        setGraphError(err.message);
+        setGraphLoading(false);
+      });
+  }, []);
+
+  const availableTypes = useMemo(() => {
+    if (!graph) return new Map<NodeCategory, number>();
+    const counts = new Map<NodeCategory, number>();
+    for (const node of graph.nodes) {
+      const cat = getNodeCategory(node);
+      counts.set(cat, (counts.get(cat) || 0) + 1);
+    }
+    return counts;
+  }, [graph]);
+
+  const hasConditionalEdges = useMemo(
+    () => !!graph?.edges.some((e) => e.type === 'conditional-call'),
+    [graph],
+  );
+
+  // Compute filtered graph for sidebar stats (type + search filters, no entry highlight)
+  const filteredGraph = useMemo(() => {
+    if (!graph) return { nodes: [], edges: [] };
+    let filtered: Pick<FlowGraphData, 'nodes' | 'edges'> = graph;
+
+    if (enabledTypes) {
+      const typeMatchIds = new Set(
+        filtered.nodes.filter((n) => enabledTypes.has(getNodeCategory(n))).map((n) => n.id),
+      );
+      filtered = {
+        nodes: filtered.nodes.filter((n) => typeMatchIds.has(n.id)),
+        edges: filtered.edges.filter(
+          (e) => typeMatchIds.has(e.source) && typeMatchIds.has(e.target),
+        ),
+      };
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchingIds = new Set(
+        filtered.nodes
+          .filter(
+            (n) =>
+              n.name.toLowerCase().includes(q) ||
+              n.filePath.toLowerCase().includes(q) ||
+              n.metadata?.route?.toLowerCase().includes(q) ||
+              n.metadata?.eventTrigger?.toLowerCase().includes(q) ||
+              n.metadata?.taskId?.toLowerCase().includes(q),
+          )
+          .map((n) => n.id),
+      );
+      filtered = {
+        nodes: filtered.nodes.filter((n) => matchingIds.has(n.id)),
+        edges: filtered.edges.filter((e) => matchingIds.has(e.source) && matchingIds.has(e.target)),
+      };
+    }
+
+    return filtered;
+  }, [graph, searchQuery, enabledTypes]);
+
+  const onToggleType = useCallback(
+    (category: NodeCategory) => {
+      setEnabledTypes((prev) => {
+        if (!prev) {
+          const all = new Set(availableTypes.keys());
+          all.delete(category);
+          return all;
+        }
+        const next = new Set(prev);
+        if (next.has(category)) {
+          next.delete(category);
+        } else {
+          next.add(category);
+        }
+        if (next.size === availableTypes.size) return null;
+        return next;
+      });
+    },
+    [availableTypes],
+  );
+
+  // Set of visible symbol names from the filtered graph, used to sync tree with graph filters.
+  // null means "show all" (no filters active or graph not loaded yet).
+  const hasFilter = searchQuery.trim() !== '' || enabledTypes !== null;
+  const visibleNames = useMemo(() => {
+    if (!graph || !hasFilter) return null;
+    return new Set(filteredGraph.nodes.map((n) => n.name));
+  }, [graph, hasFilter, filteredGraph]);
+
   return (
     <div className="flex h-full">
       <Sidebar>
         <ViewNav />
-        <SidebarContent />
+        <FlowControls
+          loading={graphLoading}
+          searchQuery={searchQuery}
+          onSearch={setSearchQuery}
+          nodeCount={filteredGraph.nodes.length}
+          edgeCount={filteredGraph.edges.length}
+          availableTypes={availableTypes}
+          enabledTypes={enabledTypes}
+          onToggleType={onToggleType}
+          onSoloType={(category) => setEnabledTypes(new Set([category]))}
+          onResetTypes={() => setEnabledTypes(null)}
+          showConditionals={showConditionals}
+          onToggleConditionals={() => setShowConditionals((prev) => !prev)}
+          hasConditionalEdges={hasConditionalEdges}
+        />
+        <div className="border-t border-gray-200" />
+        <DocsTree visibleNames={visibleNames} />
       </Sidebar>
       <main className="flex-1 relative overflow-hidden">
         <Routes>
-          <Route path="/" element={<GraphView />} />
+          <Route
+            path="/"
+            element={
+              <GraphView
+                graph={graph}
+                loading={graphLoading}
+                error={graphError}
+                searchQuery={searchQuery}
+                enabledTypes={enabledTypes}
+                showConditionals={showConditionals}
+              />
+            }
+          />
           <Route path="/docs" element={<DocsViewer />} />
           <Route path="/docs/*" element={<DocsViewer />} />
         </Routes>
