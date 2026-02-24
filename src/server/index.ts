@@ -346,12 +346,12 @@ export async function startServer(outputDir: string, port: number) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     const tryPort = port + attempt;
     try {
-      const result = await new Promise<{ server: typeof server; url: string }>(
+      const result = await new Promise<{ server: typeof server; url: string; graph: FlowGraph | null }>(
         (resolve, reject) => {
           server.once('error', reject);
           server.listen(tryPort, () => {
             server.removeListener('error', reject);
-            resolve({ server, url: `http://localhost:${tryPort}` });
+            resolve({ server, url: `http://localhost:${tryPort}`, graph });
           });
         },
       );
