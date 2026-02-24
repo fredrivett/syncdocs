@@ -15,9 +15,10 @@ import {
 import ELK, { type ElkNode } from 'elkjs/lib/elk.bundled.js';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import '@xyflow/react/dist/style.css';
 
-import type { FlowGraph as FlowGraphData, GraphNode } from '../../../graph/types.js';
+import type { FlowGraph as FlowGraphData } from '../../../graph/types.js';
 import { GRID_SIZE, snapCeil } from '../grid';
 import { DocPanel } from './DocPanel';
 import { defaultLayoutOptions, type LayoutOptions, LayoutSettings } from './LayoutSettings';
@@ -168,14 +169,42 @@ function FlowGraphInner({
 }: FlowGraphProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [selectedEntries, setSelectedEntries] = useState<Set<string>>(new Set());
-  const [focusedEntries, setFocusedEntries] = useState<Set<string>>(new Set());
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedEntries, setSelectedEntries] = useState<Set<string>>(
+    () => {
+      const param = searchParams.get('selected');
+      return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
+    },
+  );
+  const [focusedEntries, setFocusedEntries] = useState<Set<string>>(
+    () => {
+      const param = searchParams.get('focused');
+      return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
+    },
+  );
   const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
   const [needsLayout, setNeedsLayout] = useState(false);
   const { fitView } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
   const visibleGraphRef = useRef<FlowGraphData | null>(null);
   const sizeCache = useRef<SizeCache>(new Map());
+
+  // Sync selection state to URL query params
+  useEffect(() => {
+    setSearchParams((prev) => {
+      if (selectedEntries.size > 0) {
+        prev.set('selected', [...selectedEntries].map(encodeURIComponent).join(','));
+      } else {
+        prev.delete('selected');
+      }
+      if (focusedEntries.size > 0) {
+        prev.set('focused', [...focusedEntries].map(encodeURIComponent).join(','));
+      } else {
+        prev.delete('focused');
+      }
+      return prev;
+    });
+  }, [selectedEntries, focusedEntries, setSearchParams]);
 
   // Shared helper: apply ELK positions to nodes and fit the view
   const applyPositionsAndFit = useCallback(
