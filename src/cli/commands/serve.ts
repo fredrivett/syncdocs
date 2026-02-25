@@ -4,7 +4,7 @@ import type { CAC } from 'cac';
 import picomatch from 'picomatch';
 import type { FlowGraph } from '../../graph/types.js';
 import { startServer } from '../../server/index.js';
-import { type SyncdocsConfig, loadConfig } from '../utils/config.js';
+import { loadConfig, type SyncdocsConfig } from '../utils/config.js';
 
 interface ServeOptions {
   port?: number;
@@ -30,7 +30,10 @@ function resolveFocusTargets(
   const nodeIds: string[] = [];
   const unresolved: string[] = [];
 
-  const allTargets = targets.split(',').map((t) => t.trim()).filter(Boolean);
+  const allTargets = targets
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean);
   for (const target of allTargets) {
     if (nodeIdSet.has(target)) {
       nodeIds.push(target);

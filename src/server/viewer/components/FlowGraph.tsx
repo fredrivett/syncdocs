@@ -170,18 +170,14 @@ function FlowGraphInner({
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedEntries, setSelectedEntries] = useState<Set<string>>(
-    () => {
-      const param = searchParams.get('selected');
-      return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
-    },
-  );
-  const [focusedEntries, setFocusedEntries] = useState<Set<string>>(
-    () => {
-      const param = searchParams.get('focused');
-      return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
-    },
-  );
+  const [selectedEntries, setSelectedEntries] = useState<Set<string>>(() => {
+    const param = searchParams.get('selected');
+    return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
+  });
+  const [focusedEntries, setFocusedEntries] = useState<Set<string>>(() => {
+    const param = searchParams.get('focused');
+    return param ? new Set(param.split(',').map(decodeURIComponent)) : new Set<string>();
+  });
   const [layoutOptions, setLayoutOptions] = useState<LayoutOptions>(defaultLayoutOptions);
   const [needsLayout, setNeedsLayout] = useState(false);
   const { fitView } = useReactFlow();
@@ -343,8 +339,8 @@ function FlowGraphInner({
     const allCached = renderGraph.nodes.every((n) => sizeCache.current.has(n.id));
     if (allCached && renderGraph.nodes.length > 0) {
       // Fast path: compute positions before rendering so nodes never appear at origin
-      runElkLayout(rfNodes, renderGraph.edges, layoutOptions, sizeCache.current).then(
-        (positions) => applyPositionsAndFit(positions, rfNodes),
+      runElkLayout(rfNodes, renderGraph.edges, layoutOptions, sizeCache.current).then((positions) =>
+        applyPositionsAndFit(positions, rfNodes),
       );
     } else {
       // Slow path: render at origin so React Flow can measure, then layout in Pass 2
@@ -399,34 +395,31 @@ function FlowGraphInner({
     );
   }, [layoutOptions]);
 
-  const onNodeClick = useCallback(
-    (event: React.MouseEvent, node: Node) => {
-      const isMultiSelect = event.metaKey || event.ctrlKey;
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    const isMultiSelect = event.metaKey || event.ctrlKey;
 
-      if (isMultiSelect) {
-        setSelectedEntries((prev) => {
-          const next = new Set(prev);
-          if (next.has(node.id)) {
-            next.delete(node.id);
-          } else {
-            next.add(node.id);
-          }
-          return next;
-        });
-      } else {
-        setSelectedEntries((prev) => {
-          if (prev.size === 1 && prev.has(node.id)) {
-            setFocusedEntries(new Set());
-            return new Set();
-          }
-          const next = new Set([node.id]);
-          setFocusedEntries(next);
-          return next;
-        });
-      }
-    },
-    [],
-  );
+    if (isMultiSelect) {
+      setSelectedEntries((prev) => {
+        const next = new Set(prev);
+        if (next.has(node.id)) {
+          next.delete(node.id);
+        } else {
+          next.add(node.id);
+        }
+        return next;
+      });
+    } else {
+      setSelectedEntries((prev) => {
+        if (prev.size === 1 && prev.has(node.id)) {
+          setFocusedEntries(new Set());
+          return new Set();
+        }
+        const next = new Set([node.id]);
+        setFocusedEntries(next);
+        return next;
+      });
+    }
+  }, []);
 
   const clearSelection = useCallback(() => {
     setSelectedEntries(new Set());
@@ -448,9 +441,7 @@ function FlowGraphInner({
       <LayoutSettings options={layoutOptions} onChange={setLayoutOptions} />
       {(selectedEntries.size > 0 || focusedEntries.size > 0) && (
         <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-white/90 backdrop-blur border border-gray-200 rounded-full px-3 py-1.5 shadow-sm text-xs text-gray-600">
-          <span>
-            {selectedEntries.size} selected
-          </span>
+          <span>{selectedEntries.size} selected</span>
           {(selectedEntries.size !== focusedEntries.size ||
             [...selectedEntries].some((id) => !focusedEntries.has(id))) && (
             <button
