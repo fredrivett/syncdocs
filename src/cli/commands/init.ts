@@ -134,7 +134,7 @@ export function registerInitCommand(cli: CAC) {
       process.exit(0);
     }
 
-    let excludePatterns = selectedExcludes as string[];
+    const excludePatterns = selectedExcludes as string[];
 
     const customExcludes = await p.text({
       message: 'Any additional exclude patterns? (comma-separated, or press Enter to skip)',

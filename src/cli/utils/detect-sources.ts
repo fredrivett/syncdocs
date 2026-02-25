@@ -144,7 +144,7 @@ function parsePnpmWorkspaceYaml(content: string): string[] | null {
       const match = trimmed.match(/^-\s+(.+)$/);
       if (match) {
         // Strip surrounding quotes if present
-        const entry = match[1].replace(/^['"]|['"]$/g, '');
+        const entry = match[1].replace(/^(['"])(.+)\1$/, '$2');
         entries.push(entry);
       } else if (trimmed && !trimmed.startsWith('#')) {
         // Non-empty, non-comment line that isn't a list item — section ended
@@ -161,12 +161,25 @@ function parsePnpmWorkspaceYaml(content: string): string[] | null {
  *
  * Plain entries (e.g. `backend`) are returned as-is if the directory exists.
  * Glob entries ending with `/*` or `/**` are expanded by listing subdirectories
- * of the parent path.
+ * of the parent path. Negated entries (e.g. `!packages/internal`) are excluded
+ * from the final result.
  */
 function resolveWorkspaceDirs(rootDir: string, entries: string[]): string[] {
   const dirs: string[] = [];
+  const negated = new Set<string>();
+
+  // Collect negated entries first
+  for (const entry of entries) {
+    if (entry.startsWith('!')) {
+      negated.add(entry.slice(1));
+    }
+  }
 
   for (const entry of entries) {
+    if (entry.startsWith('!')) {
+      continue;
+    }
+
     // Handle glob patterns like "workshop/*" or "packages/**"
     const globMatch = entry.match(/^(.+?)\/\*\*?$/);
     if (globMatch) {
@@ -174,7 +187,7 @@ function resolveWorkspaceDirs(rootDir: string, entries: string[]): string[] {
       const parentPath = join(rootDir, parentDir);
       try {
         const children = readdirSync(parentPath, { withFileTypes: true });
-        for (const child of children) {
+        for (const child of children.sort((a, b) => a.name.localeCompare(b.name))) {
           if (child.isDirectory() && !IGNORED_DIRECTORIES.has(child.name)) {
             dirs.push(`${parentDir}/${child.name}`);
           }
@@ -191,7 +204,7 @@ function resolveWorkspaceDirs(rootDir: string, entries: string[]): string[] {
     }
   }
 
-  return dirs;
+  return negated.size > 0 ? dirs.filter((dir) => !negated.has(dir)) : dirs;
 }
 
 function containsSourceFiles(directoryPath: string, maxDepth: number): boolean {

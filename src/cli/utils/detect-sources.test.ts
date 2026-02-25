@@ -179,21 +179,43 @@ describe('detectIncludePatterns', () => {
       });
     });
 
-    it('expands glob patterns in workspace config', () => {
+    it('expands glob patterns in workspace config in sorted order', () => {
       const projectDir = createTempProject();
       writeFileSync(
         join(projectDir, 'pnpm-workspace.yaml'),
         'packages:\n  - workshop/*\n',
         'utf-8',
       );
-      writeSourceFile(projectDir, 'workshop/alpha/src/index.ts');
       writeSourceFile(projectDir, 'workshop/beta/src/index.ts');
+      writeSourceFile(projectDir, 'workshop/alpha/src/index.ts');
 
-      const result = detectIncludePatterns(projectDir);
-      expect(result.detected).toBe(true);
-      expect(result.patterns).toContain('workshop/alpha/**/*.{ts,tsx,js,jsx}');
-      expect(result.patterns).toContain('workshop/beta/**/*.{ts,tsx,js,jsx}');
-      expect(result.patterns).toHaveLength(2);
+      expect(detectIncludePatterns(projectDir)).toEqual({
+        patterns: [
+          'workshop/alpha/**/*.{ts,tsx,js,jsx}',
+          'workshop/beta/**/*.{ts,tsx,js,jsx}',
+        ],
+        detected: true,
+      });
+    });
+
+    it('excludes negated workspace entries', () => {
+      const projectDir = createTempProject();
+      writeFileSync(
+        join(projectDir, 'pnpm-workspace.yaml'),
+        'packages:\n  - packages/*\n  - !packages/internal\n',
+        'utf-8',
+      );
+      writeSourceFile(projectDir, 'packages/api/src/index.ts');
+      writeSourceFile(projectDir, 'packages/web/src/index.ts');
+      writeSourceFile(projectDir, 'packages/internal/src/index.ts');
+
+      expect(detectIncludePatterns(projectDir)).toEqual({
+        patterns: [
+          'packages/api/**/*.{ts,tsx,js,jsx}',
+          'packages/web/**/*.{ts,tsx,js,jsx}',
+        ],
+        detected: true,
+      });
     });
 
     it('excludes workspace dirs that contain no source files', () => {
