@@ -38,7 +38,8 @@ function GraphView({
         <div className="font-semibold">Error loading graph</div>
         <div className="text-gray-500 text-sm">{error}</div>
         <div className="text-gray-400 text-[13px] mt-2">
-          Make sure you've run <code className="bg-gray-100 px-1.5 rounded">piste graph</code> first.
+          Make sure you've run <code className="bg-gray-100 px-1.5 rounded">piste graph</code>{' '}
+          first.
         </div>
       </div>
     );

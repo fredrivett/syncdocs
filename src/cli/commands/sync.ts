@@ -53,7 +53,9 @@ export function registerSyncCommand(cli: CAC) {
 
         if (sourceFiles.length === 0 && !target) {
           if (config.scope.include.length === 0) {
-            p.log.warn('No include patterns configured.\nCheck scope.include in _piste/config.yaml');
+            p.log.warn(
+              'No include patterns configured.\nCheck scope.include in _piste/config.yaml',
+            );
           } else {
             p.log.warn(
               `No files matched include patterns:\n${config.scope.include.map((pat) => `  - ${pat}`).join('\n')}\n\nCheck that your config matches your project structure.`,
